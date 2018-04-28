@@ -10,6 +10,9 @@ namespace ArduinoScope
 {
   public static class Utility
   {
+    public const double MICROSECOND = 1d / 1000000d;
+    public const double MILISECOND = 1d / 1000d;
+
     public static string GetEnumDescription<T>(T value)
     {
       Type type = typeof(T);

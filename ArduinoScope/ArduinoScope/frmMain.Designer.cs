@@ -48,6 +48,10 @@
       this.colorDialog1 = new System.Windows.Forms.ColorDialog();
       this.btnStartSerial = new System.Windows.Forms.Button();
       this.btnStopSerial = new System.Windows.Forms.Button();
+      this.radAC = new System.Windows.Forms.RadioButton();
+      this.radDC = new System.Windows.Forms.RadioButton();
+      this.panel1 = new System.Windows.Forms.Panel();
+      this.lblCoupling = new System.Windows.Forms.Label();
       this.clrGridColor = new ArduinoScope.ColorPicker();
       this.clrGraphColor = new ArduinoScope.ColorPicker();
       this.clrBackgroundColor = new ArduinoScope.ColorPicker();
@@ -55,6 +59,7 @@
       this.grpView.SuspendLayout();
       ((System.ComponentModel.ISupportInitialize)(this.numvoltagePerDiv)).BeginInit();
       ((System.ComponentModel.ISupportInitialize)(this.numMicrosecondsPerDiv)).BeginInit();
+      this.panel1.SuspendLayout();
       this.SuspendLayout();
       // 
       // button1
@@ -105,6 +110,8 @@
       // 
       // grpView
       // 
+      this.grpView.Controls.Add(this.lblCoupling);
+      this.grpView.Controls.Add(this.panel1);
       this.grpView.Controls.Add(this.btnTHalf);
       this.grpView.Controls.Add(this.btnT2);
       this.grpView.Controls.Add(this.btnDummyProbe);
@@ -159,7 +166,7 @@
       // lblGridColor
       // 
       this.lblGridColor.AutoSize = true;
-      this.lblGridColor.Location = new System.Drawing.Point(8, 120);
+      this.lblGridColor.Location = new System.Drawing.Point(8, 144);
       this.lblGridColor.Name = "lblGridColor";
       this.lblGridColor.Size = new System.Drawing.Size(50, 13);
       this.lblGridColor.TabIndex = 10;
@@ -168,7 +175,7 @@
       // lblGraphColor
       // 
       this.lblGraphColor.AutoSize = true;
-      this.lblGraphColor.Location = new System.Drawing.Point(8, 96);
+      this.lblGraphColor.Location = new System.Drawing.Point(8, 120);
       this.lblGraphColor.Name = "lblGraphColor";
       this.lblGraphColor.Size = new System.Drawing.Size(63, 13);
       this.lblGraphColor.TabIndex = 8;
@@ -177,7 +184,7 @@
       // lblBackgroundColor
       // 
       this.lblBackgroundColor.AutoSize = true;
-      this.lblBackgroundColor.Location = new System.Drawing.Point(8, 72);
+      this.lblBackgroundColor.Location = new System.Drawing.Point(8, 96);
       this.lblBackgroundColor.Name = "lblBackgroundColor";
       this.lblBackgroundColor.Size = new System.Drawing.Size(92, 13);
       this.lblBackgroundColor.TabIndex = 6;
@@ -191,7 +198,7 @@
             0,
             0,
             65536});
-      this.numvoltagePerDiv.Location = new System.Drawing.Point(112, 48);
+      this.numvoltagePerDiv.Location = new System.Drawing.Point(112, 72);
       this.numvoltagePerDiv.Minimum = new decimal(new int[] {
             1,
             0,
@@ -209,7 +216,7 @@
       // 
       // numMicrosecondsPerDiv
       // 
-      this.numMicrosecondsPerDiv.Location = new System.Drawing.Point(112, 24);
+      this.numMicrosecondsPerDiv.Location = new System.Drawing.Point(112, 48);
       this.numMicrosecondsPerDiv.Maximum = new decimal(new int[] {
             10000000,
             0,
@@ -219,7 +226,7 @@
       this.numMicrosecondsPerDiv.Size = new System.Drawing.Size(64, 20);
       this.numMicrosecondsPerDiv.TabIndex = 2;
       this.numMicrosecondsPerDiv.Value = new decimal(new int[] {
-            20,
+            100000,
             0,
             0,
             0});
@@ -228,7 +235,7 @@
       // lblVoltagePerDiv
       // 
       this.lblVoltagePerDiv.AutoSize = true;
-      this.lblVoltagePerDiv.Location = new System.Drawing.Point(8, 48);
+      this.lblVoltagePerDiv.Location = new System.Drawing.Point(8, 72);
       this.lblVoltagePerDiv.Name = "lblVoltagePerDiv";
       this.lblVoltagePerDiv.Size = new System.Drawing.Size(39, 13);
       this.lblVoltagePerDiv.TabIndex = 1;
@@ -237,7 +244,7 @@
       // lblMicrosecondsPerDiv
       // 
       this.lblMicrosecondsPerDiv.AutoSize = true;
-      this.lblMicrosecondsPerDiv.Location = new System.Drawing.Point(8, 24);
+      this.lblMicrosecondsPerDiv.Location = new System.Drawing.Point(8, 48);
       this.lblMicrosecondsPerDiv.Name = "lblMicrosecondsPerDiv";
       this.lblMicrosecondsPerDiv.Size = new System.Drawing.Size(43, 13);
       this.lblMicrosecondsPerDiv.TabIndex = 0;
@@ -263,10 +270,52 @@
       this.btnStopSerial.UseVisualStyleBackColor = true;
       this.btnStopSerial.Click += new System.EventHandler(this.btnStopSerial_Click);
       // 
+      // radAC
+      // 
+      this.radAC.AutoSize = true;
+      this.radAC.Location = new System.Drawing.Point(48, 0);
+      this.radAC.Name = "radAC";
+      this.radAC.Size = new System.Drawing.Size(39, 17);
+      this.radAC.TabIndex = 15;
+      this.radAC.Text = "AC";
+      this.radAC.UseVisualStyleBackColor = true;
+      this.radAC.CheckedChanged += new System.EventHandler(this.radAC_CheckedChanged);
+      // 
+      // radDC
+      // 
+      this.radDC.AutoSize = true;
+      this.radDC.Checked = true;
+      this.radDC.Location = new System.Drawing.Point(0, 0);
+      this.radDC.Name = "radDC";
+      this.radDC.Size = new System.Drawing.Size(40, 17);
+      this.radDC.TabIndex = 16;
+      this.radDC.TabStop = true;
+      this.radDC.Text = "DC";
+      this.radDC.UseVisualStyleBackColor = true;
+      this.radDC.CheckedChanged += new System.EventHandler(this.radDC_CheckedChanged);
+      // 
+      // panel1
+      // 
+      this.panel1.Controls.Add(this.radDC);
+      this.panel1.Controls.Add(this.radAC);
+      this.panel1.Location = new System.Drawing.Point(112, 24);
+      this.panel1.Name = "panel1";
+      this.panel1.Size = new System.Drawing.Size(96, 16);
+      this.panel1.TabIndex = 17;
+      // 
+      // lblCoupling
+      // 
+      this.lblCoupling.AutoSize = true;
+      this.lblCoupling.Location = new System.Drawing.Point(8, 24);
+      this.lblCoupling.Name = "lblCoupling";
+      this.lblCoupling.Size = new System.Drawing.Size(48, 13);
+      this.lblCoupling.TabIndex = 18;
+      this.lblCoupling.Text = "Coupling";
+      // 
       // clrGridColor
       // 
       this.clrGridColor.BorderStyle = System.Windows.Forms.BorderStyle.FixedSingle;
-      this.clrGridColor.Location = new System.Drawing.Point(112, 120);
+      this.clrGridColor.Location = new System.Drawing.Point(112, 144);
       this.clrGridColor.Name = "clrGridColor";
       this.clrGridColor.SelectedColor = System.Drawing.Color.Black;
       this.clrGridColor.Size = new System.Drawing.Size(16, 16);
@@ -276,7 +325,7 @@
       // clrGraphColor
       // 
       this.clrGraphColor.BorderStyle = System.Windows.Forms.BorderStyle.FixedSingle;
-      this.clrGraphColor.Location = new System.Drawing.Point(112, 96);
+      this.clrGraphColor.Location = new System.Drawing.Point(112, 120);
       this.clrGraphColor.Name = "clrGraphColor";
       this.clrGraphColor.SelectedColor = System.Drawing.Color.Black;
       this.clrGraphColor.Size = new System.Drawing.Size(16, 16);
@@ -286,7 +335,7 @@
       // clrBackgroundColor
       // 
       this.clrBackgroundColor.BorderStyle = System.Windows.Forms.BorderStyle.FixedSingle;
-      this.clrBackgroundColor.Location = new System.Drawing.Point(112, 72);
+      this.clrBackgroundColor.Location = new System.Drawing.Point(112, 96);
       this.clrBackgroundColor.Name = "clrBackgroundColor";
       this.clrBackgroundColor.SelectedColor = System.Drawing.Color.Black;
       this.clrBackgroundColor.Size = new System.Drawing.Size(16, 16);
@@ -314,6 +363,8 @@
       this.grpView.PerformLayout();
       ((System.ComponentModel.ISupportInitialize)(this.numvoltagePerDiv)).EndInit();
       ((System.ComponentModel.ISupportInitialize)(this.numMicrosecondsPerDiv)).EndInit();
+      this.panel1.ResumeLayout(false);
+      this.panel1.PerformLayout();
       this.ResumeLayout(false);
 
     }
@@ -342,5 +393,9 @@
     private System.Windows.Forms.Button btnT2;
     private System.Windows.Forms.Button btnStartSerial;
     private System.Windows.Forms.Button btnStopSerial;
+    private System.Windows.Forms.Panel panel1;
+    private System.Windows.Forms.RadioButton radDC;
+    private System.Windows.Forms.RadioButton radAC;
+    private System.Windows.Forms.Label lblCoupling;
   }
 }

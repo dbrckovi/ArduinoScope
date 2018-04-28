@@ -16,14 +16,15 @@ namespace ArduinoScope
     private Color _gridColor = Color.DarkSlateGray;
     private Color _graphColor = Color.PapayaWhip;
     private double _voltsPerDiv = 0.5d;
-    private int _microsecondsPerDiv = 20;
+    private double _secondsPerDiv = 0.1d;
+    private bool _acCoupled = false;
 
-    public int MicrosecondsPerDiv
+    public double SecondsPerDiv
     {
-      get { return _microsecondsPerDiv; }
+      get { return _secondsPerDiv; }
       set
       {
-        _microsecondsPerDiv = value;
+        _secondsPerDiv = value;
         _rescaleNeeded = true;
       }
     }
@@ -38,14 +39,28 @@ namespace ArduinoScope
       }
     }
 
-    private int VisibleMicroseconds
+    private double VisibleSeconds
     {
-      get { return _microsecondsPerDiv * 10; }
+      get { return _secondsPerDiv * 10; }
     }
 
     private double VisibleVolts
     {
       get { return _voltsPerDiv * 10; }
+    }
+
+    /// <summary>
+    /// When true, zero volts will be at the center of the graph.
+    /// When true, zero volts will be at the bottom of the graph.
+    /// </summary>
+    public bool ACCoupled
+    {
+      get { return _acCoupled; }
+      set
+      {
+        _acCoupled = value;
+        _rescaleNeeded = true;
+      }
     }
 
     private SignalChannel _channel = null;
@@ -66,11 +81,6 @@ namespace ArduinoScope
     {
       Title = "Arduino Scope";
       base.OnLoad(e);
-    }
-
-    public void CreateChannel(int microsecondsPerSample, int bufferLengthMicroseconds)
-    {
-      _channel = new SignalChannel(microsecondsPerSample, bufferLengthMicroseconds);
     }
 
     public void CreateChannel()
@@ -105,7 +115,17 @@ namespace ArduinoScope
       GL.Viewport(ClientRectangle.X, ClientRectangle.Y, ClientRectangle.Width, ClientRectangle.Height);
 
       //Specify view in natural coordinates (positive X is right, positive Y is up). This works only if Scale is set properly below
-      Matrix4 ortoMatrix = Matrix4.CreateOrthographicOffCenter(0f, VisibleMicroseconds, 0f, Convert.ToSingle(VisibleVolts), 0.0f, 1.0f);
+      Matrix4 ortoMatrix;
+
+      if (_acCoupled)
+      {
+        ortoMatrix = Matrix4.CreateOrthographicOffCenter(0f, (float)VisibleSeconds, 0f, (float)VisibleVolts, 0.0f, 1.0f);
+      }
+      else
+      {
+        ortoMatrix = Matrix4.CreateOrthographicOffCenter(0f, (float)VisibleSeconds, -(float)VisibleVolts / 2, (float)VisibleVolts / 2, 0.0f, 1.0f);
+      }
+
       GL.MatrixMode(MatrixMode.Projection);
       GL.LoadMatrix(ref ortoMatrix);
 
@@ -120,7 +140,7 @@ namespace ArduinoScope
 
       GL.Color3(_gridColor);
 
-      for (double x = _microsecondsPerDiv; x <= _microsecondsPerDiv * 9; x += _microsecondsPerDiv)
+      for (double x = _secondsPerDiv; x <= _secondsPerDiv * 9; x += _secondsPerDiv)
       {
         GL.Vertex3(x, 0, 0.0f);
         GL.Vertex3(x, VisibleVolts, 0.0f);
@@ -129,7 +149,7 @@ namespace ArduinoScope
       for (double y = _voltsPerDiv; y <= _voltsPerDiv * 9; y += _voltsPerDiv)
       {
         GL.Vertex3(0, y, 0.0f);
-        GL.Vertex3(VisibleMicroseconds, y, 0.0f);
+        GL.Vertex3(VisibleSeconds, y, 0.0f);
       }
 
       GL.End();
@@ -137,21 +157,20 @@ namespace ArduinoScope
 
     private void RenderGraph()
     {
-      int microsecondsToTake = VisibleMicroseconds * 2;
-      byte[] data = Channel.ReadSamples(microsecondsToTake);
+      SamplePoint[] data = Channel.ReadSamples(VisibleSeconds);
 
       GL.Begin(PrimitiveType.LineStrip);
 
       GL.Color3(_graphColor);
 
-      int _microsecondsOffset = 0;
+      double _secondOffset = 0d;
       for (int x = data.Length - 1; x >= 0; x--)
       {
-        double posX = VisibleMicroseconds + _microsecondsOffset;
-        double posY = (Convert.ToDouble(data[x]) / 255) * VisibleVolts;
+        double posX = VisibleSeconds + _secondOffset;
+        double posY = data[x].Value;
 
         GL.Vertex3(posX, posY, 0.0f);
-        _microsecondsOffset -= Channel.MicrosecondsPerSample;
+        _secondOffset -= data[x].TimeOffset;
       }
 
       GL.End();

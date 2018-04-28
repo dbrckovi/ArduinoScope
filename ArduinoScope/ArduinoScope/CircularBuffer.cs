@@ -11,7 +11,7 @@ namespace ArduinoScope
   /// </summary>
   public class CircularBuffer
   {
-    private byte[] _buffer = null;
+    private SamplePoint[] _buffer = null;
     private int _pointer = 0;
     private object _locker = new object();
 
@@ -29,17 +29,16 @@ namespace ArduinoScope
     /// <param name="length">Total number of bytes in the buffer</param>
     public CircularBuffer(int length)
     {
-      _buffer = new byte[length];
+      _buffer = new SamplePoint[length];
     }
 
     /// <summary>
-    /// Adds specified bytes to the buffer. When the buffer is full, internal pointer starts from the beginning, rewriting the old bytes
+    /// Adds new samples to the end of the buffer. When the buffer is full, internal pointer starts from the beginning, rewriting the old bytes
     /// </summary>
     /// <param name="array"></param>
-    public void Add(byte[] array)
+    public void Add(SamplePoint[] array)
     {
       //TODO: refactor... this can be much simpler in a simple loop which copies what it can and remembers the indexes for next pass
-
       if (array == null || array.Length == 0) return;
 
       lock (_locker)
@@ -47,8 +46,8 @@ namespace ArduinoScope
         if (array.Length > _buffer.Length)
         {
           //more bytes were sent than the length of the buffer
-          //add the entire length of the buffer from the end of the bytes array and set pointer to the end
-          Buffer.BlockCopy(array, array.Length - _buffer.Length, _buffer, 0, _buffer.Length);
+          //add only the last part of the array to the buffer (efectivelly overwritting the entire buffer)
+          CopyArray(array, array.Length - _buffer.Length, _buffer, 0, _buffer.Length);
           _pointer = 0;
         }
         else  
@@ -58,19 +57,19 @@ namespace ArduinoScope
           if (array.Length <= lenToEnd)
           {
             //if entire array fits without overflow, add and update pointer
-            Buffer.BlockCopy(array, 0, _buffer, _pointer, array.Length);
+            CopyArray(array, 0, _buffer, _pointer, array.Length);
             _pointer += array.Length;
             if (_pointer == _buffer.Length) _pointer = 0;
           }
           else
           {
             //not everything fits, copy what we can to the end
-            Buffer.BlockCopy(array, 0, _buffer, _pointer, lenToEnd);
+            CopyArray(array, 0, _buffer, _pointer, lenToEnd);
             _pointer = 0;
 
             //copy the rest to the beginning of the buffer
             int rest = array.Length - lenToEnd;
-            Buffer.BlockCopy(array, lenToEnd, _buffer, _pointer, rest);
+            CopyArray(array, lenToEnd, _buffer, _pointer, rest);
             _pointer += rest;
           }
         }
@@ -78,22 +77,21 @@ namespace ArduinoScope
     }
 
     /// <summary>
-    /// Gets specified amount of bytes from the buffer. Bytes are ordered chronologically as they were written to the buffer. Oldest first. Last byte in the returned array is always the last written to the buffer
+    /// Gets specified amount of samples from the end of the buffer.
     /// </summary>
-    /// <param name="length">Number of bytes to copy from the current end of the buffer. Must be smaller than the length of the buffer</param>
-    public byte[] GetLast(int length)
+    /// <param name="length">Number of samples to copy from the current end of the buffer.</param>
+    public SamplePoint[] GetLast(int length)
     {
+      if (length > _buffer.Length) length = _buffer.Length;
       //TODO: refactor... this can be done simpler, in a loop
-
-      if (length > _buffer.Length) throw new Exception("Requested length is larger than the buffer");
-      byte[] ret = new byte[length];
+      SamplePoint[] ret = new SamplePoint[length];
 
       lock (_locker)
       {
         if (length <= _pointer)
         {
           //if we have enough in front of the pointer, just return it 
-          Buffer.BlockCopy(_buffer, _pointer - length, ret, 0, length);
+          CopyArray(_buffer, _pointer - length, ret, 0, length);
         }
         else
         {
@@ -101,15 +99,57 @@ namespace ArduinoScope
           //first take the part from the end of the buffer
           int lenToStart = _pointer;
           int partOnTheEnd = length - lenToStart;
-          Buffer.BlockCopy(_buffer, _buffer.Length - partOnTheEnd, ret, 0, partOnTheEnd);
+          CopyArray(_buffer, _buffer.Length - partOnTheEnd, ret, 0, partOnTheEnd);
 
           //take the rest from the beginning of the buffer
-          Buffer.BlockCopy(_buffer, 0, ret, partOnTheEnd, lenToStart);
+          CopyArray(_buffer, 0, ret, partOnTheEnd, lenToStart);
         }
       }
 
       return ret;
     }
 
+    /// <summary>
+    /// Gets samples from the end of the buffer which are within a specified time period (+ 1 additional sample)
+    /// </summary>
+    /// <param name="seconds">Time perdiod from the end of the buffer</param>
+    /// <returns></returns>
+    public SamplePoint[] GetLast(double seconds)
+    {
+      int length = 0;
+      double totalTime = 0;
+      int localPointer = _pointer - 1;
+      if (localPointer < 0) localPointer = _buffer.Length -1;
+
+      while(true)
+      {
+        if (totalTime > seconds) break;
+        if (localPointer == _pointer) break;
+        totalTime += _buffer[localPointer].TimeOffset;
+        length++;
+        localPointer--;
+        if (localPointer < 0) localPointer = _buffer.Length - 1;
+      }
+
+      return GetLast(length);
+    }
+
+    /// <summary>
+    /// Copies a specified number of sample points from source array, starting at a particular offset, to a destination array, starting at a particular offset
+    /// </summary>
+    /// <param name="src"></param>
+    /// <param name="srcOffset"></param>
+    /// <param name="dst"></param>
+    /// <param name="dstOffset"></param>
+    /// <param name="count"></param>
+    public static void CopyArray(SamplePoint[] src, int srcOffset, SamplePoint[] dst, int dstOffset, int count)
+    {
+      for (int x = 1; x <= count; x++)
+      {
+        dst[dstOffset] = src[srcOffset];
+        dstOffset++;
+        srcOffset++;
+      }
+    }
   }
 }

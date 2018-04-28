@@ -8,47 +8,33 @@ namespace ArduinoScope
 {
   public class SignalChannel
   {
-    private int _microsecondsPerSample;
-    private int _bufferLengthMicroseconds;
     private CircularBuffer _buffer = null;
 
-    public int MicrosecondsPerSample
+    /// <summary>
+    /// Initializes the buffer with one million samples
+    /// </summary>
+    public SignalChannel() : this(100000)
     {
-      get { return _microsecondsPerSample; }
+      
     }
 
-    public int BufferLengthMicroseconds
+    /// <summary>
+    /// Initializes the buffer with arbitrary number of samples
+    /// </summary>
+    /// <param name="bufferSize"></param>
+    public SignalChannel (int bufferSize)
     {
-      get { return _bufferLengthMicroseconds; }
+      _buffer = new CircularBuffer(bufferSize);
     }
 
-    public int TotalBytes
-    {
-      get { return _buffer.Length; }
-    }
-
-    public SignalChannel() : this(20, 20 * 1000 * 1000)
-    {
-      //20 microseconds per sample
-      //20 seconds total
-    }
-
-    public SignalChannel (int microsecondsPerSample, int bufferLengthMicroseconds)
-    {
-      _microsecondsPerSample = microsecondsPerSample;
-      _bufferLengthMicroseconds = bufferLengthMicroseconds;
-      _buffer = new CircularBuffer(bufferLengthMicroseconds / _microsecondsPerSample);
-    }
-
-    public void WriteSamples(byte[] samples)
+    public void WriteSamples(SamplePoint[] samples)
     {
       _buffer.Add(samples);
     }
 
-    public byte[] ReadSamples(int lengthMicroseconds)
+    public SamplePoint[] ReadSamples(double seconds)
     {
-      int bufferReadLength = lengthMicroseconds / _microsecondsPerSample;
-      return _buffer.GetLast(bufferReadLength);
+      return _buffer.GetLast(seconds);
     }
   }
 }

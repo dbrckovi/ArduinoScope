@@ -17,8 +17,7 @@ namespace ArduinoScope
     SerialPort _port = new SerialPort();
     Thread _thread = null;
     bool _threadShouldStop = true;
-
-
+    
     public frmMain()
     {
       InitializeComponent();
@@ -55,7 +54,15 @@ namespace ArduinoScope
           {
             byte[] buffer = new byte[bytesToRead];
             _port.Read(buffer, 0, bytesToRead);
-            _visualizer.Channel.WriteSamples(buffer);
+
+            SamplePoint[] samples = new SamplePoint[bytesToRead];
+            for (int x = 0; x < bytesToRead; x++)
+            {
+              samples[x].Value = ((double)buffer[x] / 255) * 5;
+              samples[x].TimeOffset = 20 * Utility.MICROSECOND;
+            }
+
+            _visualizer.Channel.WriteSamples(samples);
           }
         }
 
@@ -177,23 +184,30 @@ namespace ArduinoScope
 
     private void btnDummyProbe_Click(object sender, EventArgs e)
     {
-      byte[] buffer = new byte[6] {25, 222, 222, 222, 25, 222 };
-      _visualizer.Channel.WriteSamples(buffer);
+      SamplePoint[] points = new SamplePoint[10];
+
+      for (int x = 0; x < points.Length; x++)
+      {
+        points[x].Value = x / 10d;
+        points[x].TimeOffset = 20 * Utility.MICROSECOND;
+      }
+
+      _visualizer.Channel.WriteSamples(points);
     }
 
     private void btnT2_Click(object sender, EventArgs e)
     {
-      _visualizer.MicrosecondsPerDiv *= 2;
+      _visualizer.SecondsPerDiv *= 2;
     }
 
     private void btnTHalf_Click(object sender, EventArgs e)
     {
-      _visualizer.MicrosecondsPerDiv /= 2;
+      _visualizer.SecondsPerDiv /= 2;
     }
 
     private void numMicrosecondsPerDiv_ValueChanged(object sender, EventArgs e)
     {
-      _visualizer.MicrosecondsPerDiv = Convert.ToInt32(numMicrosecondsPerDiv.Value);
+      _visualizer.SecondsPerDiv = Convert.ToDouble(numMicrosecondsPerDiv.Value) * Utility.MICROSECOND;
     }
 
     private void numvoltagePerDiv_ValueChanged(object sender, EventArgs e)
@@ -203,7 +217,7 @@ namespace ArduinoScope
 
     private void btnStartSerial_Click(object sender, EventArgs e)
     {
-      _port.PortName = "COM5";
+      _port.PortName = "COM3";
       _port.BaudRate = 500000;
       _port.Open();
 
@@ -213,6 +227,16 @@ namespace ArduinoScope
     private void btnStopSerial_Click(object sender, EventArgs e)
     {
       StopReadThread();
+    }
+
+    private void radDC_CheckedChanged(object sender, EventArgs e)
+    {
+      if (radAC.Checked && !_visualizer.ACCoupled) _visualizer.ACCoupled = true;
+    }
+
+    private void radAC_CheckedChanged(object sender, EventArgs e)
+    {
+      if (radDC.Checked && _visualizer.ACCoupled) _visualizer.ACCoupled = false;
     }
   }
 }
