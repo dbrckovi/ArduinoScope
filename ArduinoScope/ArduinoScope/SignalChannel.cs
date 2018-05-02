@@ -32,7 +32,7 @@ namespace ArduinoScope
       _buffer.Add(samples);
     }
 
-    public SamplePoint[] ReadSamples(double seconds)
+    public SamplePoint[] ReadSamples(float seconds)
     {
       return _buffer.GetLast(seconds);
     }

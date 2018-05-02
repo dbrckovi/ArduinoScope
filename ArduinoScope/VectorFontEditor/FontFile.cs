@@ -70,6 +70,11 @@ namespace VectorFontEditor
       }
     }
 
+    /// <summary>
+    /// Gets a list of FontLine objects which form the specified character
+    /// </summary>
+    /// <param name="character">Character whose lines will be returned. If lines are not defined for specified character, an empty list will be returned</param>
+    /// <returns></returns>
     public List<FontLine> LoadCharacter(char character)
     {
       List<FontLine> ret = new List<FontLine>();

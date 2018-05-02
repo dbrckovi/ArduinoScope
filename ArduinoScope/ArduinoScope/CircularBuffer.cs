@@ -114,10 +114,10 @@ namespace ArduinoScope
     /// </summary>
     /// <param name="seconds">Time perdiod from the end of the buffer</param>
     /// <returns></returns>
-    public SamplePoint[] GetLast(double seconds)
+    public SamplePoint[] GetLast(float seconds)
     {
       int length = 0;
-      double totalTime = 0;
+      float totalTime = 0;
       int localPointer = _pointer - 1;
       if (localPointer < 0) localPointer = _buffer.Length -1;
 

@@ -7,7 +7,7 @@ namespace Tester
 {
   public struct SamplePoint
   {
-    public double Value;
-    public double TimeOffset;
+    public float Value;
+    public float TimeOffset;
   }
 }

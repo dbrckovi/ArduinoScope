@@ -11,11 +11,11 @@ namespace ArduinoScope
     /// <summary>
     /// Sample value in Volts
     /// </summary>
-    public double Value;
+    public float Value;
 
     /// <summary>
     /// Time offset (in seconds) since previous sample
     /// </summary>
-    public double TimeOffset;
+    public float TimeOffset;
   }
 }

@@ -133,18 +133,18 @@ namespace VectorFontEditor
     {
       if (_fontLines.Count == 0) return null;
       FontLine ret = null;
-      double closestDistance = double.MaxValue;
+      float closestDistance = float.MaxValue;
 
       foreach (FontLine line in _fontLines)
       {
-        double distance = FindDistanceToSegment(point, line.P1, line.P2);
+        float distance = FindDistanceToSegment(point, line.P1, line.P2);
         if (distance < .1 && distance < closestDistance) ret = line;
       }
 
       return ret;
     }
 
-    private double FindDistanceToSegment(PointF pt, PointF p1, PointF p2)
+    private float FindDistanceToSegment(PointF pt, PointF p1, PointF p2)
     {
       PointF closest = new PointF();
       float dx = p2.X - p1.X;
@@ -155,7 +155,7 @@ namespace VectorFontEditor
         closest = p1;
         dx = pt.X - p1.X;
         dy = pt.Y - p1.Y;
-        return Math.Sqrt(dx * dx + dy * dy);
+        return (float)Math.Sqrt(dx * dx + dy * dy);
       }
 
       // Calculate the t that minimizes the distance.
@@ -183,7 +183,7 @@ namespace VectorFontEditor
         dy = pt.Y - closest.Y;
       }
 
-      return Math.Sqrt(dx * dx + dy * dy);
+      return (float)Math.Sqrt(dx * dx + dy * dy);
     }
 
     private void pnlEditor_MouseMove(object sender, MouseEventArgs e)
@@ -191,8 +191,8 @@ namespace VectorFontEditor
       bool drawNeeded = false;
       PointF logical = ToLogical(new Point(e.X, e.Y));
 
-      float nearestX = (float)Math.Round((double)logical.X);
-      float nearestY = (float)Math.Round((double)logical.Y);
+      float nearestX = (float)Math.Round(logical.X);
+      float nearestY = (float)Math.Round(logical.Y);
 
       if (_indicator.Value.X != nearestX || _indicator.Value.Y != nearestY)
       {

@@ -58,7 +58,7 @@ namespace ArduinoScope
             SamplePoint[] samples = new SamplePoint[bytesToRead];
             for (int x = 0; x < bytesToRead; x++)
             {
-              samples[x].Value = ((double)buffer[x] / 255) * 5;
+              samples[x].Value = ((float)buffer[x] / 255) * 5;
               samples[x].TimeOffset = 20 * Utility.MICROSECOND;
             }
 
@@ -188,7 +188,7 @@ namespace ArduinoScope
 
       for (int x = 0; x < points.Length; x++)
       {
-        points[x].Value = x / 10d;
+        points[x].Value = x / 10f;
         points[x].TimeOffset = 20 * Utility.MICROSECOND;
       }
 
@@ -207,12 +207,12 @@ namespace ArduinoScope
 
     private void numMicrosecondsPerDiv_ValueChanged(object sender, EventArgs e)
     {
-      _visualizer.SecondsPerDiv = Convert.ToDouble(numMicrosecondsPerDiv.Value) * Utility.MICROSECOND;
+      _visualizer.SecondsPerDiv = Convert.ToSingle(numMicrosecondsPerDiv.Value) * Utility.MICROSECOND;
     }
 
     private void numvoltagePerDiv_ValueChanged(object sender, EventArgs e)
     {
-      _visualizer.VoltsPerDiv = Convert.ToDouble(numvoltagePerDiv.Value);
+      _visualizer.VoltsPerDiv = Convert.ToSingle(numvoltagePerDiv.Value);
     }
 
     private void btnStartSerial_Click(object sender, EventArgs e)

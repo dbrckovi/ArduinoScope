@@ -21,7 +21,6 @@ namespace VectorFontEditor
 
     public void DrawText()
     {
-      
       Graphics g = panel1.CreateGraphics();
       g.Clear(Color.White);
 
@@ -30,7 +29,6 @@ namespace VectorFontEditor
       int charWidth = Convert.ToInt32(8 * Convert.ToSingle(numScale.Value));
       int charHeight = Convert.ToInt32(12 * Convert.ToSingle(numScale.Value));
       int currentX = 0;
-
 
       foreach (char c in txtSource.Text.ToCharArray())
       {

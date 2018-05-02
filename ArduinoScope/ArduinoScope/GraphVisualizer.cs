@@ -6,20 +6,28 @@ using System.Threading.Tasks;
 using System.Drawing;
 using OpenTK;
 using OpenTK.Graphics.OpenGL;
+using OpenTK.Input;
 
 namespace ArduinoScope
 {
   public class GraphVisualizer : GameWindow
   {
+    //Variables
+
     private bool _rescaleNeeded = false;
     private Color _backColor = Color.SlateGray;
     private Color _gridColor = Color.DarkSlateGray;
     private Color _graphColor = Color.PapayaWhip;
-    private double _voltsPerDiv = 0.5d;
-    private double _secondsPerDiv = 0.1d;
+    private float _voltsPerDiv = 0.5f;
+    private float _secondsPerDiv = 0.1f;
     private bool _acCoupled = false;
+    private float _bottomVolts = 0f;
+    private float _topVolts = 0f;
+    private SignalChannel _channel = null;
 
-    public double SecondsPerDiv
+    //Properties
+
+    public float SecondsPerDiv
     {
       get { return _secondsPerDiv; }
       set
@@ -29,7 +37,7 @@ namespace ArduinoScope
       }
     }
 
-    public double VoltsPerDiv
+    public float VoltsPerDiv
     {
       get { return _voltsPerDiv; }
       set
@@ -39,12 +47,12 @@ namespace ArduinoScope
       }
     }
 
-    private double VisibleSeconds
+    private float VisibleSeconds
     {
       get { return _secondsPerDiv * 10; }
     }
 
-    private double VisibleVolts
+    private float VisibleVolts
     {
       get { return _voltsPerDiv * 10; }
     }
@@ -63,8 +71,6 @@ namespace ArduinoScope
       }
     }
 
-    private SignalChannel _channel = null;
-
     public SignalChannel Channel
     {
       get { return _channel; }
@@ -77,15 +83,108 @@ namespace ArduinoScope
     }
     #endregion Constructors
 
+    public void CreateChannel()
+    {
+      _channel = new SignalChannel();
+    }
+
+    private void Rescale()
+    {
+      GL.ClearColor(_backColor);
+      GL.Viewport(ClientRectangle.X, ClientRectangle.Y, ClientRectangle.Width, ClientRectangle.Height);
+
+      //Specify view in natural coordinates (positive X is right, positive Y is up). This works only if Scale is set properly below
+      Matrix4 ortoMatrix;
+
+      if (_acCoupled)
+      {
+        _bottomVolts = -(float)VisibleVolts / 2;
+        _topVolts = (float)VisibleVolts / 2;
+      }
+      else
+      {
+        _bottomVolts = 0f;
+        _topVolts = (float)VisibleVolts;
+      }
+
+      ortoMatrix = Matrix4.CreateOrthographicOffCenter(0f, (float)VisibleSeconds, _bottomVolts, _topVolts, 0.0f, 1.0f);
+
+      GL.MatrixMode(MatrixMode.Projection);
+      GL.LoadMatrix(ref ortoMatrix);
+
+      //Invert X so view can be specified naturally (above)
+      Vector3 scaleVector = new Vector3(-1f, 1f, 1f);
+      GL.Scale(scaleVector);
+    }
+
+    private void RenderGrid()
+    {
+      GL.Begin(PrimitiveType.Lines);
+
+      GL.Color3(_gridColor);
+
+      for (float x = _secondsPerDiv; x < VisibleSeconds; x += _secondsPerDiv)
+      {
+        GL.Vertex3(x, _bottomVolts, 0.0f);
+        GL.Vertex3(x, _topVolts, 0.0f);
+      }
+
+      for (float y = _bottomVolts + _voltsPerDiv; y < _topVolts; y += _voltsPerDiv)
+      {
+        GL.Vertex3(0, y, 0.0f);
+        GL.Vertex3(VisibleSeconds, y, 0.0f);
+      }
+
+      GL.End();
+    }
+
+    private void RenderGraph()
+    {
+      SamplePoint[] data = Channel.ReadSamples(VisibleSeconds);
+
+      GL.Begin(PrimitiveType.LineStrip);
+
+      GL.Color3(_graphColor);
+
+      float _secondOffset = 0f;
+      for (int x = data.Length - 1; x >= 0; x--)
+      {
+        float posX = VisibleSeconds + _secondOffset;
+        float posY = data[x].Value;
+
+        GL.Vertex3(posX, posY, 0.0f);
+        _secondOffset -= data[x].TimeOffset;
+      }
+
+      GL.End();
+    }
+
+    private void DrawString()
+    {
+
+    }
+
+    Point GLToScreen(PointF samplePointCoordinates)
+    {
+      float x = ClientRectangle.Width * (samplePointCoordinates.X / VisibleSeconds);
+      float y = ClientRectangle.Height * (_topVolts - samplePointCoordinates.Y) / VisibleVolts;
+
+      return new Point(Convert.ToInt32(x), Convert.ToInt32(y));
+    }
+
+    PointF ScreenToGL (Point screenCoordinates)
+    {
+      float x = VisibleSeconds * ((float)screenCoordinates.X / ClientRectangle.Width);
+      float y = VisibleVolts * ((float)(ClientRectangle.Height - screenCoordinates.Y) / ClientRectangle.Height) + _bottomVolts;
+      return new PointF(x,y);
+    }
+
+    //Events
+
     protected override void OnLoad(EventArgs e)
     {
       Title = "Arduino Scope";
       base.OnLoad(e);
-    }
-
-    public void CreateChannel()
-    {
-      _channel = new SignalChannel();
     }
 
     protected override void OnRenderFrame(FrameEventArgs e)
@@ -109,77 +208,27 @@ namespace ArduinoScope
       base.OnRenderFrame(e);
     }
 
-    private void Rescale()
+    protected override void OnMouseLeave(EventArgs e)
     {
-      GL.ClearColor(_backColor);
-      GL.Viewport(ClientRectangle.X, ClientRectangle.Y, ClientRectangle.Width, ClientRectangle.Height);
-
-      //Specify view in natural coordinates (positive X is right, positive Y is up). This works only if Scale is set properly below
-      Matrix4 ortoMatrix;
-
-      if (_acCoupled)
-      {
-        ortoMatrix = Matrix4.CreateOrthographicOffCenter(0f, (float)VisibleSeconds, 0f, (float)VisibleVolts, 0.0f, 1.0f);
-      }
-      else
-      {
-        ortoMatrix = Matrix4.CreateOrthographicOffCenter(0f, (float)VisibleSeconds, -(float)VisibleVolts / 2, (float)VisibleVolts / 2, 0.0f, 1.0f);
-      }
-
-      GL.MatrixMode(MatrixMode.Projection);
-      GL.LoadMatrix(ref ortoMatrix);
-
-      //Invert X so view can be specified naturally (above)
-      Vector3 scaleVector = new Vector3(-1f, 1f, 1f);
-      GL.Scale(scaleVector);
+      this.Title = "Mouse left";
+      base.OnMouseLeave(e);
     }
 
-    private void RenderGrid()
+    protected override void OnMouseMove(MouseMoveEventArgs e)
     {
-      GL.Begin(PrimitiveType.Lines);
+      PointF glCoordinates = ScreenToGL(e.Position);
+      Point screen = GLToScreen(glCoordinates);
 
-      GL.Color3(_gridColor);
+      string volts = Utility.VisualizeWithMagnitude(glCoordinates.Y, "V", 3);
+      string seconds = Utility.VisualizeWithMagnitude(glCoordinates.X, "s", 3);
 
-      for (double x = _secondsPerDiv; x <= _secondsPerDiv * 9; x += _secondsPerDiv)
-      {
-        GL.Vertex3(x, 0, 0.0f);
-        GL.Vertex3(x, VisibleVolts, 0.0f);
-      }
-
-      for (double y = _voltsPerDiv; y <= _voltsPerDiv * 9; y += _voltsPerDiv)
-      {
-        GL.Vertex3(0, y, 0.0f);
-        GL.Vertex3(VisibleSeconds, y, 0.0f);
-      }
-
-      GL.End();
-    }
-
-    private void RenderGraph()
-    {
-      SamplePoint[] data = Channel.ReadSamples(VisibleSeconds);
-
-      GL.Begin(PrimitiveType.LineStrip);
-
-      GL.Color3(_graphColor);
-
-      double _secondOffset = 0d;
-      for (int x = data.Length - 1; x >= 0; x--)
-      {
-        double posX = VisibleSeconds + _secondOffset;
-        double posY = data[x].Value;
-
-        GL.Vertex3(posX, posY, 0.0f);
-        _secondOffset -= data[x].TimeOffset;
-      }
-
-      GL.End();
+      this.Title = string.Format("Screen: {0}, {1}; Sample: {2}, {3}", screen.X, screen.Y, seconds, volts);
+      base.OnMouseMove(e);
     }
 
     protected override void OnResize(EventArgs e)
     {
       Rescale();
-
       base.OnResize(e);
     }
   }

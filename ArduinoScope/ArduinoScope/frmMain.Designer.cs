@@ -35,11 +35,18 @@
       this.lblFPS = new System.Windows.Forms.Label();
       this.infoTimer = new System.Windows.Forms.Timer(this.components);
       this.grpView = new System.Windows.Forms.GroupBox();
+      this.lblCoupling = new System.Windows.Forms.Label();
+      this.panel1 = new System.Windows.Forms.Panel();
+      this.radDC = new System.Windows.Forms.RadioButton();
+      this.radAC = new System.Windows.Forms.RadioButton();
       this.btnTHalf = new System.Windows.Forms.Button();
       this.btnT2 = new System.Windows.Forms.Button();
       this.btnDummyProbe = new System.Windows.Forms.Button();
+      this.clrGridColor = new ArduinoScope.ColorPicker();
       this.lblGridColor = new System.Windows.Forms.Label();
+      this.clrGraphColor = new ArduinoScope.ColorPicker();
       this.lblGraphColor = new System.Windows.Forms.Label();
+      this.clrBackgroundColor = new ArduinoScope.ColorPicker();
       this.lblBackgroundColor = new System.Windows.Forms.Label();
       this.numvoltagePerDiv = new System.Windows.Forms.NumericUpDown();
       this.numMicrosecondsPerDiv = new System.Windows.Forms.NumericUpDown();
@@ -48,18 +55,11 @@
       this.colorDialog1 = new System.Windows.Forms.ColorDialog();
       this.btnStartSerial = new System.Windows.Forms.Button();
       this.btnStopSerial = new System.Windows.Forms.Button();
-      this.radAC = new System.Windows.Forms.RadioButton();
-      this.radDC = new System.Windows.Forms.RadioButton();
-      this.panel1 = new System.Windows.Forms.Panel();
-      this.lblCoupling = new System.Windows.Forms.Label();
-      this.clrGridColor = new ArduinoScope.ColorPicker();
-      this.clrGraphColor = new ArduinoScope.ColorPicker();
-      this.clrBackgroundColor = new ArduinoScope.ColorPicker();
       this.grpInfo.SuspendLayout();
       this.grpView.SuspendLayout();
+      this.panel1.SuspendLayout();
       ((System.ComponentModel.ISupportInitialize)(this.numvoltagePerDiv)).BeginInit();
       ((System.ComponentModel.ISupportInitialize)(this.numMicrosecondsPerDiv)).BeginInit();
-      this.panel1.SuspendLayout();
       this.SuspendLayout();
       // 
       // button1
@@ -133,6 +133,48 @@
       this.grpView.TabStop = false;
       this.grpView.Text = "View";
       // 
+      // lblCoupling
+      // 
+      this.lblCoupling.AutoSize = true;
+      this.lblCoupling.Location = new System.Drawing.Point(8, 24);
+      this.lblCoupling.Name = "lblCoupling";
+      this.lblCoupling.Size = new System.Drawing.Size(48, 13);
+      this.lblCoupling.TabIndex = 18;
+      this.lblCoupling.Text = "Coupling";
+      // 
+      // panel1
+      // 
+      this.panel1.Controls.Add(this.radDC);
+      this.panel1.Controls.Add(this.radAC);
+      this.panel1.Location = new System.Drawing.Point(112, 24);
+      this.panel1.Name = "panel1";
+      this.panel1.Size = new System.Drawing.Size(96, 16);
+      this.panel1.TabIndex = 17;
+      // 
+      // radDC
+      // 
+      this.radDC.AutoSize = true;
+      this.radDC.Checked = true;
+      this.radDC.Location = new System.Drawing.Point(0, 0);
+      this.radDC.Name = "radDC";
+      this.radDC.Size = new System.Drawing.Size(40, 17);
+      this.radDC.TabIndex = 16;
+      this.radDC.TabStop = true;
+      this.radDC.Text = "DC";
+      this.radDC.UseVisualStyleBackColor = true;
+      this.radDC.CheckedChanged += new System.EventHandler(this.radDC_CheckedChanged);
+      // 
+      // radAC
+      // 
+      this.radAC.AutoSize = true;
+      this.radAC.Location = new System.Drawing.Point(48, 0);
+      this.radAC.Name = "radAC";
+      this.radAC.Size = new System.Drawing.Size(39, 17);
+      this.radAC.TabIndex = 15;
+      this.radAC.Text = "AC";
+      this.radAC.UseVisualStyleBackColor = true;
+      this.radAC.CheckedChanged += new System.EventHandler(this.radAC_CheckedChanged);
+      // 
       // btnTHalf
       // 
       this.btnTHalf.Location = new System.Drawing.Point(240, 104);
@@ -163,6 +205,16 @@
       this.btnDummyProbe.UseVisualStyleBackColor = true;
       this.btnDummyProbe.Click += new System.EventHandler(this.btnDummyProbe_Click);
       // 
+      // clrGridColor
+      // 
+      this.clrGridColor.BorderStyle = System.Windows.Forms.BorderStyle.FixedSingle;
+      this.clrGridColor.Location = new System.Drawing.Point(112, 144);
+      this.clrGridColor.Name = "clrGridColor";
+      this.clrGridColor.SelectedColor = System.Drawing.Color.Black;
+      this.clrGridColor.Size = new System.Drawing.Size(16, 16);
+      this.clrGridColor.TabIndex = 11;
+      this.clrGridColor.SelectedColorChanged += new System.EventHandler(this.clrGridColor_SelectedColorChanged);
+      // 
       // lblGridColor
       // 
       this.lblGridColor.AutoSize = true;
@@ -172,6 +224,16 @@
       this.lblGridColor.TabIndex = 10;
       this.lblGridColor.Text = "GridColor";
       // 
+      // clrGraphColor
+      // 
+      this.clrGraphColor.BorderStyle = System.Windows.Forms.BorderStyle.FixedSingle;
+      this.clrGraphColor.Location = new System.Drawing.Point(112, 120);
+      this.clrGraphColor.Name = "clrGraphColor";
+      this.clrGraphColor.SelectedColor = System.Drawing.Color.Black;
+      this.clrGraphColor.Size = new System.Drawing.Size(16, 16);
+      this.clrGraphColor.TabIndex = 9;
+      this.clrGraphColor.SelectedColorChanged += new System.EventHandler(this.clrGraphColor_SelectedColorChanged);
+      // 
       // lblGraphColor
       // 
       this.lblGraphColor.AutoSize = true;
@@ -180,6 +242,16 @@
       this.lblGraphColor.Size = new System.Drawing.Size(63, 13);
       this.lblGraphColor.TabIndex = 8;
       this.lblGraphColor.Text = "Graph Color";
+      // 
+      // clrBackgroundColor
+      // 
+      this.clrBackgroundColor.BorderStyle = System.Windows.Forms.BorderStyle.FixedSingle;
+      this.clrBackgroundColor.Location = new System.Drawing.Point(112, 96);
+      this.clrBackgroundColor.Name = "clrBackgroundColor";
+      this.clrBackgroundColor.SelectedColor = System.Drawing.Color.Black;
+      this.clrBackgroundColor.Size = new System.Drawing.Size(16, 16);
+      this.clrBackgroundColor.TabIndex = 7;
+      this.clrBackgroundColor.SelectedColorChanged += new System.EventHandler(this.clrBackgroundColor_SelectedColorChanged);
       // 
       // lblBackgroundColor
       // 
@@ -199,11 +271,16 @@
             0,
             65536});
       this.numvoltagePerDiv.Location = new System.Drawing.Point(112, 72);
+      this.numvoltagePerDiv.Maximum = new decimal(new int[] {
+            1215752192,
+            23,
+            0,
+            0});
       this.numvoltagePerDiv.Minimum = new decimal(new int[] {
             1,
             0,
             0,
-            196608});
+            983040});
       this.numvoltagePerDiv.Name = "numvoltagePerDiv";
       this.numvoltagePerDiv.Size = new System.Drawing.Size(64, 20);
       this.numvoltagePerDiv.TabIndex = 3;
@@ -270,78 +347,6 @@
       this.btnStopSerial.UseVisualStyleBackColor = true;
       this.btnStopSerial.Click += new System.EventHandler(this.btnStopSerial_Click);
       // 
-      // radAC
-      // 
-      this.radAC.AutoSize = true;
-      this.radAC.Location = new System.Drawing.Point(48, 0);
-      this.radAC.Name = "radAC";
-      this.radAC.Size = new System.Drawing.Size(39, 17);
-      this.radAC.TabIndex = 15;
-      this.radAC.Text = "AC";
-      this.radAC.UseVisualStyleBackColor = true;
-      this.radAC.CheckedChanged += new System.EventHandler(this.radAC_CheckedChanged);
-      // 
-      // radDC
-      // 
-      this.radDC.AutoSize = true;
-      this.radDC.Checked = true;
-      this.radDC.Location = new System.Drawing.Point(0, 0);
-      this.radDC.Name = "radDC";
-      this.radDC.Size = new System.Drawing.Size(40, 17);
-      this.radDC.TabIndex = 16;
-      this.radDC.TabStop = true;
-      this.radDC.Text = "DC";
-      this.radDC.UseVisualStyleBackColor = true;
-      this.radDC.CheckedChanged += new System.EventHandler(this.radDC_CheckedChanged);
-      // 
-      // panel1
-      // 
-      this.panel1.Controls.Add(this.radDC);
-      this.panel1.Controls.Add(this.radAC);
-      this.panel1.Location = new System.Drawing.Point(112, 24);
-      this.panel1.Name = "panel1";
-      this.panel1.Size = new System.Drawing.Size(96, 16);
-      this.panel1.TabIndex = 17;
-      // 
-      // lblCoupling
-      // 
-      this.lblCoupling.AutoSize = true;
-      this.lblCoupling.Location = new System.Drawing.Point(8, 24);
-      this.lblCoupling.Name = "lblCoupling";
-      this.lblCoupling.Size = new System.Drawing.Size(48, 13);
-      this.lblCoupling.TabIndex = 18;
-      this.lblCoupling.Text = "Coupling";
-      // 
-      // clrGridColor
-      // 
-      this.clrGridColor.BorderStyle = System.Windows.Forms.BorderStyle.FixedSingle;
-      this.clrGridColor.Location = new System.Drawing.Point(112, 144);
-      this.clrGridColor.Name = "clrGridColor";
-      this.clrGridColor.SelectedColor = System.Drawing.Color.Black;
-      this.clrGridColor.Size = new System.Drawing.Size(16, 16);
-      this.clrGridColor.TabIndex = 11;
-      this.clrGridColor.SelectedColorChanged += new System.EventHandler(this.clrGridColor_SelectedColorChanged);
-      // 
-      // clrGraphColor
-      // 
-      this.clrGraphColor.BorderStyle = System.Windows.Forms.BorderStyle.FixedSingle;
-      this.clrGraphColor.Location = new System.Drawing.Point(112, 120);
-      this.clrGraphColor.Name = "clrGraphColor";
-      this.clrGraphColor.SelectedColor = System.Drawing.Color.Black;
-      this.clrGraphColor.Size = new System.Drawing.Size(16, 16);
-      this.clrGraphColor.TabIndex = 9;
-      this.clrGraphColor.SelectedColorChanged += new System.EventHandler(this.clrGraphColor_SelectedColorChanged);
-      // 
-      // clrBackgroundColor
-      // 
-      this.clrBackgroundColor.BorderStyle = System.Windows.Forms.BorderStyle.FixedSingle;
-      this.clrBackgroundColor.Location = new System.Drawing.Point(112, 96);
-      this.clrBackgroundColor.Name = "clrBackgroundColor";
-      this.clrBackgroundColor.SelectedColor = System.Drawing.Color.Black;
-      this.clrBackgroundColor.Size = new System.Drawing.Size(16, 16);
-      this.clrBackgroundColor.TabIndex = 7;
-      this.clrBackgroundColor.SelectedColorChanged += new System.EventHandler(this.clrBackgroundColor_SelectedColorChanged);
-      // 
       // frmMain
       // 
       this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
@@ -361,10 +366,10 @@
       this.grpInfo.PerformLayout();
       this.grpView.ResumeLayout(false);
       this.grpView.PerformLayout();
-      ((System.ComponentModel.ISupportInitialize)(this.numvoltagePerDiv)).EndInit();
-      ((System.ComponentModel.ISupportInitialize)(this.numMicrosecondsPerDiv)).EndInit();
       this.panel1.ResumeLayout(false);
       this.panel1.PerformLayout();
+      ((System.ComponentModel.ISupportInitialize)(this.numvoltagePerDiv)).EndInit();
+      ((System.ComponentModel.ISupportInitialize)(this.numMicrosecondsPerDiv)).EndInit();
       this.ResumeLayout(false);
 
     }

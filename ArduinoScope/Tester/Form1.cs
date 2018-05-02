@@ -39,26 +39,26 @@ namespace Tester
 
     private void btnCopyNormal_Click(object sender, EventArgs e)
     {
-      double total = 0;
+      float total = 0;
       for (int x = 1; x <= 100; x++)
       {
         DateTime start = DateTime.Now;
         NormalCopy();
         TimeSpan span = DateTime.Now - start;
-        total += span.TotalMilliseconds;
+        total += (float)span.TotalMilliseconds;
       }
       richTextBox1.AppendText(string.Format("Normal average: {0}\r\n", total / 100));
     }
 
     private void btnBlockCopy_Click(object sender, EventArgs e)
     {
-      double total = 0;
+      float total = 0;
       for (int x = 1; x <= 100; x++)
       {
         DateTime start = DateTime.Now;
         ValueCopy();
         TimeSpan span = DateTime.Now - start;
-        total += span.TotalMilliseconds;
+        total += (float)span.TotalMilliseconds;
       }
       richTextBox1.AppendText(string.Format("Value average: {0}\r\n", total / 100));
     }
@@ -67,8 +67,8 @@ namespace Tester
     {
       for (int x = 0; x < _newSamples.Length; x++)
       {
-        _newSamples[x].Value = _rand.NextDouble();
-        _newSamples[x].TimeOffset = _rand.NextDouble();
+        _newSamples[x].Value = (float)_rand.NextDouble();
+        _newSamples[x].TimeOffset = (float)_rand.NextDouble();
       }
     }
 
