@@ -11,12 +11,26 @@ namespace ArduinoStudio
   public class ArduinoCommunicator
   {
     #region Variables
-    int _currentBaud = 9600;
-    int _responseFirstByteTimeout = 1000;
-    int _responseLastByteTimeout = 100;
-    SerialPort _port = null;
-    Encoding _serialEncoding = new UTF8Encoding();
+    private int _currentBaud = 500000;
+    private int _responseFirstByteTimeout = 1000;
+    private int _responseLastByteTimeout = 100;
+    private SerialPort _port = null;
+    private Encoding _serialEncoding = new UTF8Encoding();
+    private int _version = -1;
+    private int[] _viableBaudRates = { 9600, 14400, 19200, 28800, 38400, 57600, 115200, 230400, 500000 };
     #endregion Variables
+
+    #region Properties
+    public int Version
+    {
+      get { return _version; }
+    }
+
+    public int CurrentBaud
+    {
+      get { return _currentBaud; }
+    }
+    #endregion Properties
 
     #region Events
     public event Delegates.StringDelegate Log;
@@ -32,18 +46,33 @@ namespace ArduinoStudio
 
     #region Constructor
     /// <summary>
-    /// Creates a new instance and connects it to specified port
+    /// Creates a new instance and connects it to specified port, gets version information and establishes the best baud rate
     /// </summary>
     /// <param name="comPort">Name ot the COM port</param>
     /// <param name="responseFirstByteTimeout">After the request is sent, communicator will wait for this amount of miliseconds for first byte of the response to arrive</param>
     /// <param name="responseLastByteTimeout">Number of miliseconds, after the last byte of the response was received, in which the communicator will wait for next byte to arrive</param>
     public ArduinoCommunicator(string comPort, int responseFirstByteTimeout = 1000, int responseLastByteTimeout = 100)
     {
-      _responseFirstByteTimeout = responseFirstByteTimeout;
-      _responseLastByteTimeout = responseLastByteTimeout;
+      try
+      {
+        _responseFirstByteTimeout = responseFirstByteTimeout;
+        _responseLastByteTimeout = responseLastByteTimeout;
 
-      _port = new SerialPort(comPort, _currentBaud);
-      _port.Open();
+        _port = new SerialPort(comPort, _currentBaud);
+        _port.Open();
+        Thread.Sleep(100); //because reasons. GetVersion doesn't work without this
+        _version = GetVersion();
+      }
+      catch (Exception ex)
+      {
+        try
+        {
+          _port.Close();
+        }
+        catch { }
+
+        throw ex;
+      }
     }
     #endregion Constructor
 
@@ -133,10 +162,15 @@ namespace ArduinoStudio
     /// <returns></returns>
     private List<string> ParseResponse(string response)
     {
-      if (!response.Contains("|")) throw new Exception("Response is invalid");
-      List<string> ret = response.Split('|').ToList();
-      string first = ret[0];
-      ret.RemoveAt(0);
+      List<string> ret = null;
+      string first;
+      if (response.Contains("|"))
+      {
+        ret = response.Split('|').ToList();
+        first = ret[0];
+        ret.RemoveAt(0);
+      }
+      else first = response;
 
       if (first == "1") return ret;
       else if (first == "0")
@@ -179,7 +213,88 @@ namespace ArduinoStudio
     {
       string request = BuildRequest(RequestType.GetVersion);
       string response = SendRequest(request);
-      return int.Parse(response);
+      return int.Parse(ParseResponse(response)[0]);
+    }
+
+    /// <summary>
+    /// For debug purposes. Arduino should output some text
+    /// </summary>
+    /// <returns></returns>
+    public string Debug()
+    {
+      string request = BuildRequest(RequestType.Debug);
+      string response = SendRequest(request);
+      return ParseResponse(response)[0];
+    }
+
+    public void PinMode(int pin, PinMode mode)
+    {
+      string request = BuildRequest(RequestType.PinMode, pin.ToString(), ((int)mode).ToString());
+      string response = SendRequest(request);
+      ParseResponse(response);
+    }
+
+    public void DigitalWrite(int pin, bool value)
+    {
+      string request = BuildRequest(RequestType.DigitalWrite, pin.ToString(), value ? "1" : "0");
+      string response = SendRequest(request);
+      ParseResponse(response);
+    }
+
+    /// <summary>
+    /// Tests if specified baud rate can be used for stable communication. Reverts to original baud rate after completion
+    /// </summary>
+    /// <param name="baudRate">Baud rate to be tested</param>
+    /// <returns>True if test was completely successful</returns>
+    public bool TestBaud(int baudRate)
+    {
+      //TODO: This doesn't work. I tried a lot of stuff on Arduino side, gave up and deleted the code
+      //Now I suspect it might be the problem on .Net side because (in constructor) GetVersion() doesn't work immediately after Open()
+      //Maybe, the code here would work if the port is closed, reopened with different baud rate and then wait a bit more before sending anything
+
+      /*
+      workflow
+      1.) Send TestBaud request and wait for OK response (on the original baud rate)
+      2.) Both ends change the baud rate
+      3.) Arduino starts waiting for Test request as soon as possible
+      4.) This program sleeps for enough time to allow Arduino to change baud rate
+      5.) This program creates a long random string and sends it with Test request
+      6.) Arduino receives the request, sends the string back, and reverts to original baud rate
+      7.) This program receives the response, reverts to original baud rate and validates the response
+      8.) If response is valid and returned string is the same, return True
+
+      In all cases, regardless of output, both clients revert to original baud rate
+      */
+
+      try
+      {
+        string request = BuildRequest(RequestType.TestBaud, baudRate.ToString());
+        string response = SendRequest(request);
+        ParseResponse(response);
+
+        _port.BaudRate = baudRate;
+        Thread.Sleep(1000);
+
+        Random rand = new Random();
+        StringBuilder sb = new StringBuilder();
+        for (int x = 1; x <= 100; x++)
+        {
+          sb.Append(rand.Next(0, 10).ToString());
+        }
+
+        string testString = sb.ToString();
+        string responseString = Test(testString);
+
+        return testString == responseString;
+      }
+      catch (Exception ex)
+      {
+        return false;
+      }
+      finally
+      {
+        _port.BaudRate = _currentBaud;
+      }
     }
     #endregion Requests
   }

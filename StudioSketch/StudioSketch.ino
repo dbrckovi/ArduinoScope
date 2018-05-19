@@ -4,13 +4,24 @@ const int REQUEST_MAX_PARTS = 8;
 const int REQUEST_ERROR = 0;
 const int REQUEST_TEST = 1;
 const int REQUEST_GET_VERSION = 2;
+const int REQUEST_PIN_MODE = 3;
+const int REQUEST_DIGITAL_WRITE = 4;
+const int REQUEST_DEBUG = 5;
 
 const int RESPONSE_ERROR = 0;
 const int RESPONSE_OK = 1;
 
+String _debug = "";
+
+void Debug()
+{
+  //response may contain anything. Useful for various debugging purposes
+  SendResponse(RESPONSE_OK, _debug);
+}
+
 void setup() 
 {
-  Serial.begin(9600);
+  Serial.begin(500000);
   Serial.setTimeout(50);
 }
 
@@ -35,6 +46,11 @@ void GetAndParseRequest()
 
   switch (requestType)
   {
+    case REQUEST_DEBUG:
+    {
+      Debug();
+      break;
+    }
     case REQUEST_ERROR:
     {
       SendResponse(RESPONSE_ERROR, "Error requested, error returned");
@@ -45,17 +61,28 @@ void GetAndParseRequest()
       SendResponse(RESPONSE_OK, parts[1]);
       break;
     }
+    case REQUEST_PIN_MODE:
+    {
+      int pin = parts[1].toInt();
+      int mode = parts[2].toInt();
+      pinMode(pin, mode);
+      SendResponse(RESPONSE_OK);
+      break;
+    }
+    case REQUEST_DIGITAL_WRITE:
+    {
+      int pin = parts[1].toInt();
+      int value = parts[2].toInt();
+      digitalWrite(pin, value);
+      SendResponse(RESPONSE_OK);
+      break;
+    }
+    case REQUEST_GET_VERSION:
+    {
+      SendResponse(RESPONSE_OK, String(VERSION));
+      break;
+    }
   }
-    
-  /*
-  String response;
-  for (int x = 0; x <= lastPartIndex; x++)
-  {
-    if (parts[x].length() > 0) response += parts[x];
-  }
-  
-  Serial.print(response);
-  */
 }
 
 int SplitString(String input, char separator, String outputParts[])
@@ -89,5 +116,10 @@ int SplitString(String input, char separator, String outputParts[])
 void SendResponse(int responseType, String text)
 {
   Serial.print(String(responseType) + "|" + text);
+}
+
+void SendResponse(int responseType)
+{
+  Serial.print(String(responseType));
 }
 

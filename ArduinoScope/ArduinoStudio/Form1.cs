@@ -26,15 +26,21 @@ namespace ArduinoStudio
         if (value == null && _commuinicator != null)
         {
           _commuinicator.Stop();
+          _commuinicator.Log -= _commuinicator_Log;
         }
+
         _commuinicator = value;
-        btnSerialConnectDisconnect.Text = _commuinicator != null ? "Disconnect" : "Connect";
-        EnableDisableControls();
 
         if (_commuinicator != null)
         {
           _commuinicator.Log += _commuinicator_Log;
         }
+
+
+        txtVersion.Text = _commuinicator != null ? _commuinicator.Version.ToString() : "";
+        txtCurrentBaud.Text = _commuinicator != null ? _commuinicator.CurrentBaud.ToString() : "";
+        btnSerialConnectDisconnect.Text = _commuinicator != null ? "Disconnect" : "Connect";
+        EnableDisableControls();
       }
     }
 
@@ -139,6 +145,84 @@ namespace ArduinoStudio
       try
       {
         _commuinicator.Error();
+      }
+      catch (Exception ex)
+      {
+        Msgbox.Show(this, ex);
+      }
+    }
+
+    private void btnDebug_Click(object sender, EventArgs e)
+    {
+      try
+      {
+        txtResponse.Text = _commuinicator.Debug();
+      }
+      catch (Exception ex)
+      {
+        Msgbox.Show(this, ex);
+      }
+    }
+
+    private void btnSetOutput_Click(object sender, EventArgs e)
+    {
+      try
+      {
+        int pin = int.Parse(txtInt.Text);
+        _commuinicator.PinMode(pin, PinMode.Output);
+      }
+      catch (Exception ex)
+      {
+        Msgbox.Show(this, ex);
+      }
+    }
+
+    private void btnSetInput_Click(object sender, EventArgs e)
+    {
+      try
+      {
+        int pin = int.Parse(txtInt.Text);
+        _commuinicator.PinMode(pin, PinMode.Input);
+      }
+      catch (Exception ex)
+      {
+        Msgbox.Show(this, ex);
+      }
+    }
+
+    private void btnSetHigh_Click(object sender, EventArgs e)
+    {
+      try
+      {
+        int pin = int.Parse(txtInt.Text);
+        _commuinicator.DigitalWrite(pin, true);
+      }
+      catch (Exception ex)
+      {
+        Msgbox.Show(this, ex);
+      }
+    }
+
+    private void btnSetLow_Click(object sender, EventArgs e)
+    {
+      try
+      {
+        int pin = int.Parse(txtInt.Text);
+        _commuinicator.DigitalWrite(pin, false);
+      }
+      catch (Exception ex)
+      {
+        Msgbox.Show(this, ex);
+      }
+    }
+
+    private void btnTestBaud_Click(object sender, EventArgs e)
+    {
+      try
+      {
+        int baud = int.Parse(txtInt.Text);
+        bool result = _commuinicator.TestBaud(baud);
+        MessageBox.Show(result ? "Baud OK" : "Baud NOT OK");
       }
       catch (Exception ex)
       {
