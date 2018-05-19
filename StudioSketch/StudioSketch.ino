@@ -1,35 +1,93 @@
-const byte VERSION = 66;
-const byte COMMAND_GET_VERSION = 1;
+const int VERSION = 1;
 
-bool a = true;
+const int REQUEST_MAX_PARTS = 8;
+const int REQUEST_ERROR = 0;
+const int REQUEST_TEST = 1;
+const int REQUEST_GET_VERSION = 2;
+
+const int RESPONSE_ERROR = 0;
+const int RESPONSE_OK = 1;
 
 void setup() 
 {
-  Serial.begin(500000);
+  Serial.begin(9600);
   Serial.setTimeout(50);
-  pinMode(3, OUTPUT);
 }
 
 void loop() 
 {
-  if (Serial.available() > 0) readSerial();
+  if (Serial.available() > 0) 
+  {
+    GetAndParseRequest();
+  }
+  
   delay(1);
 }
 
-void readSerial()
+//Parses request sent from host application and performs the requested action
+void GetAndParseRequest()
 {
-  int start = millis();
-  
-  String text = Serial.readString();
-  
-  int endTime = millis() - start;
-  
-  Serial.println(endTime);
+  String request = Serial.readString();
+  String parts[REQUEST_MAX_PARTS];
+  int lastPartIndex = SplitString(request, '|', parts);
 
-  if (a) a = false;
-  else a = true;
+  int requestType = parts[0].toInt();
 
-  if (a) digitalWrite(3, HIGH);
-  else digitalWrite(3, LOW);
+  switch (requestType)
+  {
+    case REQUEST_ERROR:
+    {
+      SendResponse(RESPONSE_ERROR, "Error requested, error returned");
+      break;
+    }
+    case REQUEST_TEST:
+    {
+      SendResponse(RESPONSE_OK, parts[1]);
+      break;
+    }
+  }
+    
+  /*
+  String response;
+  for (int x = 0; x <= lastPartIndex; x++)
+  {
+    if (parts[x].length() > 0) response += parts[x];
+  }
+  
+  Serial.print(response);
+  */
+}
+
+int SplitString(String input, char separator, String outputParts[])
+{
+  int currentPart = 0;
+  int x = 0;
+  int inputLength = input.length();
+
+  while (x < inputLength)
+  {
+    char character = input.charAt(x);
+    if (character == '|') 
+    {
+      currentPart++;
+      if (currentPart >= REQUEST_MAX_PARTS) 
+      {
+        currentPart--;
+        break;
+      }
+    }
+    else
+    {
+      outputParts[currentPart] += character;
+    }
+    x++;
+  }
+
+  return currentPart;
+}
+
+void SendResponse(int responseType, String text)
+{
+  Serial.print(String(responseType) + "|" + text);
 }
 

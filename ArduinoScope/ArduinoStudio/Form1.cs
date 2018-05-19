@@ -23,12 +23,30 @@ namespace ArduinoStudio
       }
       set
       {
-        if (value == null && _commuinicator != null) _commuinicator.Stop();
+        if (value == null && _commuinicator != null)
+        {
+          _commuinicator.Stop();
+        }
         _commuinicator = value;
         btnSerialConnectDisconnect.Text = _commuinicator != null ? "Disconnect" : "Connect";
-        cmbSerialPorts.Enabled = _commuinicator == null;
-        pnlControlPanel.Enabled = _commuinicator != null;
+        EnableDisableControls();
+
+        if (_commuinicator != null)
+        {
+          _commuinicator.Log += _commuinicator_Log;
+        }
       }
+    }
+
+    private void _commuinicator_Log(string text)
+    {
+      if (this.InvokeRequired)
+      {
+        this.BeginInvoke(new MethodInvoker(delegate { _commuinicator_Log(text); }));
+        return;
+      }
+
+      txtLog.AppendText(text + "\r\n");
     }
 
     public Form1()
@@ -36,12 +54,20 @@ namespace ArduinoStudio
       InitializeComponent();
     }
 
+    private void EnableDisableControls()
+    {
+      cmbSerialPort.Enabled = _commuinicator == null;
+      pnlControlPanel.Enabled = _commuinicator != null;
+      btnSerialConnectDisconnect.Enabled = cmbSerialPort.SelectedItem != null;
+      numResponseTimeoutFirstByte.Enabled = numResponseTimeoutSubsequentBytes.Enabled = cmbSerialPort.SelectedItem != null && _commuinicator == null;
+    }
+
     private void LoadPorts()
     {
-      cmbSerialPorts.Items.Clear();
+      cmbSerialPort.Items.Clear();
       foreach (string port in SerialPort.GetPortNames())
       {
-        cmbSerialPorts.Items.Add(port);
+        cmbSerialPort.Items.Add(port);
       }
     }
 
@@ -50,6 +76,7 @@ namespace ArduinoStudio
       try
       {
         LoadPorts();
+        EnableDisableControls();
       }
       catch (Exception ex)
       {
@@ -57,16 +84,21 @@ namespace ArduinoStudio
       }
     }
 
-    private void cmbSerialPorts_SelectedIndexChanged(object sender, EventArgs e)
+    private void cmbSerialPort_SelectedIndexChanged(object sender, EventArgs e)
     {
-      btnSerialConnectDisconnect.Enabled = cmbSerialPorts.SelectedItem != null;
+      EnableDisableControls();
     }
 
     private void btnSerialConnectDisconnect_Click(object sender, EventArgs e)
     {
       try
       {
-        if (_commuinicator == null) Communicator = new ArduinoCommunicator((string)cmbSerialPorts.SelectedItem);
+        if (_commuinicator == null)
+        {
+          int firstByteTimeout = Convert.ToInt32(numResponseTimeoutFirstByte.Value);
+          int lastByteTimeout = Convert.ToInt32(numResponseTimeoutSubsequentBytes.Value);
+          Communicator = new ArduinoCommunicator((string)cmbSerialPort.SelectedItem, firstByteTimeout, lastByteTimeout);
+        }
         else Communicator = null;
       }
       catch (Exception ex)
@@ -84,7 +116,7 @@ namespace ArduinoStudio
     {
       try
       {
-        txtResponse.Text = _commuinicator.SendRequest(txtInt.Text);
+        txtResponse.Text = _commuinicator.Test(txtInt.Text);
       }
       catch (Exception ex)
       {
@@ -95,6 +127,23 @@ namespace ArduinoStudio
     private void button2_Click(object sender, EventArgs e)
     {
 
+    }
+
+    private void btnClearLog_Click(object sender, EventArgs e)
+    {
+      txtLog.Text = "";
+    }
+
+    private void btnError_Click(object sender, EventArgs e)
+    {
+      try
+      {
+        _commuinicator.Error();
+      }
+      catch (Exception ex)
+      {
+        Msgbox.Show(this, ex);
+      }
     }
   }
 }
