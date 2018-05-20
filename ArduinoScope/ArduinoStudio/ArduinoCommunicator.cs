@@ -241,6 +241,21 @@ namespace ArduinoStudio
       ParseResponse(response);
     }
 
+    public void AnalogWrite(int pin, byte value)
+    {
+      string request = BuildRequest(RequestType.AnalogWrite, pin.ToString(), value.ToString());
+      string response = SendRequest(request);
+      ParseResponse(response);
+    }
+
+    public int AnalogRead(int pin)
+    {
+      string request = BuildRequest(RequestType.AnalogRead, pin.ToString());
+      string response = SendRequest(request);
+      List<string> responseValues = ParseResponse(response);
+      return int.Parse(responseValues[0]);
+    }
+
     /// <summary>
     /// Tests if specified baud rate can be used for stable communication. Reverts to original baud rate after completion
     /// </summary>
@@ -287,7 +302,7 @@ namespace ArduinoStudio
 
         return testString == responseString;
       }
-      catch (Exception ex)
+      catch
       {
         return false;
       }

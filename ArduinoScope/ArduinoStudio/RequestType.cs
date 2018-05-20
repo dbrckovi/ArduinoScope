@@ -17,6 +17,8 @@ namespace ArduinoStudio
     DigitalWrite = 4,       //int (pon number), bool (1 = HIGH, 0 = LOW)
     Debug = 5,              //No
     TestBaud = 6,           //int (baud rate), any string
-    SetBaud = 7             //int (baud rate)
+    SetBaud = 7,            //int (baud rate)
+    AnalogWrite = 8,        //int (pin number), byte (value)
+    AnalogRead = 9,         //int (analog pin number), int (value)
   }
 }

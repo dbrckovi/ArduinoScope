@@ -229,5 +229,32 @@ namespace ArduinoStudio
         Msgbox.Show(this, ex);
       }
     }
+
+    private void sliderAnalogWrite_Scroll(object sender, EventArgs e)
+    {
+      try
+      {
+        int pin = int.Parse(txtInt.Text);
+        byte value = Convert.ToByte(sliderAnalogWrite.Value);
+        _commuinicator.AnalogWrite(pin, value);
+      }
+      catch (Exception ex)
+      {
+        Msgbox.Show(this, ex);
+      }
+    }
+
+    private void btnAnalogRead_Click(object sender, EventArgs e)
+    {
+      try
+      {
+        int pin = int.Parse(txtInt.Text);
+        txtResponse.Text = _commuinicator.AnalogRead(pin).ToString();
+      }
+      catch (Exception ex)
+      {
+        Msgbox.Show(this, ex);
+      }
+    }
   }
 }

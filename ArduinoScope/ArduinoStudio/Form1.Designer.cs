@@ -29,6 +29,10 @@
     private void InitializeComponent()
     {
       this.pnlSerialConnection = new System.Windows.Forms.Panel();
+      this.txtCurrentBaud = new System.Windows.Forms.TextBox();
+      this.lblCurrentBaud = new System.Windows.Forms.Label();
+      this.txtVersion = new System.Windows.Forms.TextBox();
+      this.lblVersion = new System.Windows.Forms.Label();
       this.numResponseTimeoutSubsequentBytes = new System.Windows.Forms.NumericUpDown();
       this.lblResponseTimeoutSubsequentBytes = new System.Windows.Forms.Label();
       this.numResponseTimeoutFirstByte = new System.Windows.Forms.NumericUpDown();
@@ -37,26 +41,35 @@
       this.lblSerialPort = new System.Windows.Forms.Label();
       this.cmbSerialPort = new System.Windows.Forms.ComboBox();
       this.pnlControlPanel = new System.Windows.Forms.Panel();
+      this.btnTestBaud = new System.Windows.Forms.Button();
+      this.btnSetLow = new System.Windows.Forms.Button();
+      this.btnSetHigh = new System.Windows.Forms.Button();
+      this.btnSetInput = new System.Windows.Forms.Button();
+      this.btnSetOutput = new System.Windows.Forms.Button();
+      this.btnDebug = new System.Windows.Forms.Button();
+      this.btnError = new System.Windows.Forms.Button();
       this.txtInt = new System.Windows.Forms.TextBox();
       this.btnTest = new System.Windows.Forms.Button();
       this.txtResponse = new System.Windows.Forms.RichTextBox();
       this.txtLog = new System.Windows.Forms.RichTextBox();
       this.btnClearLog = new System.Windows.Forms.Button();
-      this.btnError = new System.Windows.Forms.Button();
-      this.btnDebug = new System.Windows.Forms.Button();
-      this.btnSetOutput = new System.Windows.Forms.Button();
-      this.btnSetInput = new System.Windows.Forms.Button();
-      this.btnSetHigh = new System.Windows.Forms.Button();
-      this.btnSetLow = new System.Windows.Forms.Button();
-      this.lblVersion = new System.Windows.Forms.Label();
-      this.txtVersion = new System.Windows.Forms.TextBox();
-      this.txtCurrentBaud = new System.Windows.Forms.TextBox();
-      this.lblCurrentBaud = new System.Windows.Forms.Label();
-      this.btnTestBaud = new System.Windows.Forms.Button();
+      this.tabControlPanel = new System.Windows.Forms.TabControl();
+      this.tabPageDebug = new System.Windows.Forms.TabPage();
+      this.tabPageLog = new System.Windows.Forms.TabPage();
+      this.tabPageMain = new System.Windows.Forms.TabPage();
+      this.panel1 = new System.Windows.Forms.Panel();
+      this.sliderAnalogWrite = new System.Windows.Forms.TrackBar();
+      this.textBox1 = new System.Windows.Forms.TextBox();
+      this.btnAnalogRead = new System.Windows.Forms.Button();
       this.pnlSerialConnection.SuspendLayout();
       ((System.ComponentModel.ISupportInitialize)(this.numResponseTimeoutSubsequentBytes)).BeginInit();
       ((System.ComponentModel.ISupportInitialize)(this.numResponseTimeoutFirstByte)).BeginInit();
       this.pnlControlPanel.SuspendLayout();
+      this.tabControlPanel.SuspendLayout();
+      this.tabPageDebug.SuspendLayout();
+      this.tabPageLog.SuspendLayout();
+      this.panel1.SuspendLayout();
+      ((System.ComponentModel.ISupportInitialize)(this.sliderAnalogWrite)).BeginInit();
       this.SuspendLayout();
       // 
       // pnlSerialConnection
@@ -78,6 +91,40 @@
       this.pnlSerialConnection.Name = "pnlSerialConnection";
       this.pnlSerialConnection.Size = new System.Drawing.Size(1161, 40);
       this.pnlSerialConnection.TabIndex = 0;
+      // 
+      // txtCurrentBaud
+      // 
+      this.txtCurrentBaud.Enabled = false;
+      this.txtCurrentBaud.Location = new System.Drawing.Point(840, 8);
+      this.txtCurrentBaud.Name = "txtCurrentBaud";
+      this.txtCurrentBaud.Size = new System.Drawing.Size(80, 20);
+      this.txtCurrentBaud.TabIndex = 11;
+      // 
+      // lblCurrentBaud
+      // 
+      this.lblCurrentBaud.AutoSize = true;
+      this.lblCurrentBaud.Location = new System.Drawing.Point(768, 8);
+      this.lblCurrentBaud.Name = "lblCurrentBaud";
+      this.lblCurrentBaud.Size = new System.Drawing.Size(68, 13);
+      this.lblCurrentBaud.TabIndex = 10;
+      this.lblCurrentBaud.Text = "Current baud";
+      // 
+      // txtVersion
+      // 
+      this.txtVersion.Enabled = false;
+      this.txtVersion.Location = new System.Drawing.Point(728, 8);
+      this.txtVersion.Name = "txtVersion";
+      this.txtVersion.Size = new System.Drawing.Size(32, 20);
+      this.txtVersion.TabIndex = 9;
+      // 
+      // lblVersion
+      // 
+      this.lblVersion.AutoSize = true;
+      this.lblVersion.Location = new System.Drawing.Point(680, 8);
+      this.lblVersion.Name = "lblVersion";
+      this.lblVersion.Size = new System.Drawing.Size(42, 13);
+      this.lblVersion.TabIndex = 8;
+      this.lblVersion.Text = "Version";
       // 
       // numResponseTimeoutSubsequentBytes
       // 
@@ -106,9 +153,9 @@
       this.lblResponseTimeoutSubsequentBytes.AutoSize = true;
       this.lblResponseTimeoutSubsequentBytes.Location = new System.Drawing.Point(368, 8);
       this.lblResponseTimeoutSubsequentBytes.Name = "lblResponseTimeoutSubsequentBytes";
-      this.lblResponseTimeoutSubsequentBytes.Size = new System.Drawing.Size(132, 13);
+      this.lblResponseTimeoutSubsequentBytes.Size = new System.Drawing.Size(133, 13);
       this.lblResponseTimeoutSubsequentBytes.TabIndex = 6;
-      this.lblResponseTimeoutSubsequentBytes.Text = "First byte response timeout";
+      this.lblResponseTimeoutSubsequentBytes.Text = "Last byte response timeout";
       // 
       // numResponseTimeoutFirstByte
       // 
@@ -173,32 +220,94 @@
       // 
       // pnlControlPanel
       // 
-      this.pnlControlPanel.Controls.Add(this.btnTestBaud);
-      this.pnlControlPanel.Controls.Add(this.btnSetLow);
-      this.pnlControlPanel.Controls.Add(this.btnSetHigh);
-      this.pnlControlPanel.Controls.Add(this.btnSetInput);
-      this.pnlControlPanel.Controls.Add(this.btnSetOutput);
-      this.pnlControlPanel.Controls.Add(this.btnDebug);
-      this.pnlControlPanel.Controls.Add(this.btnError);
-      this.pnlControlPanel.Controls.Add(this.txtInt);
-      this.pnlControlPanel.Controls.Add(this.btnTest);
-      this.pnlControlPanel.Controls.Add(this.txtResponse);
+      this.pnlControlPanel.Controls.Add(this.tabControlPanel);
+      this.pnlControlPanel.Dock = System.Windows.Forms.DockStyle.Fill;
       this.pnlControlPanel.Enabled = false;
-      this.pnlControlPanel.Location = new System.Drawing.Point(8, 64);
+      this.pnlControlPanel.Location = new System.Drawing.Point(0, 40);
       this.pnlControlPanel.Name = "pnlControlPanel";
-      this.pnlControlPanel.Size = new System.Drawing.Size(488, 472);
+      this.pnlControlPanel.Size = new System.Drawing.Size(1161, 505);
       this.pnlControlPanel.TabIndex = 1;
+      // 
+      // btnTestBaud
+      // 
+      this.btnTestBaud.Location = new System.Drawing.Point(4, 74);
+      this.btnTestBaud.Name = "btnTestBaud";
+      this.btnTestBaud.Size = new System.Drawing.Size(112, 40);
+      this.btnTestBaud.TabIndex = 9;
+      this.btnTestBaud.Text = "Test baud";
+      this.btnTestBaud.UseVisualStyleBackColor = true;
+      this.btnTestBaud.Click += new System.EventHandler(this.btnTestBaud_Click);
+      // 
+      // btnSetLow
+      // 
+      this.btnSetLow.Location = new System.Drawing.Point(316, 74);
+      this.btnSetLow.Name = "btnSetLow";
+      this.btnSetLow.Size = new System.Drawing.Size(112, 40);
+      this.btnSetLow.TabIndex = 8;
+      this.btnSetLow.Text = "Set low";
+      this.btnSetLow.UseVisualStyleBackColor = true;
+      this.btnSetLow.Click += new System.EventHandler(this.btnSetLow_Click);
+      // 
+      // btnSetHigh
+      // 
+      this.btnSetHigh.Location = new System.Drawing.Point(316, 26);
+      this.btnSetHigh.Name = "btnSetHigh";
+      this.btnSetHigh.Size = new System.Drawing.Size(112, 40);
+      this.btnSetHigh.TabIndex = 7;
+      this.btnSetHigh.Text = "Set high";
+      this.btnSetHigh.UseVisualStyleBackColor = true;
+      this.btnSetHigh.Click += new System.EventHandler(this.btnSetHigh_Click);
+      // 
+      // btnSetInput
+      // 
+      this.btnSetInput.Location = new System.Drawing.Point(196, 74);
+      this.btnSetInput.Name = "btnSetInput";
+      this.btnSetInput.Size = new System.Drawing.Size(112, 40);
+      this.btnSetInput.TabIndex = 6;
+      this.btnSetInput.Text = "Set as input";
+      this.btnSetInput.UseVisualStyleBackColor = true;
+      this.btnSetInput.Click += new System.EventHandler(this.btnSetInput_Click);
+      // 
+      // btnSetOutput
+      // 
+      this.btnSetOutput.Location = new System.Drawing.Point(196, 26);
+      this.btnSetOutput.Name = "btnSetOutput";
+      this.btnSetOutput.Size = new System.Drawing.Size(112, 40);
+      this.btnSetOutput.TabIndex = 5;
+      this.btnSetOutput.Text = "Set as output";
+      this.btnSetOutput.UseVisualStyleBackColor = true;
+      this.btnSetOutput.Click += new System.EventHandler(this.btnSetOutput_Click);
+      // 
+      // btnDebug
+      // 
+      this.btnDebug.Location = new System.Drawing.Point(84, 26);
+      this.btnDebug.Name = "btnDebug";
+      this.btnDebug.Size = new System.Drawing.Size(72, 40);
+      this.btnDebug.TabIndex = 4;
+      this.btnDebug.Text = "Debug";
+      this.btnDebug.UseVisualStyleBackColor = true;
+      this.btnDebug.Click += new System.EventHandler(this.btnDebug_Click);
+      // 
+      // btnError
+      // 
+      this.btnError.Location = new System.Drawing.Point(4, 26);
+      this.btnError.Name = "btnError";
+      this.btnError.Size = new System.Drawing.Size(72, 40);
+      this.btnError.TabIndex = 3;
+      this.btnError.Text = "Error";
+      this.btnError.UseVisualStyleBackColor = true;
+      this.btnError.Click += new System.EventHandler(this.btnError_Click);
       // 
       // txtInt
       // 
-      this.txtInt.Location = new System.Drawing.Point(8, 8);
+      this.txtInt.Location = new System.Drawing.Point(4, 2);
       this.txtInt.Name = "txtInt";
       this.txtInt.Size = new System.Drawing.Size(400, 20);
       this.txtInt.TabIndex = 2;
       // 
       // btnTest
       // 
-      this.btnTest.Location = new System.Drawing.Point(416, 8);
+      this.btnTest.Location = new System.Drawing.Point(412, 2);
       this.btnTest.Name = "btnTest";
       this.btnTest.Size = new System.Drawing.Size(56, 24);
       this.btnTest.TabIndex = 1;
@@ -208,7 +317,7 @@
       // 
       // txtResponse
       // 
-      this.txtResponse.Location = new System.Drawing.Point(8, 400);
+      this.txtResponse.Location = new System.Drawing.Point(8, 192);
       this.txtResponse.Name = "txtResponse";
       this.txtResponse.Size = new System.Drawing.Size(472, 80);
       this.txtResponse.TabIndex = 0;
@@ -216,135 +325,126 @@
       // 
       // txtLog
       // 
+      this.txtLog.Dock = System.Windows.Forms.DockStyle.Fill;
       this.txtLog.Font = new System.Drawing.Font("Courier New", 8.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(238)));
-      this.txtLog.Location = new System.Drawing.Point(512, 104);
+      this.txtLog.Location = new System.Drawing.Point(3, 32);
       this.txtLog.Name = "txtLog";
-      this.txtLog.Size = new System.Drawing.Size(632, 432);
+      this.txtLog.Size = new System.Drawing.Size(1147, 444);
       this.txtLog.TabIndex = 2;
       this.txtLog.Text = "";
       this.txtLog.WordWrap = false;
       // 
       // btnClearLog
       // 
-      this.btnClearLog.Location = new System.Drawing.Point(536, 64);
+      this.btnClearLog.Dock = System.Windows.Forms.DockStyle.Right;
+      this.btnClearLog.Location = new System.Drawing.Point(1059, 0);
       this.btnClearLog.Name = "btnClearLog";
-      this.btnClearLog.Size = new System.Drawing.Size(88, 24);
+      this.btnClearLog.Size = new System.Drawing.Size(88, 29);
       this.btnClearLog.TabIndex = 4;
       this.btnClearLog.Text = "Clear";
       this.btnClearLog.UseVisualStyleBackColor = true;
       this.btnClearLog.Click += new System.EventHandler(this.btnClearLog_Click);
       // 
-      // btnError
+      // tabControlPanel
       // 
-      this.btnError.Location = new System.Drawing.Point(8, 32);
-      this.btnError.Name = "btnError";
-      this.btnError.Size = new System.Drawing.Size(72, 40);
-      this.btnError.TabIndex = 3;
-      this.btnError.Text = "Error";
-      this.btnError.UseVisualStyleBackColor = true;
-      this.btnError.Click += new System.EventHandler(this.btnError_Click);
+      this.tabControlPanel.Alignment = System.Windows.Forms.TabAlignment.Bottom;
+      this.tabControlPanel.Controls.Add(this.tabPageMain);
+      this.tabControlPanel.Controls.Add(this.tabPageDebug);
+      this.tabControlPanel.Controls.Add(this.tabPageLog);
+      this.tabControlPanel.Dock = System.Windows.Forms.DockStyle.Fill;
+      this.tabControlPanel.Location = new System.Drawing.Point(0, 0);
+      this.tabControlPanel.Name = "tabControlPanel";
+      this.tabControlPanel.SelectedIndex = 0;
+      this.tabControlPanel.Size = new System.Drawing.Size(1161, 505);
+      this.tabControlPanel.TabIndex = 5;
       // 
-      // btnDebug
+      // tabPageDebug
       // 
-      this.btnDebug.Location = new System.Drawing.Point(88, 32);
-      this.btnDebug.Name = "btnDebug";
-      this.btnDebug.Size = new System.Drawing.Size(72, 40);
-      this.btnDebug.TabIndex = 4;
-      this.btnDebug.Text = "Debug";
-      this.btnDebug.UseVisualStyleBackColor = true;
-      this.btnDebug.Click += new System.EventHandler(this.btnDebug_Click);
+      this.tabPageDebug.BackColor = System.Drawing.SystemColors.Control;
+      this.tabPageDebug.Controls.Add(this.btnAnalogRead);
+      this.tabPageDebug.Controls.Add(this.textBox1);
+      this.tabPageDebug.Controls.Add(this.txtResponse);
+      this.tabPageDebug.Controls.Add(this.btnTestBaud);
+      this.tabPageDebug.Controls.Add(this.sliderAnalogWrite);
+      this.tabPageDebug.Controls.Add(this.txtInt);
+      this.tabPageDebug.Controls.Add(this.btnSetLow);
+      this.tabPageDebug.Controls.Add(this.btnTest);
+      this.tabPageDebug.Controls.Add(this.btnSetHigh);
+      this.tabPageDebug.Controls.Add(this.btnError);
+      this.tabPageDebug.Controls.Add(this.btnSetInput);
+      this.tabPageDebug.Controls.Add(this.btnDebug);
+      this.tabPageDebug.Controls.Add(this.btnSetOutput);
+      this.tabPageDebug.Location = new System.Drawing.Point(4, 4);
+      this.tabPageDebug.Name = "tabPageDebug";
+      this.tabPageDebug.Padding = new System.Windows.Forms.Padding(3);
+      this.tabPageDebug.Size = new System.Drawing.Size(1153, 479);
+      this.tabPageDebug.TabIndex = 0;
+      this.tabPageDebug.Text = "Debug";
       // 
-      // btnSetOutput
+      // tabPageLog
       // 
-      this.btnSetOutput.Location = new System.Drawing.Point(200, 32);
-      this.btnSetOutput.Name = "btnSetOutput";
-      this.btnSetOutput.Size = new System.Drawing.Size(112, 40);
-      this.btnSetOutput.TabIndex = 5;
-      this.btnSetOutput.Text = "Set as output";
-      this.btnSetOutput.UseVisualStyleBackColor = true;
-      this.btnSetOutput.Click += new System.EventHandler(this.btnSetOutput_Click);
+      this.tabPageLog.BackColor = System.Drawing.SystemColors.Control;
+      this.tabPageLog.Controls.Add(this.txtLog);
+      this.tabPageLog.Controls.Add(this.panel1);
+      this.tabPageLog.Location = new System.Drawing.Point(4, 4);
+      this.tabPageLog.Name = "tabPageLog";
+      this.tabPageLog.Padding = new System.Windows.Forms.Padding(3);
+      this.tabPageLog.Size = new System.Drawing.Size(1153, 479);
+      this.tabPageLog.TabIndex = 1;
+      this.tabPageLog.Text = "Log";
       // 
-      // btnSetInput
+      // tabPageMain
       // 
-      this.btnSetInput.Location = new System.Drawing.Point(200, 80);
-      this.btnSetInput.Name = "btnSetInput";
-      this.btnSetInput.Size = new System.Drawing.Size(112, 40);
-      this.btnSetInput.TabIndex = 6;
-      this.btnSetInput.Text = "Set as input";
-      this.btnSetInput.UseVisualStyleBackColor = true;
-      this.btnSetInput.Click += new System.EventHandler(this.btnSetInput_Click);
+      this.tabPageMain.BackColor = System.Drawing.SystemColors.Control;
+      this.tabPageMain.Location = new System.Drawing.Point(4, 4);
+      this.tabPageMain.Name = "tabPageMain";
+      this.tabPageMain.Padding = new System.Windows.Forms.Padding(3);
+      this.tabPageMain.Size = new System.Drawing.Size(1153, 479);
+      this.tabPageMain.TabIndex = 2;
+      this.tabPageMain.Text = "Main";
       // 
-      // btnSetHigh
+      // panel1
       // 
-      this.btnSetHigh.Location = new System.Drawing.Point(320, 32);
-      this.btnSetHigh.Name = "btnSetHigh";
-      this.btnSetHigh.Size = new System.Drawing.Size(112, 40);
-      this.btnSetHigh.TabIndex = 7;
-      this.btnSetHigh.Text = "Set high";
-      this.btnSetHigh.UseVisualStyleBackColor = true;
-      this.btnSetHigh.Click += new System.EventHandler(this.btnSetHigh_Click);
+      this.panel1.Controls.Add(this.btnClearLog);
+      this.panel1.Dock = System.Windows.Forms.DockStyle.Top;
+      this.panel1.Location = new System.Drawing.Point(3, 3);
+      this.panel1.Name = "panel1";
+      this.panel1.Size = new System.Drawing.Size(1147, 29);
+      this.panel1.TabIndex = 5;
       // 
-      // btnSetLow
+      // sliderAnalogWrite
       // 
-      this.btnSetLow.Location = new System.Drawing.Point(320, 80);
-      this.btnSetLow.Name = "btnSetLow";
-      this.btnSetLow.Size = new System.Drawing.Size(112, 40);
-      this.btnSetLow.TabIndex = 8;
-      this.btnSetLow.Text = "Set low";
-      this.btnSetLow.UseVisualStyleBackColor = true;
-      this.btnSetLow.Click += new System.EventHandler(this.btnSetLow_Click);
+      this.sliderAnalogWrite.LargeChange = 32;
+      this.sliderAnalogWrite.Location = new System.Drawing.Point(8, 128);
+      this.sliderAnalogWrite.Maximum = 255;
+      this.sliderAnalogWrite.Name = "sliderAnalogWrite";
+      this.sliderAnalogWrite.Size = new System.Drawing.Size(93, 45);
+      this.sliderAnalogWrite.TabIndex = 10;
+      this.sliderAnalogWrite.TickFrequency = 64;
+      this.sliderAnalogWrite.Scroll += new System.EventHandler(this.sliderAnalogWrite_Scroll);
       // 
-      // lblVersion
+      // textBox1
       // 
-      this.lblVersion.AutoSize = true;
-      this.lblVersion.Location = new System.Drawing.Point(680, 8);
-      this.lblVersion.Name = "lblVersion";
-      this.lblVersion.Size = new System.Drawing.Size(42, 13);
-      this.lblVersion.TabIndex = 8;
-      this.lblVersion.Text = "Version";
+      this.textBox1.Location = new System.Drawing.Point(109, 133);
+      this.textBox1.Name = "textBox1";
+      this.textBox1.Size = new System.Drawing.Size(104, 20);
+      this.textBox1.TabIndex = 11;
       // 
-      // txtVersion
+      // btnAnalogRead
       // 
-      this.txtVersion.Enabled = false;
-      this.txtVersion.Location = new System.Drawing.Point(728, 8);
-      this.txtVersion.Name = "txtVersion";
-      this.txtVersion.Size = new System.Drawing.Size(32, 20);
-      this.txtVersion.TabIndex = 9;
-      // 
-      // txtCurrentBaud
-      // 
-      this.txtCurrentBaud.Enabled = false;
-      this.txtCurrentBaud.Location = new System.Drawing.Point(840, 8);
-      this.txtCurrentBaud.Name = "txtCurrentBaud";
-      this.txtCurrentBaud.Size = new System.Drawing.Size(80, 20);
-      this.txtCurrentBaud.TabIndex = 11;
-      // 
-      // lblCurrentBaud
-      // 
-      this.lblCurrentBaud.AutoSize = true;
-      this.lblCurrentBaud.Location = new System.Drawing.Point(768, 8);
-      this.lblCurrentBaud.Name = "lblCurrentBaud";
-      this.lblCurrentBaud.Size = new System.Drawing.Size(68, 13);
-      this.lblCurrentBaud.TabIndex = 10;
-      this.lblCurrentBaud.Text = "Current baud";
-      // 
-      // btnTestBaud
-      // 
-      this.btnTestBaud.Location = new System.Drawing.Point(8, 80);
-      this.btnTestBaud.Name = "btnTestBaud";
-      this.btnTestBaud.Size = new System.Drawing.Size(112, 40);
-      this.btnTestBaud.TabIndex = 9;
-      this.btnTestBaud.Text = "Test baud";
-      this.btnTestBaud.UseVisualStyleBackColor = true;
-      this.btnTestBaud.Click += new System.EventHandler(this.btnTestBaud_Click);
+      this.btnAnalogRead.Location = new System.Drawing.Point(232, 128);
+      this.btnAnalogRead.Name = "btnAnalogRead";
+      this.btnAnalogRead.Size = new System.Drawing.Size(112, 40);
+      this.btnAnalogRead.TabIndex = 12;
+      this.btnAnalogRead.Text = "Analog read";
+      this.btnAnalogRead.UseVisualStyleBackColor = true;
+      this.btnAnalogRead.Click += new System.EventHandler(this.btnAnalogRead_Click);
       // 
       // Form1
       // 
       this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
       this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
-      this.ClientSize = new System.Drawing.Size(1161, 618);
-      this.Controls.Add(this.btnClearLog);
-      this.Controls.Add(this.txtLog);
+      this.ClientSize = new System.Drawing.Size(1161, 545);
       this.Controls.Add(this.pnlControlPanel);
       this.Controls.Add(this.pnlSerialConnection);
       this.Name = "Form1";
@@ -356,7 +456,12 @@
       ((System.ComponentModel.ISupportInitialize)(this.numResponseTimeoutSubsequentBytes)).EndInit();
       ((System.ComponentModel.ISupportInitialize)(this.numResponseTimeoutFirstByte)).EndInit();
       this.pnlControlPanel.ResumeLayout(false);
-      this.pnlControlPanel.PerformLayout();
+      this.tabControlPanel.ResumeLayout(false);
+      this.tabPageDebug.ResumeLayout(false);
+      this.tabPageDebug.PerformLayout();
+      this.tabPageLog.ResumeLayout(false);
+      this.panel1.ResumeLayout(false);
+      ((System.ComponentModel.ISupportInitialize)(this.sliderAnalogWrite)).EndInit();
       this.ResumeLayout(false);
 
     }
@@ -388,6 +493,14 @@
     private System.Windows.Forms.TextBox txtVersion;
     private System.Windows.Forms.Label lblVersion;
     private System.Windows.Forms.Button btnTestBaud;
+    private System.Windows.Forms.TabControl tabControlPanel;
+    private System.Windows.Forms.TabPage tabPageMain;
+    private System.Windows.Forms.TabPage tabPageDebug;
+    private System.Windows.Forms.TabPage tabPageLog;
+    private System.Windows.Forms.Panel panel1;
+    private System.Windows.Forms.TextBox textBox1;
+    private System.Windows.Forms.TrackBar sliderAnalogWrite;
+    private System.Windows.Forms.Button btnAnalogRead;
   }
 }
 

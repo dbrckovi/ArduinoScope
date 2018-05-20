@@ -7,6 +7,10 @@ const int REQUEST_GET_VERSION = 2;
 const int REQUEST_PIN_MODE = 3;
 const int REQUEST_DIGITAL_WRITE = 4;
 const int REQUEST_DEBUG = 5;
+const int REQUEST_TEST_BAUD = 6;
+const int REQUEST_SET_BAUD = 7;
+const int REQUEST_ANALOG_WRITE = 8;
+const int REQUEST_ANALOG_READ = 9;
 
 const int RESPONSE_ERROR = 0;
 const int RESPONSE_OK = 1;
@@ -80,6 +84,21 @@ void GetAndParseRequest()
     case REQUEST_GET_VERSION:
     {
       SendResponse(RESPONSE_OK, String(VERSION));
+      break;
+    }
+    case REQUEST_ANALOG_WRITE:
+    {
+      int pin = parts[1].toInt();
+      int value = parts[2].toInt();
+      analogWrite(pin, value);
+      SendResponse(RESPONSE_OK);
+      break;
+    }
+    case REQUEST_ANALOG_READ:
+    {
+      int pin = parts[1].toInt();
+      int value = analogRead(pin);
+      SendResponse(RESPONSE_OK, String(value));
       break;
     }
   }
