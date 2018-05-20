@@ -18,6 +18,7 @@ namespace ArduinoStudio
     private Encoding _serialEncoding = new UTF8Encoding();
     private int _version = -1;
     private int[] _viableBaudRates = { 9600, 14400, 19200, 28800, 38400, 57600, 115200, 230400, 500000 };
+    private DigitalPin[] _digitalPins = null;
     #endregion Variables
 
     #region Properties
@@ -179,6 +180,18 @@ namespace ArduinoStudio
       }
       else throw new Exception("Invalid response code");
     }
+
+    /// <summary>
+    /// Creates a list of digital pins.
+    /// </summary>
+    private void LoadDigitalPins()
+    {
+      //In the future, this could accept some kind of Arduino model information, in case different models have different pinouts
+      //TODO: continue
+      
+
+    }
+    
     #endregion Infrastructure
 
     #region Requests
