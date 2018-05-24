@@ -11,6 +11,8 @@ const int REQUEST_TEST_BAUD = 6;
 const int REQUEST_SET_BAUD = 7;
 const int REQUEST_ANALOG_WRITE = 8;
 const int REQUEST_ANALOG_READ = 9;
+const int REQUEST_TONE = 10;
+const int REQUEST_NO_TONE = 11;
 
 const int RESPONSE_ERROR = 0;
 const int RESPONSE_OK = 1;
@@ -99,6 +101,22 @@ void GetAndParseRequest()
       int pin = parts[1].toInt();
       int value = analogRead(pin);
       SendResponse(RESPONSE_OK, String(value));
+      break;
+    }
+    case REQUEST_TONE:
+    {
+      int pin = parts[1].toInt();
+      unsigned int frequency = parts[2].toInt();
+      unsigned long duration = parts[3].toInt();
+      tone(pin, frequency, duration);
+      SendResponse(RESPONSE_OK);
+      break;
+    }
+    case REQUEST_NO_TONE:
+    {
+      int pin = parts[1].toInt();
+      noTone(pin);
+      SendResponse(RESPONSE_OK);
       break;
     }
   }

@@ -18,7 +18,6 @@ namespace ArduinoStudio
     private Encoding _serialEncoding = new UTF8Encoding();
     private int _version = -1;
     private int[] _viableBaudRates = { 9600, 14400, 19200, 28800, 38400, 57600, 115200, 230400, 500000 };
-    private DigitalPin[] _digitalPins = null;
     #endregion Variables
 
     #region Properties
@@ -267,6 +266,20 @@ namespace ArduinoStudio
       string response = SendRequest(request);
       List<string> responseValues = ParseResponse(response);
       return int.Parse(responseValues[0]);
+    }
+
+    public void Tone (int pin, int frequency, int duration)
+    {
+      string request = BuildRequest(RequestType.Tone, pin.ToString(), frequency.ToString(), duration.ToString());
+      string response = SendRequest(request);
+      ParseResponse(response);
+    }
+
+    public void NoTone(int pin)
+    {
+      string request = BuildRequest(RequestType.NoTone, pin.ToString());
+      string response = SendRequest(request);
+      ParseResponse(response);
     }
 
     /// <summary>

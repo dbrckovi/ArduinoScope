@@ -20,5 +20,7 @@ namespace ArduinoStudio
     SetBaud = 7,            //int (baud rate)
     AnalogWrite = 8,        //int (pin number), byte (value)
     AnalogRead = 9,         //int (analog pin number), int (value)
+    Tone = 10,              //int (pin number), int (frequency), int (duration in miliseconds)
+    NoTone = 11,            //int (pin number)
   }
 }

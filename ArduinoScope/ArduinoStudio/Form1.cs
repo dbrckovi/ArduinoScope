@@ -256,5 +256,32 @@ namespace ArduinoStudio
         Msgbox.Show(this, ex);
       }
     }
+
+    private void btnTone_Click(object sender, EventArgs e)
+    {
+      try
+      {
+        int pin = int.Parse(txtInt.Text);
+        int frequency = Convert.ToInt32(trackFrequency.Value);
+        _commuinicator.Tone(pin, frequency, 0);
+      }
+      catch (Exception ex)
+      {
+        Msgbox.Show(this, ex);
+      }
+    }
+
+    private void btnNoTone_Click(object sender, EventArgs e)
+    {
+      try
+      {
+        int pin = int.Parse(txtInt.Text);
+        _commuinicator.NoTone(pin);
+      }
+      catch (Exception ex)
+      {
+        Msgbox.Show(this, ex);
+      }
+    }
   }
 }
