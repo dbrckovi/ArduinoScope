@@ -36,11 +36,11 @@ namespace ArduinoStudio
           _commuinicator.Log += _commuinicator_Log;
         }
 
-
         txtVersion.Text = _commuinicator != null ? _commuinicator.Version.ToString() : "";
         txtCurrentBaud.Text = _commuinicator != null ? _commuinicator.CurrentBaud.ToString() : "";
         btnSerialConnectDisconnect.Text = _commuinicator != null ? "Disconnect" : "Connect";
         EnableDisableControls();
+        digitalPinList1.Communicator = _commuinicator;
       }
     }
 
@@ -218,16 +218,7 @@ namespace ArduinoStudio
 
     private void btnTestBaud_Click(object sender, EventArgs e)
     {
-      try
-      {
-        int baud = int.Parse(txtInt.Text);
-        bool result = _commuinicator.TestBaud(baud);
-        MessageBox.Show(result ? "Baud OK" : "Baud NOT OK");
-      }
-      catch (Exception ex)
-      {
-        Msgbox.Show(this, ex);
-      }
+
     }
 
     private void sliderAnalogWrite_Scroll(object sender, EventArgs e)
@@ -263,7 +254,7 @@ namespace ArduinoStudio
       {
         int pin = int.Parse(txtInt.Text);
         int frequency = Convert.ToInt32(trackFrequency.Value);
-        _commuinicator.Tone(pin, frequency, 0);
+        _commuinicator.Tone(pin, frequency, 20);
       }
       catch (Exception ex)
       {

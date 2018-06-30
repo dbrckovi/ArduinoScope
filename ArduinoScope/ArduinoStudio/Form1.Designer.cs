@@ -43,21 +43,6 @@
       this.pnlControlPanel = new System.Windows.Forms.Panel();
       this.tabControlPanel = new System.Windows.Forms.TabControl();
       this.tabPageMain = new System.Windows.Forms.TabPage();
-      this.grpDigitalPins = new System.Windows.Forms.GroupBox();
-      this.digitalPinController14 = new ArduinoStudio.DigitalPinController();
-      this.digitalPinController13 = new ArduinoStudio.DigitalPinController();
-      this.digitalPinController12 = new ArduinoStudio.DigitalPinController();
-      this.digitalPinController11 = new ArduinoStudio.DigitalPinController();
-      this.digitalPinController10 = new ArduinoStudio.DigitalPinController();
-      this.digitalPinController9 = new ArduinoStudio.DigitalPinController();
-      this.digitalPinController8 = new ArduinoStudio.DigitalPinController();
-      this.digitalPinController7 = new ArduinoStudio.DigitalPinController();
-      this.digitalPinController6 = new ArduinoStudio.DigitalPinController();
-      this.digitalPinController5 = new ArduinoStudio.DigitalPinController();
-      this.digitalPinController4 = new ArduinoStudio.DigitalPinController();
-      this.digitalPinController3 = new ArduinoStudio.DigitalPinController();
-      this.digitalPinController2 = new ArduinoStudio.DigitalPinController();
-      this.digitalPinController1 = new ArduinoStudio.DigitalPinController();
       this.tabPageDebug = new System.Windows.Forms.TabPage();
       this.btnNoTone = new System.Windows.Forms.Button();
       this.trackFrequency = new System.Windows.Forms.TrackBar();
@@ -65,7 +50,6 @@
       this.btnAnalogRead = new System.Windows.Forms.Button();
       this.textBox1 = new System.Windows.Forms.TextBox();
       this.txtResponse = new System.Windows.Forms.RichTextBox();
-      this.btnTestBaud = new System.Windows.Forms.Button();
       this.sliderAnalogWrite = new System.Windows.Forms.TrackBar();
       this.txtInt = new System.Windows.Forms.TextBox();
       this.btnSetLow = new System.Windows.Forms.Button();
@@ -79,13 +63,13 @@
       this.txtLog = new System.Windows.Forms.RichTextBox();
       this.panel1 = new System.Windows.Forms.Panel();
       this.btnClearLog = new System.Windows.Forms.Button();
+      this.digitalPinList1 = new ArduinoStudio.DigitalPinList();
       this.pnlSerialConnection.SuspendLayout();
       ((System.ComponentModel.ISupportInitialize)(this.numResponseTimeoutSubsequentBytes)).BeginInit();
       ((System.ComponentModel.ISupportInitialize)(this.numResponseTimeoutFirstByte)).BeginInit();
       this.pnlControlPanel.SuspendLayout();
       this.tabControlPanel.SuspendLayout();
       this.tabPageMain.SuspendLayout();
-      this.grpDigitalPins.SuspendLayout();
       this.tabPageDebug.SuspendLayout();
       ((System.ComponentModel.ISupportInitialize)(this.trackFrequency)).BeginInit();
       ((System.ComponentModel.ISupportInitialize)(this.sliderAnalogWrite)).BeginInit();
@@ -264,219 +248,14 @@
       // 
       // tabPageMain
       // 
-      this.tabPageMain.BackColor = System.Drawing.SystemColors.Control;
-      this.tabPageMain.Controls.Add(this.grpDigitalPins);
+      this.tabPageMain.BackColor = System.Drawing.Color.White;
+      this.tabPageMain.Controls.Add(this.digitalPinList1);
       this.tabPageMain.Location = new System.Drawing.Point(4, 4);
       this.tabPageMain.Name = "tabPageMain";
       this.tabPageMain.Padding = new System.Windows.Forms.Padding(3);
       this.tabPageMain.Size = new System.Drawing.Size(1153, 479);
       this.tabPageMain.TabIndex = 2;
       this.tabPageMain.Text = "Main";
-      // 
-      // grpDigitalPins
-      // 
-      this.grpDigitalPins.Controls.Add(this.digitalPinController14);
-      this.grpDigitalPins.Controls.Add(this.digitalPinController13);
-      this.grpDigitalPins.Controls.Add(this.digitalPinController12);
-      this.grpDigitalPins.Controls.Add(this.digitalPinController11);
-      this.grpDigitalPins.Controls.Add(this.digitalPinController10);
-      this.grpDigitalPins.Controls.Add(this.digitalPinController9);
-      this.grpDigitalPins.Controls.Add(this.digitalPinController8);
-      this.grpDigitalPins.Controls.Add(this.digitalPinController7);
-      this.grpDigitalPins.Controls.Add(this.digitalPinController6);
-      this.grpDigitalPins.Controls.Add(this.digitalPinController5);
-      this.grpDigitalPins.Controls.Add(this.digitalPinController4);
-      this.grpDigitalPins.Controls.Add(this.digitalPinController3);
-      this.grpDigitalPins.Controls.Add(this.digitalPinController2);
-      this.grpDigitalPins.Controls.Add(this.digitalPinController1);
-      this.grpDigitalPins.Location = new System.Drawing.Point(8, 8);
-      this.grpDigitalPins.Name = "grpDigitalPins";
-      this.grpDigitalPins.Size = new System.Drawing.Size(304, 408);
-      this.grpDigitalPins.TabIndex = 1;
-      this.grpDigitalPins.TabStop = false;
-      this.grpDigitalPins.Text = "Digital Pins";
-      // 
-      // digitalPinController14
-      // 
-      this.digitalPinController14.BackColor = System.Drawing.SystemColors.Control;
-      this.digitalPinController14.BorderStyle = System.Windows.Forms.BorderStyle.FixedSingle;
-      this.digitalPinController14.Dock = System.Windows.Forms.DockStyle.Top;
-      this.digitalPinController14.Location = new System.Drawing.Point(3, 341);
-      this.digitalPinController14.MaximumSize = new System.Drawing.Size(1000, 25);
-      this.digitalPinController14.MinimumSize = new System.Drawing.Size(100, 25);
-      this.digitalPinController14.Name = "digitalPinController14";
-      this.digitalPinController14.PinNumber = 13;
-      this.digitalPinController14.Size = new System.Drawing.Size(298, 25);
-      this.digitalPinController14.TabIndex = 13;
-      // 
-      // digitalPinController13
-      // 
-      this.digitalPinController13.BackColor = System.Drawing.SystemColors.Control;
-      this.digitalPinController13.BorderStyle = System.Windows.Forms.BorderStyle.FixedSingle;
-      this.digitalPinController13.Dock = System.Windows.Forms.DockStyle.Top;
-      this.digitalPinController13.Location = new System.Drawing.Point(3, 316);
-      this.digitalPinController13.MaximumSize = new System.Drawing.Size(1000, 25);
-      this.digitalPinController13.MinimumSize = new System.Drawing.Size(100, 25);
-      this.digitalPinController13.Name = "digitalPinController13";
-      this.digitalPinController13.PinNumber = 12;
-      this.digitalPinController13.Size = new System.Drawing.Size(298, 25);
-      this.digitalPinController13.TabIndex = 12;
-      // 
-      // digitalPinController12
-      // 
-      this.digitalPinController12.BackColor = System.Drawing.SystemColors.Control;
-      this.digitalPinController12.BorderStyle = System.Windows.Forms.BorderStyle.FixedSingle;
-      this.digitalPinController12.Dock = System.Windows.Forms.DockStyle.Top;
-      this.digitalPinController12.Location = new System.Drawing.Point(3, 291);
-      this.digitalPinController12.MaximumSize = new System.Drawing.Size(1000, 25);
-      this.digitalPinController12.MinimumSize = new System.Drawing.Size(100, 25);
-      this.digitalPinController12.Name = "digitalPinController12";
-      this.digitalPinController12.PinNumber = 11;
-      this.digitalPinController12.Size = new System.Drawing.Size(298, 25);
-      this.digitalPinController12.TabIndex = 11;
-      // 
-      // digitalPinController11
-      // 
-      this.digitalPinController11.BackColor = System.Drawing.SystemColors.Control;
-      this.digitalPinController11.BorderStyle = System.Windows.Forms.BorderStyle.FixedSingle;
-      this.digitalPinController11.Dock = System.Windows.Forms.DockStyle.Top;
-      this.digitalPinController11.Location = new System.Drawing.Point(3, 266);
-      this.digitalPinController11.MaximumSize = new System.Drawing.Size(1000, 25);
-      this.digitalPinController11.MinimumSize = new System.Drawing.Size(100, 25);
-      this.digitalPinController11.Name = "digitalPinController11";
-      this.digitalPinController11.PinNumber = 10;
-      this.digitalPinController11.Size = new System.Drawing.Size(298, 25);
-      this.digitalPinController11.TabIndex = 10;
-      // 
-      // digitalPinController10
-      // 
-      this.digitalPinController10.BackColor = System.Drawing.SystemColors.Control;
-      this.digitalPinController10.BorderStyle = System.Windows.Forms.BorderStyle.FixedSingle;
-      this.digitalPinController10.Dock = System.Windows.Forms.DockStyle.Top;
-      this.digitalPinController10.Location = new System.Drawing.Point(3, 241);
-      this.digitalPinController10.MaximumSize = new System.Drawing.Size(1000, 25);
-      this.digitalPinController10.MinimumSize = new System.Drawing.Size(100, 25);
-      this.digitalPinController10.Name = "digitalPinController10";
-      this.digitalPinController10.PinNumber = 9;
-      this.digitalPinController10.Size = new System.Drawing.Size(298, 25);
-      this.digitalPinController10.TabIndex = 9;
-      // 
-      // digitalPinController9
-      // 
-      this.digitalPinController9.BackColor = System.Drawing.SystemColors.Control;
-      this.digitalPinController9.BorderStyle = System.Windows.Forms.BorderStyle.FixedSingle;
-      this.digitalPinController9.Dock = System.Windows.Forms.DockStyle.Top;
-      this.digitalPinController9.Location = new System.Drawing.Point(3, 216);
-      this.digitalPinController9.MaximumSize = new System.Drawing.Size(1000, 25);
-      this.digitalPinController9.MinimumSize = new System.Drawing.Size(100, 25);
-      this.digitalPinController9.Name = "digitalPinController9";
-      this.digitalPinController9.PinNumber = 8;
-      this.digitalPinController9.Size = new System.Drawing.Size(298, 25);
-      this.digitalPinController9.TabIndex = 8;
-      // 
-      // digitalPinController8
-      // 
-      this.digitalPinController8.BackColor = System.Drawing.SystemColors.Control;
-      this.digitalPinController8.BorderStyle = System.Windows.Forms.BorderStyle.FixedSingle;
-      this.digitalPinController8.Dock = System.Windows.Forms.DockStyle.Top;
-      this.digitalPinController8.Location = new System.Drawing.Point(3, 191);
-      this.digitalPinController8.MaximumSize = new System.Drawing.Size(1000, 25);
-      this.digitalPinController8.MinimumSize = new System.Drawing.Size(100, 25);
-      this.digitalPinController8.Name = "digitalPinController8";
-      this.digitalPinController8.PinNumber = 7;
-      this.digitalPinController8.Size = new System.Drawing.Size(298, 25);
-      this.digitalPinController8.TabIndex = 7;
-      // 
-      // digitalPinController7
-      // 
-      this.digitalPinController7.BackColor = System.Drawing.SystemColors.Control;
-      this.digitalPinController7.BorderStyle = System.Windows.Forms.BorderStyle.FixedSingle;
-      this.digitalPinController7.Dock = System.Windows.Forms.DockStyle.Top;
-      this.digitalPinController7.Location = new System.Drawing.Point(3, 166);
-      this.digitalPinController7.MaximumSize = new System.Drawing.Size(1000, 25);
-      this.digitalPinController7.MinimumSize = new System.Drawing.Size(100, 25);
-      this.digitalPinController7.Name = "digitalPinController7";
-      this.digitalPinController7.PinNumber = 6;
-      this.digitalPinController7.Size = new System.Drawing.Size(298, 25);
-      this.digitalPinController7.TabIndex = 6;
-      // 
-      // digitalPinController6
-      // 
-      this.digitalPinController6.BackColor = System.Drawing.SystemColors.Control;
-      this.digitalPinController6.BorderStyle = System.Windows.Forms.BorderStyle.FixedSingle;
-      this.digitalPinController6.Dock = System.Windows.Forms.DockStyle.Top;
-      this.digitalPinController6.Location = new System.Drawing.Point(3, 141);
-      this.digitalPinController6.MaximumSize = new System.Drawing.Size(1000, 25);
-      this.digitalPinController6.MinimumSize = new System.Drawing.Size(100, 25);
-      this.digitalPinController6.Name = "digitalPinController6";
-      this.digitalPinController6.PinNumber = 5;
-      this.digitalPinController6.Size = new System.Drawing.Size(298, 25);
-      this.digitalPinController6.TabIndex = 5;
-      // 
-      // digitalPinController5
-      // 
-      this.digitalPinController5.BackColor = System.Drawing.SystemColors.Control;
-      this.digitalPinController5.BorderStyle = System.Windows.Forms.BorderStyle.FixedSingle;
-      this.digitalPinController5.Dock = System.Windows.Forms.DockStyle.Top;
-      this.digitalPinController5.Location = new System.Drawing.Point(3, 116);
-      this.digitalPinController5.MaximumSize = new System.Drawing.Size(1000, 25);
-      this.digitalPinController5.MinimumSize = new System.Drawing.Size(100, 25);
-      this.digitalPinController5.Name = "digitalPinController5";
-      this.digitalPinController5.PinNumber = 4;
-      this.digitalPinController5.Size = new System.Drawing.Size(298, 25);
-      this.digitalPinController5.TabIndex = 4;
-      // 
-      // digitalPinController4
-      // 
-      this.digitalPinController4.BackColor = System.Drawing.SystemColors.Control;
-      this.digitalPinController4.BorderStyle = System.Windows.Forms.BorderStyle.FixedSingle;
-      this.digitalPinController4.Dock = System.Windows.Forms.DockStyle.Top;
-      this.digitalPinController4.Location = new System.Drawing.Point(3, 91);
-      this.digitalPinController4.MaximumSize = new System.Drawing.Size(1000, 25);
-      this.digitalPinController4.MinimumSize = new System.Drawing.Size(100, 25);
-      this.digitalPinController4.Name = "digitalPinController4";
-      this.digitalPinController4.PinNumber = 3;
-      this.digitalPinController4.Size = new System.Drawing.Size(298, 25);
-      this.digitalPinController4.TabIndex = 3;
-      // 
-      // digitalPinController3
-      // 
-      this.digitalPinController3.BackColor = System.Drawing.SystemColors.Control;
-      this.digitalPinController3.BorderStyle = System.Windows.Forms.BorderStyle.FixedSingle;
-      this.digitalPinController3.Dock = System.Windows.Forms.DockStyle.Top;
-      this.digitalPinController3.Location = new System.Drawing.Point(3, 66);
-      this.digitalPinController3.MaximumSize = new System.Drawing.Size(1000, 25);
-      this.digitalPinController3.MinimumSize = new System.Drawing.Size(100, 25);
-      this.digitalPinController3.Name = "digitalPinController3";
-      this.digitalPinController3.PinNumber = 2;
-      this.digitalPinController3.Size = new System.Drawing.Size(298, 25);
-      this.digitalPinController3.TabIndex = 2;
-      // 
-      // digitalPinController2
-      // 
-      this.digitalPinController2.BackColor = System.Drawing.SystemColors.Control;
-      this.digitalPinController2.BorderStyle = System.Windows.Forms.BorderStyle.FixedSingle;
-      this.digitalPinController2.Dock = System.Windows.Forms.DockStyle.Top;
-      this.digitalPinController2.Location = new System.Drawing.Point(3, 41);
-      this.digitalPinController2.MaximumSize = new System.Drawing.Size(1000, 25);
-      this.digitalPinController2.MinimumSize = new System.Drawing.Size(100, 25);
-      this.digitalPinController2.Name = "digitalPinController2";
-      this.digitalPinController2.PinNumber = 1;
-      this.digitalPinController2.Size = new System.Drawing.Size(298, 25);
-      this.digitalPinController2.TabIndex = 1;
-      // 
-      // digitalPinController1
-      // 
-      this.digitalPinController1.BackColor = System.Drawing.SystemColors.Control;
-      this.digitalPinController1.BorderStyle = System.Windows.Forms.BorderStyle.FixedSingle;
-      this.digitalPinController1.Dock = System.Windows.Forms.DockStyle.Top;
-      this.digitalPinController1.Location = new System.Drawing.Point(3, 16);
-      this.digitalPinController1.MaximumSize = new System.Drawing.Size(1000, 25);
-      this.digitalPinController1.MinimumSize = new System.Drawing.Size(100, 25);
-      this.digitalPinController1.Name = "digitalPinController1";
-      this.digitalPinController1.PinNumber = 0;
-      this.digitalPinController1.Size = new System.Drawing.Size(298, 25);
-      this.digitalPinController1.TabIndex = 0;
       // 
       // tabPageDebug
       // 
@@ -487,7 +266,6 @@
       this.tabPageDebug.Controls.Add(this.btnAnalogRead);
       this.tabPageDebug.Controls.Add(this.textBox1);
       this.tabPageDebug.Controls.Add(this.txtResponse);
-      this.tabPageDebug.Controls.Add(this.btnTestBaud);
       this.tabPageDebug.Controls.Add(this.sliderAnalogWrite);
       this.tabPageDebug.Controls.Add(this.txtInt);
       this.tabPageDebug.Controls.Add(this.btnSetLow);
@@ -560,16 +338,6 @@
       this.txtResponse.Size = new System.Drawing.Size(472, 80);
       this.txtResponse.TabIndex = 0;
       this.txtResponse.Text = "";
-      // 
-      // btnTestBaud
-      // 
-      this.btnTestBaud.Location = new System.Drawing.Point(4, 74);
-      this.btnTestBaud.Name = "btnTestBaud";
-      this.btnTestBaud.Size = new System.Drawing.Size(112, 40);
-      this.btnTestBaud.TabIndex = 9;
-      this.btnTestBaud.Text = "Test baud";
-      this.btnTestBaud.UseVisualStyleBackColor = true;
-      this.btnTestBaud.Click += new System.EventHandler(this.btnTestBaud_Click);
       // 
       // sliderAnalogWrite
       // 
@@ -702,6 +470,14 @@
       this.btnClearLog.UseVisualStyleBackColor = true;
       this.btnClearLog.Click += new System.EventHandler(this.btnClearLog_Click);
       // 
+      // digitalPinList1
+      // 
+      this.digitalPinList1.Communicator = null;
+      this.digitalPinList1.Location = new System.Drawing.Point(8, 8);
+      this.digitalPinList1.Name = "digitalPinList1";
+      this.digitalPinList1.Size = new System.Drawing.Size(992, 448);
+      this.digitalPinList1.TabIndex = 0;
+      // 
       // Form1
       // 
       this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
@@ -720,7 +496,6 @@
       this.pnlControlPanel.ResumeLayout(false);
       this.tabControlPanel.ResumeLayout(false);
       this.tabPageMain.ResumeLayout(false);
-      this.grpDigitalPins.ResumeLayout(false);
       this.tabPageDebug.ResumeLayout(false);
       this.tabPageDebug.PerformLayout();
       ((System.ComponentModel.ISupportInitialize)(this.trackFrequency)).EndInit();
@@ -757,7 +532,6 @@
     private System.Windows.Forms.Label lblCurrentBaud;
     private System.Windows.Forms.TextBox txtVersion;
     private System.Windows.Forms.Label lblVersion;
-    private System.Windows.Forms.Button btnTestBaud;
     private System.Windows.Forms.TabControl tabControlPanel;
     private System.Windows.Forms.TabPage tabPageMain;
     private System.Windows.Forms.TabPage tabPageDebug;
@@ -769,21 +543,7 @@
     private System.Windows.Forms.Button btnTone;
     private System.Windows.Forms.TrackBar trackFrequency;
     private System.Windows.Forms.Button btnNoTone;
-    private DigitalPinController digitalPinController1;
-    private System.Windows.Forms.GroupBox grpDigitalPins;
-    private DigitalPinController digitalPinController14;
-    private DigitalPinController digitalPinController13;
-    private DigitalPinController digitalPinController12;
-    private DigitalPinController digitalPinController11;
-    private DigitalPinController digitalPinController10;
-    private DigitalPinController digitalPinController9;
-    private DigitalPinController digitalPinController8;
-    private DigitalPinController digitalPinController7;
-    private DigitalPinController digitalPinController6;
-    private DigitalPinController digitalPinController5;
-    private DigitalPinController digitalPinController4;
-    private DigitalPinController digitalPinController3;
-    private DigitalPinController digitalPinController2;
+    private DigitalPinList digitalPinList1;
   }
 }
 

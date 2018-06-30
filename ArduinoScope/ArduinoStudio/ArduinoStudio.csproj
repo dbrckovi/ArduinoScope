@@ -46,12 +46,26 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="ArduinoCommunicator.cs" />
+    <Compile Include="BoolControl.cs">
+      <SubType>UserControl</SubType>
+    </Compile>
+    <Compile Include="BoolControl.Designer.cs">
+      <DependentUpon>BoolControl.cs</DependentUpon>
+    </Compile>
     <Compile Include="Delegates.cs" />
+    <Compile Include="DigitalOutMode.cs" />
+    <Compile Include="DigitalPin.cs" />
     <Compile Include="DigitalPinController.cs">
       <SubType>UserControl</SubType>
     </Compile>
     <Compile Include="DigitalPinController.Designer.cs">
       <DependentUpon>DigitalPinController.cs</DependentUpon>
+    </Compile>
+    <Compile Include="DigitalPinList.cs">
+      <SubType>UserControl</SubType>
+    </Compile>
+    <Compile Include="DigitalPinList.Designer.cs">
+      <DependentUpon>DigitalPinList.cs</DependentUpon>
     </Compile>
     <Compile Include="Form1.cs">
       <SubType>Form</SubType>
@@ -60,15 +74,51 @@
       <DependentUpon>Form1.cs</DependentUpon>
     </Compile>
     <Compile Include="Msgbox.cs" />
+    <Compile Include="OutputModeControl.cs">
+      <SubType>UserControl</SubType>
+    </Compile>
+    <Compile Include="OutputModeControl.Designer.cs">
+      <DependentUpon>OutputModeControl.cs</DependentUpon>
+    </Compile>
     <Compile Include="PinMode.cs" />
+    <Compile Include="PinModeControl.cs">
+      <SubType>UserControl</SubType>
+    </Compile>
+    <Compile Include="PinModeControl.Designer.cs">
+      <DependentUpon>PinModeControl.cs</DependentUpon>
+    </Compile>
     <Compile Include="Program.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
+    <Compile Include="PwmValueControl.cs">
+      <SubType>UserControl</SubType>
+    </Compile>
+    <Compile Include="PwmValueControl.Designer.cs">
+      <DependentUpon>PwmValueControl.cs</DependentUpon>
+    </Compile>
     <Compile Include="RequestType.cs" />
+    <Compile Include="ToneValueControl.cs">
+      <SubType>UserControl</SubType>
+    </Compile>
+    <Compile Include="ToneValueControl.Designer.cs">
+      <DependentUpon>ToneValueControl.cs</DependentUpon>
+    </Compile>
+    <EmbeddedResource Include="BoolControl.resx">
+      <DependentUpon>BoolControl.cs</DependentUpon>
+    </EmbeddedResource>
     <EmbeddedResource Include="DigitalPinController.resx">
       <DependentUpon>DigitalPinController.cs</DependentUpon>
     </EmbeddedResource>
+    <EmbeddedResource Include="DigitalPinList.resx">
+      <DependentUpon>DigitalPinList.cs</DependentUpon>
+    </EmbeddedResource>
     <EmbeddedResource Include="Form1.resx">
       <DependentUpon>Form1.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="OutputModeControl.resx">
+      <DependentUpon>OutputModeControl.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="PinModeControl.resx">
+      <DependentUpon>PinModeControl.cs</DependentUpon>
     </EmbeddedResource>
     <EmbeddedResource Include="Properties\Resources.resx">
       <Generator>ResXFileCodeGenerator</Generator>
@@ -79,6 +129,12 @@
       <AutoGen>True</AutoGen>
       <DependentUpon>Resources.resx</DependentUpon>
     </Compile>
+    <EmbeddedResource Include="PwmValueControl.resx">
+      <DependentUpon>PwmValueControl.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="ToneValueControl.resx">
+      <DependentUpon>ToneValueControl.cs</DependentUpon>
+    </EmbeddedResource>
     <None Include="Properties\Settings.settings">
       <Generator>SettingsSingleFileGenerator</Generator>
       <LastGenOutput>Settings.Designer.cs</LastGenOutput>

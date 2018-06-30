@@ -2,22 +2,29 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
-using System.Threading.Tasks;
 using System.IO.Ports;
 using System.Threading;
+using System.Threading.Tasks;
 
 namespace ArduinoStudio
 {
   public class ArduinoCommunicator
   {
+    private const int DEFAULT_BAUD = 500000;
+
+    private void Dummy()
+    {
+      
+    }
+
     #region Variables
-    private int _currentBaud = 500000;
     private int _responseFirstByteTimeout = 1000;
     private int _responseLastByteTimeout = 100;
     private SerialPort _port = null;
     private Encoding _serialEncoding = new UTF8Encoding();
     private int _version = -1;
     private int[] _viableBaudRates = { 9600, 14400, 19200, 28800, 38400, 57600, 115200, 230400, 500000 };
+    private DigitalPin[] _digitalPins = new DigitalPin[13];
     #endregion Variables
 
     #region Properties
@@ -28,7 +35,18 @@ namespace ArduinoStudio
 
     public int CurrentBaud
     {
-      get { return _currentBaud; }
+      get { return _port.BaudRate; }
+    }
+
+    /// <summary>
+    /// Gets the states and values of all digital pins
+    /// </summary>
+    public DigitalPin[] DigitalPins
+    {
+      get
+      {
+        return _digitalPins;
+      }
     }
     #endregion Properties
 
@@ -42,11 +60,20 @@ namespace ArduinoStudio
         Log(text);
       }
     }
+
+    /// <summary>
+    /// Raised when status of one or more pins changes or gets updated
+    /// </summary>
+    public event Delegates.VoidDelegate PinStatusChanged;
+    private void OnPinStatusChanged()
+    {
+      PinStatusChanged?.Invoke();
+    }
     #endregion Events
 
     #region Constructor
     /// <summary>
-    /// Creates a new instance and connects it to specified port, gets version information and establishes the best baud rate
+    /// Creates a new instance and connects it to specified port and gets version information
     /// </summary>
     /// <param name="comPort">Name ot the COM port</param>
     /// <param name="responseFirstByteTimeout">After the request is sent, communicator will wait for this amount of miliseconds for first byte of the response to arrive</param>
@@ -58,10 +85,12 @@ namespace ArduinoStudio
         _responseFirstByteTimeout = responseFirstByteTimeout;
         _responseLastByteTimeout = responseLastByteTimeout;
 
-        _port = new SerialPort(comPort, _currentBaud);
+        _port = new SerialPort(comPort, DEFAULT_BAUD);
         _port.Open();
         Thread.Sleep(100); //because reasons. GetVersion doesn't work without this
         _version = GetVersion();
+        GenerateDigitalPins();
+        InitializeDigitalPins();
       }
       catch (Exception ex)
       {
@@ -183,14 +212,33 @@ namespace ArduinoStudio
     /// <summary>
     /// Creates a list of digital pins.
     /// </summary>
-    private void LoadDigitalPins()
+    private void GenerateDigitalPins()
     {
-      //In the future, this could accept some kind of Arduino model information, in case different models have different pinouts
-      //TODO: continue
-      
+      //The list is now hardcoded for Arduino Uno
+      //TODO: Check if it's possible to acquire the pin list dynamically
 
+      _digitalPins = new DigitalPin[14];
+
+      for (int x = 0; x < _digitalPins.Length; x++)
+      {
+        _digitalPins[x] = new DigitalPin(x);
+      }
     }
-    
+
+    /// <summary>
+    /// Initializes digital pins to default modes and values
+    /// </summary>
+    private void InitializeDigitalPins()
+    {
+      //TODO: Get mode and value of each digital pin from Arduino (support for this must be implemented into sketch first)
+      //For now, each pin is initialized to Digital boolean output and turned off
+
+      foreach (DigitalPin pin in _digitalPins)
+      {
+        NoTone(pin.PinNumber);
+        DigitalWrite(pin.PinNumber, false);
+      }
+    }
     #endregion Infrastructure
 
     #region Requests
@@ -239,26 +287,62 @@ namespace ArduinoStudio
       return ParseResponse(response)[0];
     }
 
+    /// <summary>
+    /// Sets the mode of the digital pin
+    /// </summary>
+    /// <param name="pin"></param>
+    /// <param name="mode"></param>
     public void PinMode(int pin, PinMode mode)
     {
       string request = BuildRequest(RequestType.PinMode, pin.ToString(), ((int)mode).ToString());
       string response = SendRequest(request);
       ParseResponse(response);
+
+      _digitalPins[pin].PinMode = mode;
+      OnPinStatusChanged();
     }
 
+    /// <summary>
+    /// Writes a boolean value to the digital pin. Sets the pin to boolean output mode if required
+    /// </summary>
+    /// <param name="pin"></param>
+    /// <param name="value"></param>
     public void DigitalWrite(int pin, bool value)
     {
+      if (_digitalPins[pin].PinMode != ArduinoStudio.PinMode.Output) PinMode(pin, ArduinoStudio.PinMode.Output);
+      if (_digitalPins[pin].OutputMode == DigitalOutMode.Tone) NoTone(pin);
+
       string request = BuildRequest(RequestType.DigitalWrite, pin.ToString(), value ? "1" : "0");
       string response = SendRequest(request);
       ParseResponse(response);
+
+      _digitalPins[pin].OutputMode = DigitalOutMode.Boolean;
+      _digitalPins[pin].OutputBool = value;
+
+      OnPinStatusChanged();
     }
 
+
+    /// <summary>
+    /// Writes a pwm value to the digital pin. Sets the pin to pwm output mode if required
+    /// </summary>
+    /// <param name="pin"></param>
+    /// <param name="value"></param>
     public void AnalogWrite(int pin, byte value)
     {
+      if (_digitalPins[pin].PinMode != ArduinoStudio.PinMode.Output) PinMode(pin, ArduinoStudio.PinMode.Output);
+      if (_digitalPins[pin].OutputMode == DigitalOutMode.Tone) NoTone(pin);
+
       string request = BuildRequest(RequestType.AnalogWrite, pin.ToString(), value.ToString());
       string response = SendRequest(request);
       ParseResponse(response);
+
+      _digitalPins[pin].OutputMode = DigitalOutMode.PWM;
+      _digitalPins[pin].OutputPwm = value;
+
+      OnPinStatusChanged();
     }
+
 
     public int AnalogRead(int pin)
     {
@@ -268,74 +352,43 @@ namespace ArduinoStudio
       return int.Parse(responseValues[0]);
     }
 
+    /// <summary>
+    /// Writes a tone value to the digital pin. Sets the pin to Tone output moed if required
+    /// </summary>
+    /// <param name="pin"></param>
+    /// <param name="frequency"></param>
+    /// <param name="duration"></param>
     public void Tone (int pin, int frequency, int duration)
     {
+      if (_digitalPins[pin].PinMode != ArduinoStudio.PinMode.Output) PinMode(pin, ArduinoStudio.PinMode.Output);
+
       string request = BuildRequest(RequestType.Tone, pin.ToString(), frequency.ToString(), duration.ToString());
       string response = SendRequest(request);
       ParseResponse(response);
+
+      _digitalPins[pin].OutputMode = DigitalOutMode.Tone;
+      _digitalPins[pin].OutputToneFrequency = frequency;
+      _digitalPins[pin].OutputToneDuration = duration;
+
+      OnPinStatusChanged();
     }
 
+
+    /// <summary>
+    /// Stops the tone output on the pin. Sets the pin to the tone output mode if required
+    /// </summary>
+    /// <param name="pin"></param>
     public void NoTone(int pin)
     {
+      if (_digitalPins[pin].PinMode != ArduinoStudio.PinMode.Output) PinMode(pin, ArduinoStudio.PinMode.Output);
+
       string request = BuildRequest(RequestType.NoTone, pin.ToString());
       string response = SendRequest(request);
       ParseResponse(response);
-    }
 
-    /// <summary>
-    /// Tests if specified baud rate can be used for stable communication. Reverts to original baud rate after completion
-    /// </summary>
-    /// <param name="baudRate">Baud rate to be tested</param>
-    /// <returns>True if test was completely successful</returns>
-    public bool TestBaud(int baudRate)
-    {
-      //TODO: This doesn't work. I tried a lot of stuff on Arduino side, gave up and deleted the code
-      //Now I suspect it might be the problem on .Net side because (in constructor) GetVersion() doesn't work immediately after Open()
-      //Maybe, the code here would work if the port is closed, reopened with different baud rate and then wait a bit more before sending anything
+      _digitalPins[pin].OutputMode = DigitalOutMode.Tone;
 
-      /*
-      workflow
-      1.) Send TestBaud request and wait for OK response (on the original baud rate)
-      2.) Both ends change the baud rate
-      3.) Arduino starts waiting for Test request as soon as possible
-      4.) This program sleeps for enough time to allow Arduino to change baud rate
-      5.) This program creates a long random string and sends it with Test request
-      6.) Arduino receives the request, sends the string back, and reverts to original baud rate
-      7.) This program receives the response, reverts to original baud rate and validates the response
-      8.) If response is valid and returned string is the same, return True
-
-      In all cases, regardless of output, both clients revert to original baud rate
-      */
-
-      try
-      {
-        string request = BuildRequest(RequestType.TestBaud, baudRate.ToString());
-        string response = SendRequest(request);
-        ParseResponse(response);
-
-        _port.BaudRate = baudRate;
-        Thread.Sleep(1000);
-
-        Random rand = new Random();
-        StringBuilder sb = new StringBuilder();
-        for (int x = 1; x <= 100; x++)
-        {
-          sb.Append(rand.Next(0, 10).ToString());
-        }
-
-        string testString = sb.ToString();
-        string responseString = Test(testString);
-
-        return testString == responseString;
-      }
-      catch
-      {
-        return false;
-      }
-      finally
-      {
-        _port.BaudRate = _currentBaud;
-      }
+      OnPinStatusChanged();
     }
     #endregion Requests
   }

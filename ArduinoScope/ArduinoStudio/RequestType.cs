@@ -16,8 +16,8 @@ namespace ArduinoStudio
     PinMode = 3,            //int (pin number), bool (1 = OUTPUT, 0 = INPUT)
     DigitalWrite = 4,       //int (pon number), bool (1 = HIGH, 0 = LOW)
     Debug = 5,              //No
-    TestBaud = 6,           //int (baud rate), any string
-    SetBaud = 7,            //int (baud rate)
+    TestBaud = 6,           //NOT USED
+    SetBaud = 7,            //NOT USED
     AnalogWrite = 8,        //int (pin number), byte (value)
     AnalogRead = 9,         //int (analog pin number), int (value)
     Tone = 10,              //int (pin number), int (frequency), int (duration in miliseconds)
