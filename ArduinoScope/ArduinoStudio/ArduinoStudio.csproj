@@ -46,17 +46,23 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="AnalogPin.cs" />
-    <Compile Include="AnalogPinControl.cs">
+    <Compile Include="SmallGraph.cs">
       <SubType>UserControl</SubType>
     </Compile>
-    <Compile Include="AnalogPinControl.Designer.cs">
+    <Compile Include="SmallGraph.Designer.cs">
+      <DependentUpon>SmallGraph.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Vizualizers\AnalogPinControl.cs">
+      <SubType>UserControl</SubType>
+    </Compile>
+    <Compile Include="Vizualizers\AnalogPinControl.Designer.cs">
       <DependentUpon>AnalogPinControl.cs</DependentUpon>
     </Compile>
     <Compile Include="ArduinoCommunicator.cs" />
-    <Compile Include="BoolControl.cs">
+    <Compile Include="Vizualizers\BoolControl.cs">
       <SubType>UserControl</SubType>
     </Compile>
-    <Compile Include="BoolControl.Designer.cs">
+    <Compile Include="Vizualizers\BoolControl.Designer.cs">
       <DependentUpon>BoolControl.cs</DependentUpon>
     </Compile>
     <Compile Include="Delegates.cs" />
@@ -71,10 +77,10 @@
     <Compile Include="Msgbox.cs" />
     <Compile Include="Program.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
-    <Compile Include="PwmValueControl.cs">
+    <Compile Include="Vizualizers\PwmValueControl.cs">
       <SubType>UserControl</SubType>
     </Compile>
-    <Compile Include="PwmValueControl.Designer.cs">
+    <Compile Include="Vizualizers\PwmValueControl.Designer.cs">
       <DependentUpon>PwmValueControl.cs</DependentUpon>
     </Compile>
     <Compile Include="RequestType.cs" />
@@ -84,10 +90,13 @@
     <Compile Include="ToneValueControl.Designer.cs">
       <DependentUpon>ToneValueControl.cs</DependentUpon>
     </Compile>
-    <EmbeddedResource Include="AnalogPinControl.resx">
+    <EmbeddedResource Include="SmallGraph.resx">
+      <DependentUpon>SmallGraph.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Vizualizers\AnalogPinControl.resx">
       <DependentUpon>AnalogPinControl.cs</DependentUpon>
     </EmbeddedResource>
-    <EmbeddedResource Include="BoolControl.resx">
+    <EmbeddedResource Include="Vizualizers\BoolControl.resx">
       <DependentUpon>BoolControl.cs</DependentUpon>
     </EmbeddedResource>
     <EmbeddedResource Include="Form1.resx">
@@ -102,7 +111,7 @@
       <AutoGen>True</AutoGen>
       <DependentUpon>Resources.resx</DependentUpon>
     </Compile>
-    <EmbeddedResource Include="PwmValueControl.resx">
+    <EmbeddedResource Include="Vizualizers\PwmValueControl.resx">
       <DependentUpon>PwmValueControl.cs</DependentUpon>
     </EmbeddedResource>
     <EmbeddedResource Include="ToneValueControl.resx">

@@ -11,7 +11,7 @@ namespace ArduinoStudio
   public class ArduinoCommunicator
   {
     private const int DEFAULT_BAUD = 500000;
-    private const int PIN_STATUS_REFRESH_MS = 300;    //UpdatePinStatuses() takes cca 170 ms on baud 500000
+    private const int PIN_STATUS_REFRESH_MS = 100;    //UpdatePinStatuses() takes cca 170 ms on baud 500000
 
     #region Variables
     private int _responseFirstByteTimeout = 1000;

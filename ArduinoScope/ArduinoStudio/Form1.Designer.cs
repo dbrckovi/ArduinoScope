@@ -29,9 +29,7 @@
     private void InitializeComponent()
     {
       this.pnlSerialConnection = new System.Windows.Forms.Panel();
-      this.txtCurrentBaud = new System.Windows.Forms.TextBox();
       this.lblCurrentBaud = new System.Windows.Forms.Label();
-      this.txtVersion = new System.Windows.Forms.TextBox();
       this.lblVersion = new System.Windows.Forms.Label();
       this.numResponseTimeoutSubsequentBytes = new System.Windows.Forms.NumericUpDown();
       this.lblResponseTimeoutSubsequentBytes = new System.Windows.Forms.Label();
@@ -43,6 +41,8 @@
       this.pnlControlPanel = new System.Windows.Forms.Panel();
       this.tabControlPanel = new System.Windows.Forms.TabControl();
       this.tabPageMain = new System.Windows.Forms.TabPage();
+      this.grpAnalogPins = new System.Windows.Forms.GroupBox();
+      this.pnlAnalogPins = new System.Windows.Forms.FlowLayoutPanel();
       this.tabPageDebug = new System.Windows.Forms.TabPage();
       this.button6 = new System.Windows.Forms.Button();
       this.button5 = new System.Windows.Forms.Button();
@@ -61,28 +61,35 @@
       this.txtLog = new System.Windows.Forms.RichTextBox();
       this.panel1 = new System.Windows.Forms.Panel();
       this.btnClearLog = new System.Windows.Forms.Button();
-      this.grpAnalogPins = new System.Windows.Forms.GroupBox();
-      this.pnlAnalogPins = new System.Windows.Forms.FlowLayoutPanel();
+      this.label1 = new System.Windows.Forms.Label();
+      this.label2 = new System.Windows.Forms.Label();
+      this.label3 = new System.Windows.Forms.Label();
+      this.label4 = new System.Windows.Forms.Label();
+      this.label5 = new System.Windows.Forms.Label();
+      this.label6 = new System.Windows.Forms.Label();
+      this.txtVersion = new System.Windows.Forms.Label();
+      this.txtCurrentBaud = new System.Windows.Forms.Label();
       this.pnlSerialConnection.SuspendLayout();
       ((System.ComponentModel.ISupportInitialize)(this.numResponseTimeoutSubsequentBytes)).BeginInit();
       ((System.ComponentModel.ISupportInitialize)(this.numResponseTimeoutFirstByte)).BeginInit();
       this.pnlControlPanel.SuspendLayout();
       this.tabControlPanel.SuspendLayout();
       this.tabPageMain.SuspendLayout();
+      this.grpAnalogPins.SuspendLayout();
       this.tabPageDebug.SuspendLayout();
       ((System.ComponentModel.ISupportInitialize)(this.trackFrequency)).BeginInit();
       ((System.ComponentModel.ISupportInitialize)(this.sliderAnalogWrite)).BeginInit();
       this.tabPageLog.SuspendLayout();
       this.panel1.SuspendLayout();
-      this.grpAnalogPins.SuspendLayout();
       this.SuspendLayout();
       // 
       // pnlSerialConnection
       // 
+      this.pnlSerialConnection.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(0)))), ((int)(((byte)(100)))), ((int)(((byte)(104)))));
       this.pnlSerialConnection.BorderStyle = System.Windows.Forms.BorderStyle.FixedSingle;
       this.pnlSerialConnection.Controls.Add(this.txtCurrentBaud);
-      this.pnlSerialConnection.Controls.Add(this.lblCurrentBaud);
       this.pnlSerialConnection.Controls.Add(this.txtVersion);
+      this.pnlSerialConnection.Controls.Add(this.lblCurrentBaud);
       this.pnlSerialConnection.Controls.Add(this.lblVersion);
       this.pnlSerialConnection.Controls.Add(this.numResponseTimeoutSubsequentBytes);
       this.pnlSerialConnection.Controls.Add(this.lblResponseTimeoutSubsequentBytes);
@@ -92,18 +99,11 @@
       this.pnlSerialConnection.Controls.Add(this.lblSerialPort);
       this.pnlSerialConnection.Controls.Add(this.cmbSerialPort);
       this.pnlSerialConnection.Dock = System.Windows.Forms.DockStyle.Top;
+      this.pnlSerialConnection.ForeColor = System.Drawing.Color.FromArgb(((int)(((byte)(23)))), ((int)(((byte)(161)))), ((int)(((byte)(165)))));
       this.pnlSerialConnection.Location = new System.Drawing.Point(0, 0);
       this.pnlSerialConnection.Name = "pnlSerialConnection";
-      this.pnlSerialConnection.Size = new System.Drawing.Size(1161, 40);
+      this.pnlSerialConnection.Size = new System.Drawing.Size(945, 40);
       this.pnlSerialConnection.TabIndex = 0;
-      // 
-      // txtCurrentBaud
-      // 
-      this.txtCurrentBaud.Enabled = false;
-      this.txtCurrentBaud.Location = new System.Drawing.Point(840, 8);
-      this.txtCurrentBaud.Name = "txtCurrentBaud";
-      this.txtCurrentBaud.Size = new System.Drawing.Size(80, 20);
-      this.txtCurrentBaud.TabIndex = 11;
       // 
       // lblCurrentBaud
       // 
@@ -113,14 +113,6 @@
       this.lblCurrentBaud.Size = new System.Drawing.Size(68, 13);
       this.lblCurrentBaud.TabIndex = 10;
       this.lblCurrentBaud.Text = "Current baud";
-      // 
-      // txtVersion
-      // 
-      this.txtVersion.Enabled = false;
-      this.txtVersion.Location = new System.Drawing.Point(728, 8);
-      this.txtVersion.Name = "txtVersion";
-      this.txtVersion.Size = new System.Drawing.Size(32, 20);
-      this.txtVersion.TabIndex = 9;
       // 
       // lblVersion
       // 
@@ -148,7 +140,7 @@
       this.numResponseTimeoutSubsequentBytes.Size = new System.Drawing.Size(64, 20);
       this.numResponseTimeoutSubsequentBytes.TabIndex = 7;
       this.numResponseTimeoutSubsequentBytes.Value = new decimal(new int[] {
-            100,
+            50,
             0,
             0,
             0});
@@ -179,7 +171,7 @@
       this.numResponseTimeoutFirstByte.Size = new System.Drawing.Size(64, 20);
       this.numResponseTimeoutFirstByte.TabIndex = 5;
       this.numResponseTimeoutFirstByte.Value = new decimal(new int[] {
-            1000,
+            300,
             0,
             0,
             0});
@@ -195,13 +187,18 @@
       // 
       // btnSerialConnectDisconnect
       // 
+      this.btnSerialConnectDisconnect.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(23)))), ((int)(((byte)(161)))), ((int)(((byte)(165)))));
       this.btnSerialConnectDisconnect.Enabled = false;
+      this.btnSerialConnectDisconnect.FlatAppearance.BorderColor = System.Drawing.Color.FromArgb(((int)(((byte)(23)))), ((int)(((byte)(161)))), ((int)(((byte)(165)))));
+      this.btnSerialConnectDisconnect.FlatAppearance.BorderSize = 0;
+      this.btnSerialConnectDisconnect.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
+      this.btnSerialConnectDisconnect.ForeColor = System.Drawing.Color.FromArgb(((int)(((byte)(0)))), ((int)(((byte)(100)))), ((int)(((byte)(104)))));
       this.btnSerialConnectDisconnect.Location = new System.Drawing.Point(584, 8);
       this.btnSerialConnectDisconnect.Name = "btnSerialConnectDisconnect";
       this.btnSerialConnectDisconnect.Size = new System.Drawing.Size(80, 24);
       this.btnSerialConnectDisconnect.TabIndex = 2;
       this.btnSerialConnectDisconnect.Text = "Connect";
-      this.btnSerialConnectDisconnect.UseVisualStyleBackColor = true;
+      this.btnSerialConnectDisconnect.UseVisualStyleBackColor = false;
       this.btnSerialConnectDisconnect.Click += new System.EventHandler(this.btnSerialConnectDisconnect_Click);
       // 
       // lblSerialPort
@@ -215,7 +212,9 @@
       // 
       // cmbSerialPort
       // 
+      this.cmbSerialPort.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(241)))), ((int)(((byte)(255)))), ((int)(((byte)(255)))));
       this.cmbSerialPort.DropDownStyle = System.Windows.Forms.ComboBoxStyle.DropDownList;
+      this.cmbSerialPort.ForeColor = System.Drawing.Color.FromArgb(((int)(((byte)(0)))), ((int)(((byte)(100)))), ((int)(((byte)(104)))));
       this.cmbSerialPort.FormattingEnabled = true;
       this.cmbSerialPort.Location = new System.Drawing.Point(48, 8);
       this.cmbSerialPort.Name = "cmbSerialPort";
@@ -225,12 +224,13 @@
       // 
       // pnlControlPanel
       // 
+      this.pnlControlPanel.BackColor = System.Drawing.Color.White;
       this.pnlControlPanel.Controls.Add(this.tabControlPanel);
       this.pnlControlPanel.Dock = System.Windows.Forms.DockStyle.Fill;
       this.pnlControlPanel.Enabled = false;
       this.pnlControlPanel.Location = new System.Drawing.Point(0, 40);
       this.pnlControlPanel.Name = "pnlControlPanel";
-      this.pnlControlPanel.Size = new System.Drawing.Size(1161, 505);
+      this.pnlControlPanel.Size = new System.Drawing.Size(945, 334);
       this.pnlControlPanel.TabIndex = 1;
       // 
       // tabControlPanel
@@ -243,19 +243,47 @@
       this.tabControlPanel.Location = new System.Drawing.Point(0, 0);
       this.tabControlPanel.Name = "tabControlPanel";
       this.tabControlPanel.SelectedIndex = 0;
-      this.tabControlPanel.Size = new System.Drawing.Size(1161, 505);
+      this.tabControlPanel.Size = new System.Drawing.Size(945, 334);
       this.tabControlPanel.TabIndex = 5;
       // 
       // tabPageMain
       // 
       this.tabPageMain.BackColor = System.Drawing.Color.White;
+      this.tabPageMain.Controls.Add(this.label5);
+      this.tabPageMain.Controls.Add(this.label6);
+      this.tabPageMain.Controls.Add(this.label4);
+      this.tabPageMain.Controls.Add(this.label3);
+      this.tabPageMain.Controls.Add(this.label2);
+      this.tabPageMain.Controls.Add(this.label1);
       this.tabPageMain.Controls.Add(this.grpAnalogPins);
       this.tabPageMain.Location = new System.Drawing.Point(4, 4);
+      this.tabPageMain.Margin = new System.Windows.Forms.Padding(0);
       this.tabPageMain.Name = "tabPageMain";
       this.tabPageMain.Padding = new System.Windows.Forms.Padding(3);
-      this.tabPageMain.Size = new System.Drawing.Size(1153, 479);
+      this.tabPageMain.Size = new System.Drawing.Size(937, 308);
       this.tabPageMain.TabIndex = 2;
       this.tabPageMain.Text = "Main";
+      // 
+      // grpAnalogPins
+      // 
+      this.grpAnalogPins.BackColor = System.Drawing.Color.White;
+      this.grpAnalogPins.Controls.Add(this.pnlAnalogPins);
+      this.grpAnalogPins.Dock = System.Windows.Forms.DockStyle.Left;
+      this.grpAnalogPins.ForeColor = System.Drawing.Color.FromArgb(((int)(((byte)(0)))), ((int)(((byte)(100)))), ((int)(((byte)(104)))));
+      this.grpAnalogPins.Location = new System.Drawing.Point(3, 3);
+      this.grpAnalogPins.Name = "grpAnalogPins";
+      this.grpAnalogPins.Size = new System.Drawing.Size(144, 302);
+      this.grpAnalogPins.TabIndex = 0;
+      this.grpAnalogPins.TabStop = false;
+      this.grpAnalogPins.Text = "Analog pins";
+      // 
+      // pnlAnalogPins
+      // 
+      this.pnlAnalogPins.Dock = System.Windows.Forms.DockStyle.Fill;
+      this.pnlAnalogPins.Location = new System.Drawing.Point(3, 16);
+      this.pnlAnalogPins.Name = "pnlAnalogPins";
+      this.pnlAnalogPins.Size = new System.Drawing.Size(138, 283);
+      this.pnlAnalogPins.TabIndex = 0;
       // 
       // tabPageDebug
       // 
@@ -450,29 +478,87 @@
       this.btnClearLog.UseVisualStyleBackColor = true;
       this.btnClearLog.Click += new System.EventHandler(this.btnClearLog_Click);
       // 
-      // grpAnalogPins
+      // label1
       // 
-      this.grpAnalogPins.Controls.Add(this.pnlAnalogPins);
-      this.grpAnalogPins.Location = new System.Drawing.Point(56, 48);
-      this.grpAnalogPins.Name = "grpAnalogPins";
-      this.grpAnalogPins.Size = new System.Drawing.Size(576, 240);
-      this.grpAnalogPins.TabIndex = 0;
-      this.grpAnalogPins.TabStop = false;
-      this.grpAnalogPins.Text = "Analog pins";
+      this.label1.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(0)))), ((int)(((byte)(100)))), ((int)(((byte)(104)))));
+      this.label1.BorderStyle = System.Windows.Forms.BorderStyle.FixedSingle;
+      this.label1.ForeColor = System.Drawing.Color.FromArgb(((int)(((byte)(0)))), ((int)(((byte)(100)))), ((int)(((byte)(104)))));
+      this.label1.Location = new System.Drawing.Point(680, 40);
+      this.label1.Name = "label1";
+      this.label1.Size = new System.Drawing.Size(48, 32);
+      this.label1.TabIndex = 1;
       // 
-      // pnlAnalogPins
+      // label2
       // 
-      this.pnlAnalogPins.Dock = System.Windows.Forms.DockStyle.Fill;
-      this.pnlAnalogPins.Location = new System.Drawing.Point(3, 16);
-      this.pnlAnalogPins.Name = "pnlAnalogPins";
-      this.pnlAnalogPins.Size = new System.Drawing.Size(570, 221);
-      this.pnlAnalogPins.TabIndex = 0;
+      this.label2.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(23)))), ((int)(((byte)(161)))), ((int)(((byte)(165)))));
+      this.label2.BorderStyle = System.Windows.Forms.BorderStyle.FixedSingle;
+      this.label2.Location = new System.Drawing.Point(739, 40);
+      this.label2.Name = "label2";
+      this.label2.Size = new System.Drawing.Size(48, 32);
+      this.label2.TabIndex = 2;
+      // 
+      // label3
+      // 
+      this.label3.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(232)))), ((int)(((byte)(80)))), ((int)(((byte)(31)))));
+      this.label3.BorderStyle = System.Windows.Forms.BorderStyle.FixedSingle;
+      this.label3.Location = new System.Drawing.Point(680, 80);
+      this.label3.Name = "label3";
+      this.label3.Size = new System.Drawing.Size(48, 32);
+      this.label3.TabIndex = 3;
+      // 
+      // label4
+      // 
+      this.label4.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(240)))), ((int)(((byte)(181)))), ((int)(((byte)(52)))));
+      this.label4.BorderStyle = System.Windows.Forms.BorderStyle.FixedSingle;
+      this.label4.Location = new System.Drawing.Point(739, 80);
+      this.label4.Name = "label4";
+      this.label4.Size = new System.Drawing.Size(48, 32);
+      this.label4.TabIndex = 4;
+      // 
+      // label5
+      // 
+      this.label5.BackColor = System.Drawing.Color.White;
+      this.label5.BorderStyle = System.Windows.Forms.BorderStyle.FixedSingle;
+      this.label5.Location = new System.Drawing.Point(739, 120);
+      this.label5.Name = "label5";
+      this.label5.Size = new System.Drawing.Size(48, 32);
+      this.label5.TabIndex = 6;
+      // 
+      // label6
+      // 
+      this.label6.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(241)))), ((int)(((byte)(255)))), ((int)(((byte)(255)))));
+      this.label6.BorderStyle = System.Windows.Forms.BorderStyle.FixedSingle;
+      this.label6.Location = new System.Drawing.Point(680, 120);
+      this.label6.Name = "label6";
+      this.label6.Size = new System.Drawing.Size(48, 32);
+      this.label6.TabIndex = 5;
+      // 
+      // txtVersion
+      // 
+      this.txtVersion.AutoSize = true;
+      this.txtVersion.ForeColor = System.Drawing.Color.FromArgb(((int)(((byte)(241)))), ((int)(((byte)(255)))), ((int)(((byte)(255)))));
+      this.txtVersion.Location = new System.Drawing.Point(728, 8);
+      this.txtVersion.Name = "txtVersion";
+      this.txtVersion.Size = new System.Drawing.Size(10, 13);
+      this.txtVersion.TabIndex = 11;
+      this.txtVersion.Text = "-";
+      // 
+      // txtCurrentBaud
+      // 
+      this.txtCurrentBaud.AutoSize = true;
+      this.txtCurrentBaud.ForeColor = System.Drawing.Color.FromArgb(((int)(((byte)(241)))), ((int)(((byte)(255)))), ((int)(((byte)(255)))));
+      this.txtCurrentBaud.Location = new System.Drawing.Point(840, 8);
+      this.txtCurrentBaud.Name = "txtCurrentBaud";
+      this.txtCurrentBaud.Size = new System.Drawing.Size(10, 13);
+      this.txtCurrentBaud.TabIndex = 12;
+      this.txtCurrentBaud.Text = "-";
       // 
       // Form1
       // 
       this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
       this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
-      this.ClientSize = new System.Drawing.Size(1161, 545);
+      this.BackColor = System.Drawing.Color.White;
+      this.ClientSize = new System.Drawing.Size(945, 374);
       this.Controls.Add(this.pnlControlPanel);
       this.Controls.Add(this.pnlSerialConnection);
       this.Name = "Form1";
@@ -486,13 +572,13 @@
       this.pnlControlPanel.ResumeLayout(false);
       this.tabControlPanel.ResumeLayout(false);
       this.tabPageMain.ResumeLayout(false);
+      this.grpAnalogPins.ResumeLayout(false);
       this.tabPageDebug.ResumeLayout(false);
       this.tabPageDebug.PerformLayout();
       ((System.ComponentModel.ISupportInitialize)(this.trackFrequency)).EndInit();
       ((System.ComponentModel.ISupportInitialize)(this.sliderAnalogWrite)).EndInit();
       this.tabPageLog.ResumeLayout(false);
       this.panel1.ResumeLayout(false);
-      this.grpAnalogPins.ResumeLayout(false);
       this.ResumeLayout(false);
 
     }
@@ -514,9 +600,7 @@
     private System.Windows.Forms.Label lblResponseTimeoutSubsequentBytes;
     private System.Windows.Forms.Button btnSetLow;
     private System.Windows.Forms.Button btnSetHigh;
-    private System.Windows.Forms.TextBox txtCurrentBaud;
     private System.Windows.Forms.Label lblCurrentBaud;
-    private System.Windows.Forms.TextBox txtVersion;
     private System.Windows.Forms.Label lblVersion;
     private System.Windows.Forms.TabControl tabControlPanel;
     private System.Windows.Forms.TabPage tabPageMain;
@@ -534,6 +618,14 @@
     private System.Windows.Forms.Button button6;
     private System.Windows.Forms.GroupBox grpAnalogPins;
     private System.Windows.Forms.FlowLayoutPanel pnlAnalogPins;
+    private System.Windows.Forms.Label label5;
+    private System.Windows.Forms.Label label6;
+    private System.Windows.Forms.Label label4;
+    private System.Windows.Forms.Label label3;
+    private System.Windows.Forms.Label label2;
+    private System.Windows.Forms.Label label1;
+    private System.Windows.Forms.Label txtCurrentBaud;
+    private System.Windows.Forms.Label txtVersion;
   }
 }
 
