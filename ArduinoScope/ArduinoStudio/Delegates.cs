@@ -12,5 +12,6 @@ namespace ArduinoStudio
     public delegate void VoidDelegate();
     public delegate void StringDelegate(string text);
     public delegate void ControlDelegate(Control control);
+    public delegate void ExceptionDelegate(Exception ex);
   }
 }

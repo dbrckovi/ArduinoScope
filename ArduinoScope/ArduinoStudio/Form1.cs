@@ -40,7 +40,8 @@ namespace ArduinoStudio
         txtCurrentBaud.Text = _commuinicator != null ? _commuinicator.CurrentBaud.ToString() : "";
         btnSerialConnectDisconnect.Text = _commuinicator != null ? "Disconnect" : "Connect";
         EnableDisableControls();
-        digitalPinList1.Communicator = _commuinicator;
+        GenerateAnalogPins();
+        GenerateDigitalPins();
       }
     }
 
@@ -66,6 +67,31 @@ namespace ArduinoStudio
       pnlControlPanel.Enabled = _commuinicator != null;
       btnSerialConnectDisconnect.Enabled = cmbSerialPort.SelectedItem != null;
       numResponseTimeoutFirstByte.Enabled = numResponseTimeoutSubsequentBytes.Enabled = cmbSerialPort.SelectedItem != null && _commuinicator == null;
+    }
+
+    private void GenerateAnalogPins()
+    {
+      if (_commuinicator == null)
+      {
+        foreach (AnalogPinControl ctl in pnlAnalogPins.Controls)
+        {
+          ctl.Dispose();
+        }
+
+        pnlAnalogPins.Controls.Clear();
+      }
+      else
+      {
+        foreach (AnalogPin pin in _commuinicator.AnalogPins)
+        {
+          pnlAnalogPins.Controls.Add(new AnalogPinControl(_commuinicator, pin.PinNumber));
+        }
+      }
+    }
+
+    private void GenerateDigitalPins()
+    {
+
     }
 
     private void LoadPorts()
@@ -118,18 +144,6 @@ namespace ArduinoStudio
       if (Communicator != null) Communicator = null;
     }
 
-    private void button1_Click(object sender, EventArgs e)
-    {
-      try
-      {
-        txtResponse.Text = _commuinicator.Test(txtInt.Text);
-      }
-      catch (Exception ex)
-      {
-        Msgbox.Show(this, ex);
-      }
-    }
-
     private void button2_Click(object sender, EventArgs e)
     {
 
@@ -138,56 +152,6 @@ namespace ArduinoStudio
     private void btnClearLog_Click(object sender, EventArgs e)
     {
       txtLog.Text = "";
-    }
-
-    private void btnError_Click(object sender, EventArgs e)
-    {
-      try
-      {
-        _commuinicator.Error();
-      }
-      catch (Exception ex)
-      {
-        Msgbox.Show(this, ex);
-      }
-    }
-
-    private void btnDebug_Click(object sender, EventArgs e)
-    {
-      try
-      {
-        txtResponse.Text = _commuinicator.Debug();
-      }
-      catch (Exception ex)
-      {
-        Msgbox.Show(this, ex);
-      }
-    }
-
-    private void btnSetOutput_Click(object sender, EventArgs e)
-    {
-      try
-      {
-        int pin = int.Parse(txtInt.Text);
-        _commuinicator.PinMode(pin, PinMode.Output);
-      }
-      catch (Exception ex)
-      {
-        Msgbox.Show(this, ex);
-      }
-    }
-
-    private void btnSetInput_Click(object sender, EventArgs e)
-    {
-      try
-      {
-        int pin = int.Parse(txtInt.Text);
-        _commuinicator.PinMode(pin, PinMode.Input);
-      }
-      catch (Exception ex)
-      {
-        Msgbox.Show(this, ex);
-      }
     }
 
     private void btnSetHigh_Click(object sender, EventArgs e)
@@ -216,25 +180,6 @@ namespace ArduinoStudio
       }
     }
 
-    private void btnTestBaud_Click(object sender, EventArgs e)
-    {
-
-    }
-
-    private void sliderAnalogWrite_Scroll(object sender, EventArgs e)
-    {
-      try
-      {
-        int pin = int.Parse(txtInt.Text);
-        byte value = Convert.ToByte(sliderAnalogWrite.Value);
-        _commuinicator.AnalogWrite(pin, value);
-      }
-      catch (Exception ex)
-      {
-        Msgbox.Show(this, ex);
-      }
-    }
-
     private void btnAnalogRead_Click(object sender, EventArgs e)
     {
       try
@@ -254,7 +199,7 @@ namespace ArduinoStudio
       {
         int pin = int.Parse(txtInt.Text);
         int frequency = Convert.ToInt32(trackFrequency.Value);
-        _commuinicator.Tone(pin, frequency, 20);
+        _commuinicator.Tone(pin, frequency, 2000);
       }
       catch (Exception ex)
       {
@@ -268,6 +213,57 @@ namespace ArduinoStudio
       {
         int pin = int.Parse(txtInt.Text);
         _commuinicator.NoTone(pin);
+      }
+      catch (Exception ex)
+      {
+        Msgbox.Show(this, ex);
+      }
+    }
+
+    private void button1_Click(object sender, EventArgs e)
+    {
+      try
+      {
+        int pin = int.Parse(txtInt.Text);
+        byte value = Convert.ToByte(sliderAnalogWrite.Value);
+        _commuinicator.AnalogWrite(pin, value);
+      }
+      catch (Exception ex)
+      {
+        Msgbox.Show(this, ex);
+      }
+    }
+
+    private void button2_Click_1(object sender, EventArgs e)
+    {
+      try
+      {
+        _commuinicator.ResetPins();
+      }
+      catch (Exception ex)
+      {
+        Msgbox.Show(this, ex);
+      }
+    }
+
+    private void button5_Click(object sender, EventArgs e)
+    {
+      try
+      {
+        txtResponse.Text = _commuinicator.Debug();
+      }
+      catch (Exception ex)
+      {
+        Msgbox.Show(this, ex);
+      }
+    }
+
+    private void button6_Click(object sender, EventArgs e)
+    {
+      try
+      {
+        int pin = int.Parse(txtInt.Text);
+        txtResponse.Text = _commuinicator.DigitalRead(pin).ToString();
       }
       catch (Exception ex)
       {

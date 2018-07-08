@@ -11,11 +11,7 @@ namespace ArduinoStudio
   public class ArduinoCommunicator
   {
     private const int DEFAULT_BAUD = 500000;
-
-    private void Dummy()
-    {
-      
-    }
+    private const int PIN_STATUS_REFRESH_MS = 300;    //UpdatePinStatuses() takes cca 170 ms on baud 500000
 
     #region Variables
     private int _responseFirstByteTimeout = 1000;
@@ -24,7 +20,12 @@ namespace ArduinoStudio
     private Encoding _serialEncoding = new UTF8Encoding();
     private int _version = -1;
     private int[] _viableBaudRates = { 9600, 14400, 19200, 28800, 38400, 57600, 115200, 230400, 500000 };
-    private DigitalPin[] _digitalPins = new DigitalPin[13];
+    private DigitalPin[] _digitalPins = null;
+    private AnalogPin[] _analogPins = null;
+    private Thread _thread = null;
+    private bool _threadShouldAbort = true;
+    private DateTime _lastPinStatusRefreshTime = DateTime.Now.AddDays(-1);
+    private object _locker = new object();
     #endregion Variables
 
     #region Properties
@@ -39,13 +40,24 @@ namespace ArduinoStudio
     }
 
     /// <summary>
-    /// Gets the states and values of all digital pins
+    /// Contains states and last values of all digital pins
     /// </summary>
     public DigitalPin[] DigitalPins
     {
       get
       {
         return _digitalPins;
+      }
+    }
+
+    /// <summary>
+    /// Contains states and last values of all analog pins
+    /// </summary>
+    public AnalogPin[] AnalogPins
+    {
+      get
+      {
+        return _analogPins;
       }
     }
     #endregion Properties
@@ -62,12 +74,21 @@ namespace ArduinoStudio
     }
 
     /// <summary>
-    /// Raised when status of one or more pins changes or gets updated
+    /// Raised when status or value of one or more pins changes
     /// </summary>
     public event Delegates.VoidDelegate PinStatusChanged;
     private void OnPinStatusChanged()
     {
       PinStatusChanged?.Invoke();
+    }
+
+    /// <summary>
+    /// Raised when critical exception occurs which prevents the communicator from operating normally.
+    /// </summary>
+    public event Delegates.ExceptionDelegate CriticalException;
+    private void OnCriticalException(Exception ex)
+    {
+      CriticalException?.Invoke(ex);
     }
     #endregion Events
 
@@ -85,12 +106,26 @@ namespace ArduinoStudio
         _responseFirstByteTimeout = responseFirstByteTimeout;
         _responseLastByteTimeout = responseLastByteTimeout;
 
+        #region Open serial port
         _port = new SerialPort(comPort, DEFAULT_BAUD);
         _port.Open();
-        Thread.Sleep(100); //because reasons. GetVersion doesn't work without this
+        Thread.Sleep(100); //because reasons. GetVersion doesn't work without this    TODO: better sleep
+        #endregion Open serial port
+
+        #region Get data from arduino
         _version = GetVersion();
         GenerateDigitalPins();
-        InitializeDigitalPins();
+        UpdatePinStatuses();
+        #endregion Get data from arduino
+
+        #region Start worker thread
+        _threadShouldAbort = false;
+        ThreadStart start = new ThreadStart(Work);
+        _thread = new Thread(start);
+        _thread.Name = "ArduinoCommunicator worker thread";
+        _thread.IsBackground = true;
+        _thread.Start();
+        #endregion Start worker thread
       }
       catch (Exception ex)
       {
@@ -106,8 +141,36 @@ namespace ArduinoStudio
     #endregion Constructor
 
     #region Infrastructure
-    public void Stop()
+    /// <summary>
+    /// Stops the ArduinoCommunicator
+    /// </summary>
+    /// <param name="forceStopTimeout">Time (in miliseconds) to wait for background thread to stop before forcing it to stop</param>
+    public void Stop(int forceStopTimeout = 5000)
     {
+      _threadShouldAbort = true;
+      DateTime stopCalledTime = DateTime.Now;
+
+      while(_thread != null)
+      {
+        TimeSpan span = DateTime.Now - stopCalledTime;
+        if (span.TotalMilliseconds > forceStopTimeout) break;
+        Thread.Sleep(1);  //TODO: better sleep
+      }
+
+      if (_thread != null)
+      {
+        try
+        {
+          _thread.Abort();
+        } catch { }
+
+        try
+        {
+          _thread.Interrupt();
+        }
+        catch { }
+      }
+
       _port.Close();
     }
 
@@ -160,9 +223,11 @@ namespace ArduinoStudio
       DateTime start = DateTime.Now;
       while (true)
       {
+        if (_thread != null && _threadShouldAbort) return false;
         if (_port.BytesToRead > 0) return true;
         TimeSpan span = DateTime.Now - start;
         if (span.TotalMilliseconds > waitTimeMiliseconds) return false;
+        Thread.Sleep(1); //TODO: better sleep
       }
     }
 
@@ -210,96 +275,135 @@ namespace ArduinoStudio
     }
 
     /// <summary>
-    /// Creates a list of digital pins.
+    /// Gets a list of pins from Arduino and populates DigitalPins property
     /// </summary>
     private void GenerateDigitalPins()
     {
-      //The list is now hardcoded for Arduino Uno
-      //TODO: Check if it's possible to acquire the pin list dynamically
+      //D0:S0,D1:S0,D2:S0,D3:S1,D4:S0,D5:S1,D6:S1,D7:S0,D8:S0,D9:S1,D10:S1,D11:S1,D12:S0,D13:S0,A0,A1,A2,A3,A4,A5
 
-      _digitalPins = new DigitalPin[14];
+      string configString = GetPinConfig();
+      string[] pinStrings = configString.Split(',');
+      List<DigitalPin> digitalPins = new List<DigitalPin>();
+      List<AnalogPin> analogPins = new List<AnalogPin>();
 
-      for (int x = 0; x < _digitalPins.Length; x++)
+      foreach (string pinString in pinStrings)
       {
-        _digitalPins[x] = new DigitalPin(x);
+        if (pinString.StartsWith("D")) digitalPins.Add(new DigitalPin(pinString));
+        else if (pinString.StartsWith("A")) analogPins.Add(new AnalogPin(pinString));
       }
+
+      _digitalPins = digitalPins.ToArray();
+      _analogPins = analogPins.ToArray();
     }
 
     /// <summary>
-    /// Initializes digital pins to default modes and values
+    /// Gets statuses and values of each pin from arduino and updates local lists
     /// </summary>
-    private void InitializeDigitalPins()
+    private void UpdatePinStatuses()
     {
-      //TODO: Get mode and value of each digital pin from Arduino (support for this must be implemented into sketch first)
-      //For now, each pin is initialized to Digital boolean output and turned off
+      string pinsStatusString = GetPinStatus();
+      string[] statusStrings = pinsStatusString.Split(',');
 
-      foreach (DigitalPin pin in _digitalPins)
+      foreach (string statusString in statusStrings)
       {
-        NoTone(pin.PinNumber);
-        DigitalWrite(pin.PinNumber, false);
+        string[] props = statusString.Split(':');
+        string key = props[0].Substring(0, 1);
+        string value = props[0].Substring(1, props[0].Length - 1);
+        int pinNumber = int.Parse(value);
+
+        if (key == "D") DigitalPins[pinNumber].UpdateStatus(statusString);
+        else if (key == "A") AnalogPins[pinNumber].UpdateStatus(statusString);
+      }
+      _lastPinStatusRefreshTime = DateTime.Now;
+    }
+
+    /// <summary>
+    /// Runs in background thread. Periodically refreshes pin statuses and values
+    /// </summary>
+    private void Work()
+    {
+      try
+      {
+        while (!_threadShouldAbort)
+        {
+          TimeSpan span = DateTime.Now - _lastPinStatusRefreshTime;
+          if (span.TotalMilliseconds > PIN_STATUS_REFRESH_MS)
+          {
+            lock (_locker)
+            {
+              UpdatePinStatuses();
+            }
+            OnPinStatusChanged();
+          }
+
+          Thread.Sleep(1);  //TODO: use better sleep
+        }
+      }
+      catch (ThreadAbortException)
+      {
+        OnLog("ArduinoCommunicator worker thread was forcibly aborted");
+      }
+      catch (ThreadInterruptedException)
+      {
+        OnLog("ArduinoCommunicator worker thread was forcibly interrupted and stopped");
+      }
+      catch (Exception ex)
+      {
+        OnLog(string.Format("Critial ArduinoCommunicator error. {0}", ex.Message));
+      }
+      finally
+      {
+        _threadShouldAbort = true;
+        _thread = null;
       }
     }
+
     #endregion Infrastructure
 
     #region Requests
     /// <summary>
-    /// Performs a basic communication test. Arduino will return the received text.
-    /// </summary>
-    /// <param name="text">Text to be sent to, and received from, Arduino</param>
-    /// <returns>The text which was sent</returns>
-    public string Test(string text)
-    {
-      if (text.Contains("|")) throw new Exception("Text may not contain '|' character");
-      string request = BuildRequest(RequestType.Test, text);
-      string response = SendRequest(request);
-      return ParseResponse(response)[0];
-    }
-
-    /// <summary>
-    /// Sends error request. Only for debugging purposes
-    /// </summary>
-    /// <returns></returns>
-    public void Error()
-    {
-      string request = BuildRequest(RequestType.Error);
-      ParseResponse(SendRequest(request));
-    }
-
-    /// <summary>
     /// Requests the software version from the Arduino
     /// </summary>
     /// <returns>The version number</returns>
-    public int GetVersion()
+    private int GetVersion()
     {
       string request = BuildRequest(RequestType.GetVersion);
       string response = SendRequest(request);
       return int.Parse(ParseResponse(response)[0]);
     }
 
-    /// <summary>
-    /// For debug purposes. Arduino should output some text
-    /// </summary>
-    /// <returns></returns>
-    public string Debug()
+    public void ResetPins()
     {
-      string request = BuildRequest(RequestType.Debug);
+      lock (_locker)
+      {
+        string request = BuildRequest(RequestType.ResetPins);
+        string response = SendRequest(request);
+        ParseResponse(response);
+
+        UpdatePinStatuses();
+      }
+
+      OnPinStatusChanged();
+    }
+
+    private string GetPinConfig()
+    {
+      string request = BuildRequest(RequestType.GetPinConfig);
       string response = SendRequest(request);
-      return ParseResponse(response)[0];
+      List<string> responseValues = ParseResponse(response);
+      return responseValues[0];
     }
 
     /// <summary>
-    /// Sets the mode of the digital pin
+    /// Gets statuses and values of each pin from arduino in string format
     /// </summary>
-    /// <param name="pin"></param>
-    /// <param name="mode"></param>
-    public void PinMode(int pin, PinMode mode)
+    /// <returns></returns>
+    private string GetPinStatus()
     {
-      string request = BuildRequest(RequestType.PinMode, pin.ToString(), ((int)mode).ToString());
+      string request = BuildRequest(RequestType.GetPinStatus);
       string response = SendRequest(request);
-      ParseResponse(response);
-
-      _digitalPins[pin].PinMode = mode;
-      OnPinStatusChanged();
+      List<string> responseValues = ParseResponse(response);
+      return responseValues[0];
     }
 
     /// <summary>
@@ -309,17 +413,37 @@ namespace ArduinoStudio
     /// <param name="value"></param>
     public void DigitalWrite(int pin, bool value)
     {
-      if (_digitalPins[pin].PinMode != ArduinoStudio.PinMode.Output) PinMode(pin, ArduinoStudio.PinMode.Output);
-      if (_digitalPins[pin].OutputMode == DigitalOutMode.Tone) NoTone(pin);
+      lock (_locker)
+      {
+        string request = BuildRequest(RequestType.DigitalWrite, pin.ToString(), value ? "1" : "0");
+        string response = SendRequest(request);
+        ParseResponse(response);
 
-      string request = BuildRequest(RequestType.DigitalWrite, pin.ToString(), value ? "1" : "0");
-      string response = SendRequest(request);
-      ParseResponse(response);
+        _digitalPins[pin].PinMode = DigitalPinMode.BoolWrite;
+        _digitalPins[pin].BoolValue = value;
+      }
+      OnPinStatusChanged();
+    }
 
-      _digitalPins[pin].OutputMode = DigitalOutMode.Boolean;
-      _digitalPins[pin].OutputBool = value;
+    public bool DigitalRead(int pin)
+    {
+      bool value = false;
+
+      lock (_locker)
+      {
+        string request = BuildRequest(RequestType.DigitalRead, pin.ToString());
+        string response = SendRequest(request);
+        List<string> responseValues = ParseResponse(response);
+
+        value = responseValues[0] == "1";
+
+        _digitalPins[pin].PinMode = DigitalPinMode.BoolRead;
+        _digitalPins[pin].BoolValue = value;
+      }
 
       OnPinStatusChanged();
+
+      return value;
     }
 
 
@@ -330,26 +454,36 @@ namespace ArduinoStudio
     /// <param name="value"></param>
     public void AnalogWrite(int pin, byte value)
     {
-      if (_digitalPins[pin].PinMode != ArduinoStudio.PinMode.Output) PinMode(pin, ArduinoStudio.PinMode.Output);
-      if (_digitalPins[pin].OutputMode == DigitalOutMode.Tone) NoTone(pin);
+      lock (_locker)
+      {
+        string request = BuildRequest(RequestType.Pwm, pin.ToString(), value.ToString());
+        string response = SendRequest(request);
+        ParseResponse(response);
 
-      string request = BuildRequest(RequestType.AnalogWrite, pin.ToString(), value.ToString());
-      string response = SendRequest(request);
-      ParseResponse(response);
-
-      _digitalPins[pin].OutputMode = DigitalOutMode.PWM;
-      _digitalPins[pin].OutputPwm = value;
+        _digitalPins[pin].PinMode = DigitalPinMode.Pwm;
+        _digitalPins[pin].PwmValue = value;
+      }
 
       OnPinStatusChanged();
     }
 
-
     public int AnalogRead(int pin)
     {
-      string request = BuildRequest(RequestType.AnalogRead, pin.ToString());
-      string response = SendRequest(request);
-      List<string> responseValues = ParseResponse(response);
-      return int.Parse(responseValues[0]);
+      int value = 0;
+
+      lock (_locker)
+      {
+        string request = BuildRequest(RequestType.AnalogRead, pin.ToString());
+        string response = SendRequest(request);
+        List<string> responseValues = ParseResponse(response);
+
+        value = int.Parse(responseValues[0]);
+        _analogPins[pin].Value = value;
+      }
+
+      OnPinStatusChanged();
+
+      return value;
     }
 
     /// <summary>
@@ -358,17 +492,18 @@ namespace ArduinoStudio
     /// <param name="pin"></param>
     /// <param name="frequency"></param>
     /// <param name="duration"></param>
-    public void Tone (int pin, int frequency, int duration)
+    public void Tone(int pin, int frequency, int duration)
     {
-      if (_digitalPins[pin].PinMode != ArduinoStudio.PinMode.Output) PinMode(pin, ArduinoStudio.PinMode.Output);
+      lock (_locker)
+      {
+        string request = BuildRequest(RequestType.Tone, pin.ToString(), frequency.ToString(), duration.ToString());
+        string response = SendRequest(request);
+        ParseResponse(response);
 
-      string request = BuildRequest(RequestType.Tone, pin.ToString(), frequency.ToString(), duration.ToString());
-      string response = SendRequest(request);
-      ParseResponse(response);
-
-      _digitalPins[pin].OutputMode = DigitalOutMode.Tone;
-      _digitalPins[pin].OutputToneFrequency = frequency;
-      _digitalPins[pin].OutputToneDuration = duration;
+        _digitalPins[pin].PinMode = DigitalPinMode.Tone;
+        _digitalPins[pin].Frequency = frequency;
+        _digitalPins[pin].Duration = duration;
+      }
 
       OnPinStatusChanged();
     }
@@ -380,15 +515,27 @@ namespace ArduinoStudio
     /// <param name="pin"></param>
     public void NoTone(int pin)
     {
-      if (_digitalPins[pin].PinMode != ArduinoStudio.PinMode.Output) PinMode(pin, ArduinoStudio.PinMode.Output);
+      lock (_locker)
+      {
+        string request = BuildRequest(RequestType.NoTone, pin.ToString());
+        string response = SendRequest(request);
+        ParseResponse(response);
 
-      string request = BuildRequest(RequestType.NoTone, pin.ToString());
-      string response = SendRequest(request);
-      ParseResponse(response);
-
-      _digitalPins[pin].OutputMode = DigitalOutMode.Tone;
+        _digitalPins[pin].PinMode = DigitalPinMode.Tone;
+      }
 
       OnPinStatusChanged();
+    }
+
+    public string Debug()
+    {
+      lock (_locker)
+      {
+        string request = BuildRequest(RequestType.Debug);
+        string response = SendRequest(request);
+        List<string> responseValues = ParseResponse(response);
+        return responseValues[0];
+      }
     }
     #endregion Requests
   }

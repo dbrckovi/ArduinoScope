@@ -1,0 +1,63 @@
+PIN STATUS STRING
+
+String contains status and values of all analog and digital pins
+Pins are separated by comma ','
+Properties of each pin are separated by colon ':'
+Each pin property consist of letter immediately followed by number. 
+Letter represents the type of the property and number represents its value.
+First property in the string must always be A or D
+
+Property types:
+D - represents a digital pin, number represents pin number
+A - represents an analog pin, number represents pin number
+M - pin mode, number represents value of DigitalPinMode enumeration
+V - pin value. Boolean values are represented by 0 or 1
+F - frequency of the tone when pin is in Tone mode
+L - length (duration) of the tone when pin is in Tone Mode
+
+Examples:
+
+1.) D3:M1:V1
+	- digital pin 3 is in BOOL_OUT mode and is turned on (high value)
+	
+2.) D6:M2:V144
+	- digital pin 3 is in PWM mode. duty cycle of the pwm signal is 144
+	
+3.) D11:M3:F600:L1000
+	- digital pin 11 is in Tone mode. Frequency is 600, duration is 1000
+
+4.) D2:M0:V0
+	-digital pin 2 is in BOOL_IN mode. It's value is LOW
+	
+5.) A2:V673
+	- analog pin 2 has value 673
+
+
+6.) D3:M1:V1,D6:M2:V144,D11:M3:F600:L1000,D2:M0:V0,A2:V673
+	- all 5 previous examples combined into a single string
+
+
+	
+PIN CONFIG STRING
+
+String returns all digital and analog pins.
+Also indicates which digital pins support PWM/TONE function	
+String contains status and values of all analog and digital pins
+Pins are separated by comma ','
+Properties of each pin are separated by colon ':'
+Each pin property consist of letter immediately followed by number. 
+Letter represents the type of the property and number represents its value.
+First property in the string must always be A or D
+
+Property types:
+D - represents a digital pin, number represents pin number
+A - represents an analog pin, number represents pin number	
+S - for digital pins, indicates whether pin supports PWM/TONE. 1 indicates that it does, 0 that it doesn't
+
+The following example is a typical arduino Uno configuration...
+ - 14 digital pins of which these support pwm/tone: 3,5,6,9,10,11
+ - 6 analog pins
+
+D0:S0,D1:S0,D2:S0,D3:S1,D4:S0,D5:S1,D6:S1,D7:S0,D8:S0,D9:S1,D10:S1,D11:S1,D12:S0,D13:S0,A0,A1,A2,A3,A4,A5
+
+

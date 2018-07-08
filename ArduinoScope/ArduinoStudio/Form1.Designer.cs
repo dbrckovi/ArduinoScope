@@ -44,26 +44,25 @@
       this.tabControlPanel = new System.Windows.Forms.TabControl();
       this.tabPageMain = new System.Windows.Forms.TabPage();
       this.tabPageDebug = new System.Windows.Forms.TabPage();
+      this.button6 = new System.Windows.Forms.Button();
+      this.button5 = new System.Windows.Forms.Button();
+      this.button2 = new System.Windows.Forms.Button();
+      this.button1 = new System.Windows.Forms.Button();
       this.btnNoTone = new System.Windows.Forms.Button();
       this.trackFrequency = new System.Windows.Forms.TrackBar();
       this.btnTone = new System.Windows.Forms.Button();
       this.btnAnalogRead = new System.Windows.Forms.Button();
-      this.textBox1 = new System.Windows.Forms.TextBox();
       this.txtResponse = new System.Windows.Forms.RichTextBox();
       this.sliderAnalogWrite = new System.Windows.Forms.TrackBar();
       this.txtInt = new System.Windows.Forms.TextBox();
       this.btnSetLow = new System.Windows.Forms.Button();
-      this.btnTest = new System.Windows.Forms.Button();
       this.btnSetHigh = new System.Windows.Forms.Button();
-      this.btnError = new System.Windows.Forms.Button();
-      this.btnSetInput = new System.Windows.Forms.Button();
-      this.btnDebug = new System.Windows.Forms.Button();
-      this.btnSetOutput = new System.Windows.Forms.Button();
       this.tabPageLog = new System.Windows.Forms.TabPage();
       this.txtLog = new System.Windows.Forms.RichTextBox();
       this.panel1 = new System.Windows.Forms.Panel();
       this.btnClearLog = new System.Windows.Forms.Button();
-      this.digitalPinList1 = new ArduinoStudio.DigitalPinList();
+      this.grpAnalogPins = new System.Windows.Forms.GroupBox();
+      this.pnlAnalogPins = new System.Windows.Forms.FlowLayoutPanel();
       this.pnlSerialConnection.SuspendLayout();
       ((System.ComponentModel.ISupportInitialize)(this.numResponseTimeoutSubsequentBytes)).BeginInit();
       ((System.ComponentModel.ISupportInitialize)(this.numResponseTimeoutFirstByte)).BeginInit();
@@ -75,6 +74,7 @@
       ((System.ComponentModel.ISupportInitialize)(this.sliderAnalogWrite)).BeginInit();
       this.tabPageLog.SuspendLayout();
       this.panel1.SuspendLayout();
+      this.grpAnalogPins.SuspendLayout();
       this.SuspendLayout();
       // 
       // pnlSerialConnection
@@ -249,7 +249,7 @@
       // tabPageMain
       // 
       this.tabPageMain.BackColor = System.Drawing.Color.White;
-      this.tabPageMain.Controls.Add(this.digitalPinList1);
+      this.tabPageMain.Controls.Add(this.grpAnalogPins);
       this.tabPageMain.Location = new System.Drawing.Point(4, 4);
       this.tabPageMain.Name = "tabPageMain";
       this.tabPageMain.Padding = new System.Windows.Forms.Padding(3);
@@ -260,21 +260,19 @@
       // tabPageDebug
       // 
       this.tabPageDebug.BackColor = System.Drawing.SystemColors.Control;
+      this.tabPageDebug.Controls.Add(this.button6);
+      this.tabPageDebug.Controls.Add(this.button5);
+      this.tabPageDebug.Controls.Add(this.button2);
+      this.tabPageDebug.Controls.Add(this.button1);
       this.tabPageDebug.Controls.Add(this.btnNoTone);
       this.tabPageDebug.Controls.Add(this.trackFrequency);
       this.tabPageDebug.Controls.Add(this.btnTone);
       this.tabPageDebug.Controls.Add(this.btnAnalogRead);
-      this.tabPageDebug.Controls.Add(this.textBox1);
       this.tabPageDebug.Controls.Add(this.txtResponse);
       this.tabPageDebug.Controls.Add(this.sliderAnalogWrite);
       this.tabPageDebug.Controls.Add(this.txtInt);
       this.tabPageDebug.Controls.Add(this.btnSetLow);
-      this.tabPageDebug.Controls.Add(this.btnTest);
       this.tabPageDebug.Controls.Add(this.btnSetHigh);
-      this.tabPageDebug.Controls.Add(this.btnError);
-      this.tabPageDebug.Controls.Add(this.btnSetInput);
-      this.tabPageDebug.Controls.Add(this.btnDebug);
-      this.tabPageDebug.Controls.Add(this.btnSetOutput);
       this.tabPageDebug.Location = new System.Drawing.Point(4, 4);
       this.tabPageDebug.Name = "tabPageDebug";
       this.tabPageDebug.Padding = new System.Windows.Forms.Padding(3);
@@ -282,11 +280,51 @@
       this.tabPageDebug.TabIndex = 0;
       this.tabPageDebug.Text = "Debug";
       // 
+      // button6
+      // 
+      this.button6.Location = new System.Drawing.Point(120, 176);
+      this.button6.Name = "button6";
+      this.button6.Size = new System.Drawing.Size(88, 32);
+      this.button6.TabIndex = 21;
+      this.button6.Text = "Digital read";
+      this.button6.UseVisualStyleBackColor = true;
+      this.button6.Click += new System.EventHandler(this.button6_Click);
+      // 
+      // button5
+      // 
+      this.button5.Location = new System.Drawing.Point(480, 104);
+      this.button5.Name = "button5";
+      this.button5.Size = new System.Drawing.Size(88, 32);
+      this.button5.TabIndex = 20;
+      this.button5.Text = "Debug";
+      this.button5.UseVisualStyleBackColor = true;
+      this.button5.Click += new System.EventHandler(this.button5_Click);
+      // 
+      // button2
+      // 
+      this.button2.Location = new System.Drawing.Point(280, 176);
+      this.button2.Name = "button2";
+      this.button2.Size = new System.Drawing.Size(88, 32);
+      this.button2.TabIndex = 17;
+      this.button2.Text = "Reset pins";
+      this.button2.UseVisualStyleBackColor = true;
+      this.button2.Click += new System.EventHandler(this.button2_Click_1);
+      // 
+      // button1
+      // 
+      this.button1.Location = new System.Drawing.Point(144, 72);
+      this.button1.Name = "button1";
+      this.button1.Size = new System.Drawing.Size(64, 24);
+      this.button1.TabIndex = 16;
+      this.button1.Text = "Set pwm";
+      this.button1.UseVisualStyleBackColor = true;
+      this.button1.Click += new System.EventHandler(this.button1_Click);
+      // 
       // btnNoTone
       // 
-      this.btnNoTone.Location = new System.Drawing.Point(472, 128);
+      this.btnNoTone.Location = new System.Drawing.Point(216, 120);
       this.btnNoTone.Name = "btnNoTone";
-      this.btnNoTone.Size = new System.Drawing.Size(112, 40);
+      this.btnNoTone.Size = new System.Drawing.Size(72, 24);
       this.btnNoTone.TabIndex = 15;
       this.btnNoTone.Text = "No Tone";
       this.btnNoTone.UseVisualStyleBackColor = true;
@@ -295,20 +333,20 @@
       // trackFrequency
       // 
       this.trackFrequency.LargeChange = 32;
-      this.trackFrequency.Location = new System.Drawing.Point(352, 176);
+      this.trackFrequency.Location = new System.Drawing.Point(8, 120);
       this.trackFrequency.Maximum = 20000;
       this.trackFrequency.Minimum = 31;
       this.trackFrequency.Name = "trackFrequency";
-      this.trackFrequency.Size = new System.Drawing.Size(112, 45);
+      this.trackFrequency.Size = new System.Drawing.Size(128, 45);
       this.trackFrequency.TabIndex = 14;
       this.trackFrequency.TickFrequency = 64;
       this.trackFrequency.Value = 31;
       // 
       // btnTone
       // 
-      this.btnTone.Location = new System.Drawing.Point(352, 128);
+      this.btnTone.Location = new System.Drawing.Point(144, 120);
       this.btnTone.Name = "btnTone";
-      this.btnTone.Size = new System.Drawing.Size(112, 40);
+      this.btnTone.Size = new System.Drawing.Size(64, 24);
       this.btnTone.TabIndex = 13;
       this.btnTone.Text = "Tone";
       this.btnTone.UseVisualStyleBackColor = true;
@@ -316,20 +354,13 @@
       // 
       // btnAnalogRead
       // 
-      this.btnAnalogRead.Location = new System.Drawing.Point(232, 128);
+      this.btnAnalogRead.Location = new System.Drawing.Point(16, 176);
       this.btnAnalogRead.Name = "btnAnalogRead";
-      this.btnAnalogRead.Size = new System.Drawing.Size(112, 40);
+      this.btnAnalogRead.Size = new System.Drawing.Size(88, 32);
       this.btnAnalogRead.TabIndex = 12;
       this.btnAnalogRead.Text = "Analog read";
       this.btnAnalogRead.UseVisualStyleBackColor = true;
       this.btnAnalogRead.Click += new System.EventHandler(this.btnAnalogRead_Click);
-      // 
-      // textBox1
-      // 
-      this.textBox1.Location = new System.Drawing.Point(109, 133);
-      this.textBox1.Name = "textBox1";
-      this.textBox1.Size = new System.Drawing.Size(104, 20);
-      this.textBox1.TabIndex = 11;
       // 
       // txtResponse
       // 
@@ -342,90 +373,39 @@
       // sliderAnalogWrite
       // 
       this.sliderAnalogWrite.LargeChange = 32;
-      this.sliderAnalogWrite.Location = new System.Drawing.Point(8, 128);
+      this.sliderAnalogWrite.Location = new System.Drawing.Point(8, 72);
       this.sliderAnalogWrite.Maximum = 255;
       this.sliderAnalogWrite.Name = "sliderAnalogWrite";
-      this.sliderAnalogWrite.Size = new System.Drawing.Size(93, 45);
+      this.sliderAnalogWrite.Size = new System.Drawing.Size(128, 45);
       this.sliderAnalogWrite.TabIndex = 10;
       this.sliderAnalogWrite.TickFrequency = 64;
-      this.sliderAnalogWrite.Scroll += new System.EventHandler(this.sliderAnalogWrite_Scroll);
       // 
       // txtInt
       // 
-      this.txtInt.Location = new System.Drawing.Point(4, 2);
+      this.txtInt.Location = new System.Drawing.Point(8, 8);
       this.txtInt.Name = "txtInt";
-      this.txtInt.Size = new System.Drawing.Size(400, 20);
+      this.txtInt.Size = new System.Drawing.Size(112, 20);
       this.txtInt.TabIndex = 2;
       // 
       // btnSetLow
       // 
-      this.btnSetLow.Location = new System.Drawing.Point(316, 74);
+      this.btnSetLow.Location = new System.Drawing.Point(72, 40);
       this.btnSetLow.Name = "btnSetLow";
-      this.btnSetLow.Size = new System.Drawing.Size(112, 40);
+      this.btnSetLow.Size = new System.Drawing.Size(64, 24);
       this.btnSetLow.TabIndex = 8;
       this.btnSetLow.Text = "Set low";
       this.btnSetLow.UseVisualStyleBackColor = true;
       this.btnSetLow.Click += new System.EventHandler(this.btnSetLow_Click);
       // 
-      // btnTest
-      // 
-      this.btnTest.Location = new System.Drawing.Point(412, 2);
-      this.btnTest.Name = "btnTest";
-      this.btnTest.Size = new System.Drawing.Size(56, 24);
-      this.btnTest.TabIndex = 1;
-      this.btnTest.Text = "Test";
-      this.btnTest.UseVisualStyleBackColor = true;
-      this.btnTest.Click += new System.EventHandler(this.button1_Click);
-      // 
       // btnSetHigh
       // 
-      this.btnSetHigh.Location = new System.Drawing.Point(316, 26);
+      this.btnSetHigh.Location = new System.Drawing.Point(8, 40);
       this.btnSetHigh.Name = "btnSetHigh";
-      this.btnSetHigh.Size = new System.Drawing.Size(112, 40);
+      this.btnSetHigh.Size = new System.Drawing.Size(64, 24);
       this.btnSetHigh.TabIndex = 7;
       this.btnSetHigh.Text = "Set high";
       this.btnSetHigh.UseVisualStyleBackColor = true;
       this.btnSetHigh.Click += new System.EventHandler(this.btnSetHigh_Click);
-      // 
-      // btnError
-      // 
-      this.btnError.Location = new System.Drawing.Point(4, 26);
-      this.btnError.Name = "btnError";
-      this.btnError.Size = new System.Drawing.Size(72, 40);
-      this.btnError.TabIndex = 3;
-      this.btnError.Text = "Error";
-      this.btnError.UseVisualStyleBackColor = true;
-      this.btnError.Click += new System.EventHandler(this.btnError_Click);
-      // 
-      // btnSetInput
-      // 
-      this.btnSetInput.Location = new System.Drawing.Point(196, 74);
-      this.btnSetInput.Name = "btnSetInput";
-      this.btnSetInput.Size = new System.Drawing.Size(112, 40);
-      this.btnSetInput.TabIndex = 6;
-      this.btnSetInput.Text = "Set as input";
-      this.btnSetInput.UseVisualStyleBackColor = true;
-      this.btnSetInput.Click += new System.EventHandler(this.btnSetInput_Click);
-      // 
-      // btnDebug
-      // 
-      this.btnDebug.Location = new System.Drawing.Point(84, 26);
-      this.btnDebug.Name = "btnDebug";
-      this.btnDebug.Size = new System.Drawing.Size(72, 40);
-      this.btnDebug.TabIndex = 4;
-      this.btnDebug.Text = "Debug";
-      this.btnDebug.UseVisualStyleBackColor = true;
-      this.btnDebug.Click += new System.EventHandler(this.btnDebug_Click);
-      // 
-      // btnSetOutput
-      // 
-      this.btnSetOutput.Location = new System.Drawing.Point(196, 26);
-      this.btnSetOutput.Name = "btnSetOutput";
-      this.btnSetOutput.Size = new System.Drawing.Size(112, 40);
-      this.btnSetOutput.TabIndex = 5;
-      this.btnSetOutput.Text = "Set as output";
-      this.btnSetOutput.UseVisualStyleBackColor = true;
-      this.btnSetOutput.Click += new System.EventHandler(this.btnSetOutput_Click);
       // 
       // tabPageLog
       // 
@@ -470,13 +450,23 @@
       this.btnClearLog.UseVisualStyleBackColor = true;
       this.btnClearLog.Click += new System.EventHandler(this.btnClearLog_Click);
       // 
-      // digitalPinList1
+      // grpAnalogPins
       // 
-      this.digitalPinList1.Communicator = null;
-      this.digitalPinList1.Location = new System.Drawing.Point(8, 8);
-      this.digitalPinList1.Name = "digitalPinList1";
-      this.digitalPinList1.Size = new System.Drawing.Size(992, 448);
-      this.digitalPinList1.TabIndex = 0;
+      this.grpAnalogPins.Controls.Add(this.pnlAnalogPins);
+      this.grpAnalogPins.Location = new System.Drawing.Point(56, 48);
+      this.grpAnalogPins.Name = "grpAnalogPins";
+      this.grpAnalogPins.Size = new System.Drawing.Size(576, 240);
+      this.grpAnalogPins.TabIndex = 0;
+      this.grpAnalogPins.TabStop = false;
+      this.grpAnalogPins.Text = "Analog pins";
+      // 
+      // pnlAnalogPins
+      // 
+      this.pnlAnalogPins.Dock = System.Windows.Forms.DockStyle.Fill;
+      this.pnlAnalogPins.Location = new System.Drawing.Point(3, 16);
+      this.pnlAnalogPins.Name = "pnlAnalogPins";
+      this.pnlAnalogPins.Size = new System.Drawing.Size(570, 221);
+      this.pnlAnalogPins.TabIndex = 0;
       // 
       // Form1
       // 
@@ -502,6 +492,7 @@
       ((System.ComponentModel.ISupportInitialize)(this.sliderAnalogWrite)).EndInit();
       this.tabPageLog.ResumeLayout(false);
       this.panel1.ResumeLayout(false);
+      this.grpAnalogPins.ResumeLayout(false);
       this.ResumeLayout(false);
 
     }
@@ -514,7 +505,6 @@
     private System.Windows.Forms.Label lblSerialPort;
     private System.Windows.Forms.Panel pnlControlPanel;
     private System.Windows.Forms.TextBox txtInt;
-    private System.Windows.Forms.Button btnTest;
     private System.Windows.Forms.RichTextBox txtResponse;
         private System.Windows.Forms.NumericUpDown numResponseTimeoutFirstByte;
         private System.Windows.Forms.Label lblResponseTimeoutFirstByte;
@@ -522,12 +512,8 @@
     private System.Windows.Forms.Button btnClearLog;
     private System.Windows.Forms.NumericUpDown numResponseTimeoutSubsequentBytes;
     private System.Windows.Forms.Label lblResponseTimeoutSubsequentBytes;
-    private System.Windows.Forms.Button btnError;
-    private System.Windows.Forms.Button btnDebug;
     private System.Windows.Forms.Button btnSetLow;
     private System.Windows.Forms.Button btnSetHigh;
-    private System.Windows.Forms.Button btnSetInput;
-    private System.Windows.Forms.Button btnSetOutput;
     private System.Windows.Forms.TextBox txtCurrentBaud;
     private System.Windows.Forms.Label lblCurrentBaud;
     private System.Windows.Forms.TextBox txtVersion;
@@ -537,13 +523,17 @@
     private System.Windows.Forms.TabPage tabPageDebug;
     private System.Windows.Forms.TabPage tabPageLog;
     private System.Windows.Forms.Panel panel1;
-    private System.Windows.Forms.TextBox textBox1;
     private System.Windows.Forms.TrackBar sliderAnalogWrite;
     private System.Windows.Forms.Button btnAnalogRead;
     private System.Windows.Forms.Button btnTone;
     private System.Windows.Forms.TrackBar trackFrequency;
     private System.Windows.Forms.Button btnNoTone;
-    private DigitalPinList digitalPinList1;
+    private System.Windows.Forms.Button button1;
+    private System.Windows.Forms.Button button2;
+    private System.Windows.Forms.Button button5;
+    private System.Windows.Forms.Button button6;
+    private System.Windows.Forms.GroupBox grpAnalogPins;
+    private System.Windows.Forms.FlowLayoutPanel pnlAnalogPins;
   }
 }
 

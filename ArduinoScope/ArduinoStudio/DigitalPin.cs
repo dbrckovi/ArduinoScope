@@ -12,37 +12,123 @@ namespace ArduinoStudio
   public class DigitalPin
   {
     public int PinNumber = 0;
-    public PinMode PinMode = PinMode.Output;
-    public DigitalOutMode OutputMode = DigitalOutMode.Boolean;
+    public DigitalPinMode PinMode = DigitalPinMode.BoolRead;
 
     /// <summary>
-    /// When PinMode is Input, holds the last received boolean value on the pin
+    /// Contains pin value for BoolRead and BoolWrite modes
     /// </summary>
-    public bool InputBool = false;
+    public bool BoolValue = false;
 
     /// <summary>
-    /// When PinMode is Output and OutputMode is Boolean, holds the last boolean value the pin was set to
+    /// Holds pwm value when pin is in Pwm mode
     /// </summary>
-    public bool OutputBool = false;
+    public byte PwmValue = 0;
 
     /// <summary>
-    /// When PinMode is Output and OutputMode is PWM, holds the last duty cycle the pin was set to
+    /// Holds tone frequency when pin is in Tone mode
     /// </summary>
-    public byte OutputPwm = 0;
+    public int Frequency = 440;
 
     /// <summary>
-    /// When PinMode is Output and OutputMode is Tone, holds the last frequency the pin tone signal was set to
+    /// Holds tone duration when pin is in Tone mode
     /// </summary>
-    public int OutputToneFrequency = 440;
+    public int Duration = 0;
 
     /// <summary>
-    /// When PinMode is Output and OutputMode is Tone, holds the duration of the last tone signal
+    /// Indicates whether pin supports pwm/tone modes
     /// </summary>
-    public int OutputToneDuration = 0;
+    public bool SupportsPwm = false;
 
-    public DigitalPin(int number)
+    /// <summary>
+    /// Constructs new DigitalPin
+    /// </summary>
+    /// <param name="number">Pin number</param>
+    /// <param name="supportsPwm">Indicates whether pin supports PWM and TONE modes</param>
+    public DigitalPin(int number, bool supportsPwm)
     {
       PinNumber = number;
+      SupportsPwm = supportsPwm;
     }
+
+    /// <summary>
+    /// Constructs new Digital with values parsed from config string received from arduino
+    /// </summary>
+    /// <param name="configString">String containing digital pin configuration information</param>
+    public DigitalPin(string configString)
+    {
+      string[] props = configString.Split(':');
+
+      foreach (string prop in props)
+      {
+        string key = prop.Substring(0, 1);
+        string value = prop.Substring(1, prop.Length - 1);
+
+        switch (key)
+        {
+          case "D": PinNumber = int.Parse(value); break;
+          case "S": SupportsPwm = value == "1"; break;
+          default: throw new Exception(string.Format("Config string '{0}' contains properties which don't belong to digital pin configuration", configString));
+        }
+      }
+    }
+
+    /// <summary>
+    /// Updates pin status/value from status string received from arduino
+    /// </summary>
+    /// <param name="statusString">String containing digital pin status information</param>
+    public void UpdateStatus(string statusString)
+    {
+      string[] props = statusString.Split(':');
+
+      string valueTemp = ""; //holds value of V property so it can be parsed at the end when pin mode is known
+      
+      foreach (string prop in props)
+      {
+        string key = prop.Substring(0, 1);
+        string value = prop.Substring(1, prop.Length - 1);
+
+        switch (key)
+        {
+          case "D":
+            {
+              int pinNumber = int.Parse(value);
+              if (pinNumber != PinNumber) throw new Exception(string.Format("Status string '{0}' does not correspond to digita pin {1}", statusString, PinNumber));
+              break;
+            }
+          case "M":
+            {
+              int modeValue = int.Parse(value);
+              PinMode = (DigitalPinMode)modeValue;
+              break;
+            }
+          case "V":
+            {
+              valueTemp = value; //save to valueTemp because it is possible that PinMode was not yet updated at this point
+              break;
+            }
+          case "F":
+            {
+              Frequency = int.Parse(value);
+              break;
+            }
+          case "L":
+            {
+              Duration = int.Parse(value);
+              break;
+            }
+          default: throw new Exception(string.Format("Status string '{0}' contains properties which don't belong to analog pin status", statusString));
+        }
+      }
+
+      if (PinMode == DigitalPinMode.BoolRead || PinMode == DigitalPinMode.BoolWrite)
+      {
+        BoolValue = valueTemp == "1";
+      }
+      else if (PinMode == DigitalPinMode.Pwm)
+      {
+        PwmValue = byte.Parse(valueTemp);
+      }
+    }
+
   }
 }

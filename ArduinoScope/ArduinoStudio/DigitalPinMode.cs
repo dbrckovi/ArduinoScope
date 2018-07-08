@@ -6,9 +6,12 @@ using System.Threading.Tasks;
 
 namespace ArduinoStudio
 {
-  public enum PinMode
+  public enum DigitalPinMode
   {
-    Input = 0,
-    Output = 1
+    BoolRead = 0,
+    BoolWrite = 1,
+    Pwm = 2,
+    Tone = 3,
+    NoTone = 4
   }
 }
