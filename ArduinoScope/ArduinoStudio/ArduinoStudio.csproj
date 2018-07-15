@@ -46,10 +46,22 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="AnalogPin.cs" />
-    <Compile Include="SmallGraph.cs">
+    <Compile Include="LedIndicator.cs">
       <SubType>UserControl</SubType>
     </Compile>
-    <Compile Include="SmallGraph.Designer.cs">
+    <Compile Include="LedIndicator.Designer.cs">
+      <DependentUpon>LedIndicator.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Vizualizers\DigitalPinControl.cs">
+      <SubType>UserControl</SubType>
+    </Compile>
+    <Compile Include="Vizualizers\DigitalPinControl.Designer.cs">
+      <DependentUpon>DigitalPinControl.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Vizualizers\SmallGraph.cs">
+      <SubType>UserControl</SubType>
+    </Compile>
+    <Compile Include="Vizualizers\SmallGraph.Designer.cs">
       <DependentUpon>SmallGraph.cs</DependentUpon>
     </Compile>
     <Compile Include="Vizualizers\AnalogPinControl.cs">
@@ -59,12 +71,6 @@
       <DependentUpon>AnalogPinControl.cs</DependentUpon>
     </Compile>
     <Compile Include="ArduinoCommunicator.cs" />
-    <Compile Include="Vizualizers\BoolControl.cs">
-      <SubType>UserControl</SubType>
-    </Compile>
-    <Compile Include="Vizualizers\BoolControl.Designer.cs">
-      <DependentUpon>BoolControl.cs</DependentUpon>
-    </Compile>
     <Compile Include="Delegates.cs" />
     <Compile Include="DigitalPin.cs" />
     <Compile Include="DigitalPinMode.cs" />
@@ -90,14 +96,17 @@
     <Compile Include="ToneValueControl.Designer.cs">
       <DependentUpon>ToneValueControl.cs</DependentUpon>
     </Compile>
-    <EmbeddedResource Include="SmallGraph.resx">
+    <EmbeddedResource Include="LedIndicator.resx">
+      <DependentUpon>LedIndicator.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Vizualizers\DigitalPinControl.resx">
+      <DependentUpon>DigitalPinControl.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Vizualizers\SmallGraph.resx">
       <DependentUpon>SmallGraph.cs</DependentUpon>
     </EmbeddedResource>
     <EmbeddedResource Include="Vizualizers\AnalogPinControl.resx">
       <DependentUpon>AnalogPinControl.cs</DependentUpon>
-    </EmbeddedResource>
-    <EmbeddedResource Include="Vizualizers\BoolControl.resx">
-      <DependentUpon>BoolControl.cs</DependentUpon>
     </EmbeddedResource>
     <EmbeddedResource Include="Form1.resx">
       <DependentUpon>Form1.cs</DependentUpon>

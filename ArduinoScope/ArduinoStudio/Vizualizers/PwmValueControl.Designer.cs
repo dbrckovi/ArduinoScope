@@ -35,8 +35,8 @@
       // 
       // txtValue
       // 
-      this.txtValue.Dock = System.Windows.Forms.DockStyle.Left;
-      this.txtValue.Location = new System.Drawing.Point(0, 0);
+      this.txtValue.Dock = System.Windows.Forms.DockStyle.Right;
+      this.txtValue.Location = new System.Drawing.Point(321, 0);
       this.txtValue.MaxLength = 3;
       this.txtValue.Name = "txtValue";
       this.txtValue.Size = new System.Drawing.Size(32, 20);
@@ -48,9 +48,10 @@
       // trackValue
       // 
       this.trackValue.AutoSize = false;
+      this.trackValue.BackColor = System.Drawing.Color.White;
       this.trackValue.Dock = System.Windows.Forms.DockStyle.Fill;
       this.trackValue.LargeChange = 32;
-      this.trackValue.Location = new System.Drawing.Point(32, 0);
+      this.trackValue.Location = new System.Drawing.Point(0, 0);
       this.trackValue.Maximum = 255;
       this.trackValue.Name = "trackValue";
       this.trackValue.Size = new System.Drawing.Size(321, 20);

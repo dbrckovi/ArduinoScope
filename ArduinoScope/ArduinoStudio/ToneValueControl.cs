@@ -42,12 +42,6 @@ namespace ArduinoStudio
       }
     }
 
-    public event Delegates.ControlDelegate NoTone;
-    private void OnNoTone()
-    {
-      if (NoTone != null) NoTone(this);
-    }
-
     public event Delegates.ControlDelegate ValueChanged;
     private void OnValueChanged()
     {
@@ -96,16 +90,6 @@ namespace ArduinoStudio
       txtFrequency.Text = Frequency.ToString();
       trackFrequency.Value = Frequency;
       txtDuration.Text = Duration.ToString();
-    }
-
-    private void btnPlay_Click(object sender, EventArgs e)
-    {
-      OnValueChanged();
-    }
-
-    private void btnStop_Click(object sender, EventArgs e)
-    {
-      OnNoTone();
     }
   }
 }

@@ -1,1 +1,1 @@
-﻿
+﻿ArduinoCommunicator - create async versions of main methods (should improve GUI responsiveness)

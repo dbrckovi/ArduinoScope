@@ -53,7 +53,7 @@ namespace ArduinoStudio
         return;
       }
 
-      txtLog.AppendText(text + "\r\n");
+      if (chkEnableLog.Checked) txtLog.AppendText(text + "\r\n");
     }
 
     public Form1()
@@ -91,7 +91,22 @@ namespace ArduinoStudio
 
     private void GenerateDigitalPins()
     {
+      if (_commuinicator == null)
+      {
+        foreach (DigitalPinControl ctl in pnlDigitalPins.Controls)
+        {
+          ctl.Dispose();
+        }
 
+        pnlDigitalPins.Controls.Clear();
+      }
+      else
+      {
+        foreach (DigitalPin pin in _commuinicator.DigitalPins)
+        {
+          pnlDigitalPins.Controls.Add(new DigitalPinControl(_commuinicator, pin.PinNumber));
+        }
+      }
     }
 
     private void LoadPorts()
@@ -107,6 +122,7 @@ namespace ArduinoStudio
     {
       try
       {
+        pnlButtons.BackColor = Program.DisabledColor;
         LoadPorts();
         EnableDisableControls();
       }
@@ -144,126 +160,16 @@ namespace ArduinoStudio
       if (Communicator != null) Communicator = null;
     }
 
-    private void button2_Click(object sender, EventArgs e)
-    {
-
-    }
-
     private void btnClearLog_Click(object sender, EventArgs e)
     {
       txtLog.Text = "";
     }
 
-    private void btnSetHigh_Click(object sender, EventArgs e)
-    {
-      try
-      {
-        int pin = int.Parse(txtInt.Text);
-        _commuinicator.DigitalWrite(pin, true);
-      }
-      catch (Exception ex)
-      {
-        Msgbox.Show(this, ex);
-      }
-    }
-
-    private void btnSetLow_Click(object sender, EventArgs e)
-    {
-      try
-      {
-        int pin = int.Parse(txtInt.Text);
-        _commuinicator.DigitalWrite(pin, false);
-      }
-      catch (Exception ex)
-      {
-        Msgbox.Show(this, ex);
-      }
-    }
-
-    private void btnAnalogRead_Click(object sender, EventArgs e)
-    {
-      try
-      {
-        int pin = int.Parse(txtInt.Text);
-        txtResponse.Text = _commuinicator.AnalogRead(pin).ToString();
-      }
-      catch (Exception ex)
-      {
-        Msgbox.Show(this, ex);
-      }
-    }
-
-    private void btnTone_Click(object sender, EventArgs e)
-    {
-      try
-      {
-        int pin = int.Parse(txtInt.Text);
-        int frequency = Convert.ToInt32(trackFrequency.Value);
-        _commuinicator.Tone(pin, frequency, 2000);
-      }
-      catch (Exception ex)
-      {
-        Msgbox.Show(this, ex);
-      }
-    }
-
-    private void btnNoTone_Click(object sender, EventArgs e)
-    {
-      try
-      {
-        int pin = int.Parse(txtInt.Text);
-        _commuinicator.NoTone(pin);
-      }
-      catch (Exception ex)
-      {
-        Msgbox.Show(this, ex);
-      }
-    }
-
-    private void button1_Click(object sender, EventArgs e)
-    {
-      try
-      {
-        int pin = int.Parse(txtInt.Text);
-        byte value = Convert.ToByte(sliderAnalogWrite.Value);
-        _commuinicator.AnalogWrite(pin, value);
-      }
-      catch (Exception ex)
-      {
-        Msgbox.Show(this, ex);
-      }
-    }
-
-    private void button2_Click_1(object sender, EventArgs e)
+    private void btnResetPins_Click(object sender, EventArgs e)
     {
       try
       {
         _commuinicator.ResetPins();
-      }
-      catch (Exception ex)
-      {
-        Msgbox.Show(this, ex);
-      }
-    }
-
-    private void button5_Click(object sender, EventArgs e)
-    {
-      try
-      {
-        txtResponse.Text = _commuinicator.Debug();
-      }
-      catch (Exception ex)
-      {
-        Msgbox.Show(this, ex);
-      }
-    }
-
-    private void button6_Click(object sender, EventArgs e)
-    {
-      try
-      {
-        int pin = int.Parse(txtInt.Text);
-        txtResponse.Text = _commuinicator.DigitalRead(pin).ToString();
       }
       catch (Exception ex)
       {
