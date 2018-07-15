@@ -97,7 +97,7 @@ namespace ArduinoStudio
 
     private void DrawButtonDisabled(Button button)
     {
-      button.BackColor = Program.DisabledColor;
+      button.BackColor = Program.BackgroundColor;
       button.ForeColor = Program.PrimaryLightColor;
     }
 

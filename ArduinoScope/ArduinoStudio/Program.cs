@@ -16,9 +16,8 @@ namespace ArduinoStudio
     public static Color PrimaryLightColor = Color.FromArgb(23, 161, 165);
     public static Color AccentColor = Color.FromArgb(232, 80, 31);
     public static Color AccentLightColor = Color.FromArgb(240, 181, 52);
-    public static Color BackgroundColor = Color.FromArgb(241, 255, 255);
-    public static Color BackgroundLightColor = Color.FromArgb(255,255,255);
-    public static Color DisabledColor = Color.FromArgb(210, 222, 222);
+    public static Color BackgroundColor = Color.FromArgb(210, 222, 222);
+    public static Color BackgroundLightColor = Color.FromArgb(241, 255, 255);
 
     public static Brush PrimaryBrush = new SolidBrush(PrimaryColor);
     public static Brush PrimaryLightBrush = new SolidBrush(PrimaryLightColor);

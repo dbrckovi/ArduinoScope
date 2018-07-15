@@ -37,7 +37,7 @@ namespace ArduinoStudio
     private void RefreshGUI()
     {
       Graphics g = this.CreateGraphics();
-      g.Clear(_value ? Program.AccentColor : Program.BackgroundColor);
+      g.Clear(_value ? Program.AccentColor : Program.BackgroundLightColor);
       g.DrawRectangle(Program.PrimaryPen, 0, 0, this.Width - 1, this.Height - 1);
     }
 

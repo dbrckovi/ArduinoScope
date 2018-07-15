@@ -122,7 +122,9 @@ namespace ArduinoStudio
     {
       try
       {
-        pnlButtons.BackColor = Program.DisabledColor;
+        pnlButtons.BackColor = Program.BackgroundColor;
+        tabPageMain.BackColor = grpAnalogPins.BackColor = grpDigitalPins.BackColor = Program.BackgroundColor;
+
         LoadPorts();
         EnableDisableControls();
       }

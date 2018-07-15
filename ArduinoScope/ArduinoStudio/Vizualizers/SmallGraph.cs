@@ -47,7 +47,7 @@ namespace ArduinoStudio
 
       if (_buffer == null || _bufferGraphics == null || _surfaceGraphics == null) InitializeGraphics();
 
-      _bufferGraphics.Clear(Program.BackgroundColor);
+      _bufferGraphics.Clear(Program.BackgroundLightColor);
 
       _bufferGraphics.DrawRectangle(Program.PrimaryPen, 0, 0, _buffer.Width - 1, _buffer.Height - 1);
 
