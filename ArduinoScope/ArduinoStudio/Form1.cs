@@ -71,6 +71,7 @@ namespace ArduinoStudio
 
     private void GenerateAnalogPins()
     {
+      pnlAnalogPins.SuspendLayout();
       if (_commuinicator == null)
       {
         foreach (AnalogPinControl ctl in pnlAnalogPins.Controls)
@@ -82,15 +83,21 @@ namespace ArduinoStudio
       }
       else
       {
+        List<AnalogPinControl> controls = new List<AnalogPinControl>();
+
         foreach (AnalogPin pin in _commuinicator.AnalogPins)
         {
-          pnlAnalogPins.Controls.Add(new AnalogPinControl(_commuinicator, pin.PinNumber));
+          controls.Add(new AnalogPinControl(_commuinicator, pin.PinNumber));
         }
+
+        pnlAnalogPins.Controls.AddRange(controls.ToArray());
       }
+      pnlAnalogPins.ResumeLayout();
     }
 
     private void GenerateDigitalPins()
     {
+      pnlDigitalPins.SuspendLayout();
       if (_commuinicator == null)
       {
         foreach (DigitalPinControl ctl in pnlDigitalPins.Controls)
@@ -102,11 +109,15 @@ namespace ArduinoStudio
       }
       else
       {
+        List<DigitalPinControl> controls = new List<DigitalPinControl>();
+
         foreach (DigitalPin pin in _commuinicator.DigitalPins)
         {
-          pnlDigitalPins.Controls.Add(new DigitalPinControl(_commuinicator, pin.PinNumber));
+          controls.Add(new DigitalPinControl(_commuinicator, pin.PinNumber));
         }
+        pnlDigitalPins.Controls.AddRange(controls.ToArray());
       }
+      pnlDigitalPins.ResumeLayout();
     }
 
     private void LoadPorts()
