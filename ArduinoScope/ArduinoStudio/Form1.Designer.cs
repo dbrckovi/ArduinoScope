@@ -47,13 +47,14 @@
       this.pnlDigitalPins = new System.Windows.Forms.FlowLayoutPanel();
       this.grpAnalogPins = new System.Windows.Forms.GroupBox();
       this.pnlAnalogPins = new System.Windows.Forms.FlowLayoutPanel();
+      this.pnlButtons = new System.Windows.Forms.Panel();
+      this.btnResetPins = new System.Windows.Forms.Button();
       this.tabPageLog = new System.Windows.Forms.TabPage();
       this.txtLog = new System.Windows.Forms.RichTextBox();
       this.panel1 = new System.Windows.Forms.Panel();
-      this.btnClearLog = new System.Windows.Forms.Button();
-      this.pnlButtons = new System.Windows.Forms.Panel();
-      this.btnResetPins = new System.Windows.Forms.Button();
       this.chkEnableLog = new System.Windows.Forms.CheckBox();
+      this.btnClearLog = new System.Windows.Forms.Button();
+      this.button1 = new System.Windows.Forms.Button();
       this.pnlSerialConnection.SuspendLayout();
       ((System.ComponentModel.ISupportInitialize)(this.numResponseTimeoutSubsequentBytes)).BeginInit();
       ((System.ComponentModel.ISupportInitialize)(this.numResponseTimeoutFirstByte)).BeginInit();
@@ -62,9 +63,9 @@
       this.tabPageMain.SuspendLayout();
       this.grpDigitalPins.SuspendLayout();
       this.grpAnalogPins.SuspendLayout();
+      this.pnlButtons.SuspendLayout();
       this.tabPageLog.SuspendLayout();
       this.panel1.SuspendLayout();
-      this.pnlButtons.SuspendLayout();
       this.SuspendLayout();
       // 
       // pnlSerialConnection
@@ -305,6 +306,30 @@
       this.pnlAnalogPins.Size = new System.Drawing.Size(138, 576);
       this.pnlAnalogPins.TabIndex = 0;
       // 
+      // pnlButtons
+      // 
+      this.pnlButtons.Controls.Add(this.btnResetPins);
+      this.pnlButtons.Dock = System.Windows.Forms.DockStyle.Top;
+      this.pnlButtons.Location = new System.Drawing.Point(3, 3);
+      this.pnlButtons.Name = "pnlButtons";
+      this.pnlButtons.Size = new System.Drawing.Size(1138, 29);
+      this.pnlButtons.TabIndex = 8;
+      // 
+      // btnResetPins
+      // 
+      this.btnResetPins.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(23)))), ((int)(((byte)(161)))), ((int)(((byte)(165)))));
+      this.btnResetPins.FlatAppearance.BorderColor = System.Drawing.Color.FromArgb(((int)(((byte)(23)))), ((int)(((byte)(161)))), ((int)(((byte)(165)))));
+      this.btnResetPins.FlatAppearance.BorderSize = 0;
+      this.btnResetPins.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
+      this.btnResetPins.ForeColor = System.Drawing.Color.FromArgb(((int)(((byte)(0)))), ((int)(((byte)(100)))), ((int)(((byte)(104)))));
+      this.btnResetPins.Location = new System.Drawing.Point(2, 2);
+      this.btnResetPins.Name = "btnResetPins";
+      this.btnResetPins.Size = new System.Drawing.Size(80, 24);
+      this.btnResetPins.TabIndex = 3;
+      this.btnResetPins.Text = "Reset pins";
+      this.btnResetPins.UseVisualStyleBackColor = false;
+      this.btnResetPins.Click += new System.EventHandler(this.btnResetPins_Click);
+      // 
       // tabPageLog
       // 
       this.tabPageLog.BackColor = System.Drawing.SystemColors.Control;
@@ -338,6 +363,16 @@
       this.panel1.Size = new System.Drawing.Size(1138, 29);
       this.panel1.TabIndex = 5;
       // 
+      // chkEnableLog
+      // 
+      this.chkEnableLog.AutoSize = true;
+      this.chkEnableLog.Location = new System.Drawing.Point(8, 6);
+      this.chkEnableLog.Name = "chkEnableLog";
+      this.chkEnableLog.Size = new System.Drawing.Size(76, 17);
+      this.chkEnableLog.TabIndex = 5;
+      this.chkEnableLog.Text = "Enable log";
+      this.chkEnableLog.UseVisualStyleBackColor = true;
+      // 
       // btnClearLog
       // 
       this.btnClearLog.Dock = System.Windows.Forms.DockStyle.Right;
@@ -349,39 +384,15 @@
       this.btnClearLog.UseVisualStyleBackColor = true;
       this.btnClearLog.Click += new System.EventHandler(this.btnClearLog_Click);
       // 
-      // pnlButtons
+      // button1
       // 
-      this.pnlButtons.Controls.Add(this.btnResetPins);
-      this.pnlButtons.Dock = System.Windows.Forms.DockStyle.Top;
-      this.pnlButtons.Location = new System.Drawing.Point(3, 3);
-      this.pnlButtons.Name = "pnlButtons";
-      this.pnlButtons.Size = new System.Drawing.Size(1138, 29);
-      this.pnlButtons.TabIndex = 8;
-      // 
-      // btnResetPins
-      // 
-      this.btnResetPins.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(23)))), ((int)(((byte)(161)))), ((int)(((byte)(165)))));
-      this.btnResetPins.FlatAppearance.BorderColor = System.Drawing.Color.FromArgb(((int)(((byte)(23)))), ((int)(((byte)(161)))), ((int)(((byte)(165)))));
-      this.btnResetPins.FlatAppearance.BorderSize = 0;
-      this.btnResetPins.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
-      this.btnResetPins.ForeColor = System.Drawing.Color.FromArgb(((int)(((byte)(0)))), ((int)(((byte)(100)))), ((int)(((byte)(104)))));
-      this.btnResetPins.Location = new System.Drawing.Point(2, 2);
-      this.btnResetPins.Name = "btnResetPins";
-      this.btnResetPins.Size = new System.Drawing.Size(80, 24);
-      this.btnResetPins.TabIndex = 3;
-      this.btnResetPins.Text = "Reset pins";
-      this.btnResetPins.UseVisualStyleBackColor = false;
-      this.btnResetPins.Click += new System.EventHandler(this.btnResetPins_Click);
-      // 
-      // chkEnableLog
-      // 
-      this.chkEnableLog.AutoSize = true;
-      this.chkEnableLog.Location = new System.Drawing.Point(8, 6);
-      this.chkEnableLog.Name = "chkEnableLog";
-      this.chkEnableLog.Size = new System.Drawing.Size(76, 17);
-      this.chkEnableLog.TabIndex = 5;
-      this.chkEnableLog.Text = "Enable log";
-      this.chkEnableLog.UseVisualStyleBackColor = true;
+      this.button1.Location = new System.Drawing.Point(1056, 8);
+      this.button1.Name = "button1";
+      this.button1.Size = new System.Drawing.Size(75, 23);
+      this.button1.TabIndex = 2;
+      this.button1.Text = "Test";
+      this.button1.UseVisualStyleBackColor = true;
+      this.button1.Click += new System.EventHandler(this.button1_Click);
       // 
       // Form1
       // 
@@ -389,6 +400,7 @@
       this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
       this.BackColor = System.Drawing.Color.White;
       this.ClientSize = new System.Drawing.Size(1152, 696);
+      this.Controls.Add(this.button1);
       this.Controls.Add(this.pnlControlPanel);
       this.Controls.Add(this.pnlSerialConnection);
       this.Name = "Form1";
@@ -404,10 +416,10 @@
       this.tabPageMain.ResumeLayout(false);
       this.grpDigitalPins.ResumeLayout(false);
       this.grpAnalogPins.ResumeLayout(false);
+      this.pnlButtons.ResumeLayout(false);
       this.tabPageLog.ResumeLayout(false);
       this.panel1.ResumeLayout(false);
       this.panel1.PerformLayout();
-      this.pnlButtons.ResumeLayout(false);
       this.ResumeLayout(false);
 
     }
@@ -440,6 +452,7 @@
     private System.Windows.Forms.Panel pnlButtons;
     private System.Windows.Forms.Button btnResetPins;
     private System.Windows.Forms.CheckBox chkEnableLog;
+    private System.Windows.Forms.Button button1;
   }
 }
 
