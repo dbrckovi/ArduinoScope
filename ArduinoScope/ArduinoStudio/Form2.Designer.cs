@@ -28,24 +28,22 @@
     /// </summary>
     private void InitializeComponent()
     {
-      this.glCtl = new OpenTK.GLControl();
+      this.scopeControl1 = new ArduinoStudio.ScopeControl();
       this.SuspendLayout();
       // 
-      // glCtl
+      // scopeControl1
       // 
-      this.glCtl.BackColor = System.Drawing.Color.Black;
-      this.glCtl.Location = new System.Drawing.Point(40, 32);
-      this.glCtl.Name = "glCtl";
-      this.glCtl.Size = new System.Drawing.Size(696, 384);
-      this.glCtl.TabIndex = 0;
-      this.glCtl.VSync = false;
+      this.scopeControl1.Location = new System.Drawing.Point(40, 16);
+      this.scopeControl1.Name = "scopeControl1";
+      this.scopeControl1.Size = new System.Drawing.Size(944, 472);
+      this.scopeControl1.TabIndex = 0;
       // 
       // Form2
       // 
       this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
       this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
-      this.ClientSize = new System.Drawing.Size(1059, 551);
-      this.Controls.Add(this.glCtl);
+      this.ClientSize = new System.Drawing.Size(1180, 713);
+      this.Controls.Add(this.scopeControl1);
       this.Name = "Form2";
       this.Text = "Form2";
       this.FormClosed += new System.Windows.Forms.FormClosedEventHandler(this.Form2_FormClosed);
@@ -55,6 +53,6 @@
 
     #endregion
 
-    private OpenTK.GLControl glCtl;
+    private ScopeControl scopeControl1;
   }
 }

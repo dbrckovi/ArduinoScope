@@ -64,6 +64,12 @@
     <Compile Include="LedIndicator.Designer.cs">
       <DependentUpon>LedIndicator.cs</DependentUpon>
     </Compile>
+    <Compile Include="ScopeControl.cs">
+      <SubType>UserControl</SubType>
+    </Compile>
+    <Compile Include="ScopeControl.Designer.cs">
+      <DependentUpon>ScopeControl.cs</DependentUpon>
+    </Compile>
     <Compile Include="Vizualizers\DigitalPinControl.cs">
       <SubType>UserControl</SubType>
     </Compile>
@@ -113,6 +119,9 @@
     </EmbeddedResource>
     <EmbeddedResource Include="LedIndicator.resx">
       <DependentUpon>LedIndicator.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="ScopeControl.resx">
+      <DependentUpon>ScopeControl.cs</DependentUpon>
     </EmbeddedResource>
     <EmbeddedResource Include="Vizualizers\DigitalPinControl.resx">
       <DependentUpon>DigitalPinControl.cs</DependentUpon>
